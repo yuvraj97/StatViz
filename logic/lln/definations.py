@@ -112,7 +112,7 @@ def definition(state, distribution, parameters, population, sample):
     # Statistics
     
     So now we have $"""+sample_size+"""$ Random variables,
-    $X_1, X_2, \cdots, X_{""" +sample_size+"""}$.    
+    $X_1, X_2, \\cdots, X_{""" +sample_size+"""}$.    
     According to **Law of Large Numbers**,    
     
     > Sample Average $(\\overline{X}_n)$ tends to the the **true mean** as
@@ -130,49 +130,49 @@ def definition(state, distribution, parameters, population, sample):
     st.latex("\\hat{\\mu} = \\frac{1}{"+ sample_size +"}\\sum _{i=1}^ {"+ sample_size +"} X_ i = "+ "{:.4f}".format(sample.iloc[0].mean())  )
 
 
-def parameters(distribution, state):
+def parameters(dist, state):
     print("\t ######## lln.run ########")
     if(dist == "gauss"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     elif(dist == "unif"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     elif(dist == "ber"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     elif(dist == "geo"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     elif(dist == "bin"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     elif(dist == "poiss"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     elif(dist == "beta"):
-        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[distribution["id"]]["mu"])+ """$    
-    - $\\text{standard deviation}(\\sigma): """+str(state.lln[distribution["id"]]["sigma"])+"""$    
+        parameters = """- $\\text{mean}(\\mu): """ +str(state.lln[dist["id"]]["mu"])+ """$    
+    - $\\text{standard deviation}(\\sigma): """+str(state.lln[dist["id"]]["sigma"])+"""$    
     """
     return parameters
 
-def run(state, distribution, population, sample):
+def run(state, dist, population, sample):
     population = population.reshape((1,len(population)))
     population = pd.DataFrame(data=population, index=['Random draws'])
     population.columns += 1
     sample = sample.reshape((1,len(sample)))
     sample = pd.DataFrame(data=sample, index=['Sample r.v.'])
     sample.columns += 1
-    #distribution = {
+    #dist = {
     #                "id": "gauss",
     #                "name": "Normal distribution",
     #                "latex": "$\\mathcal{N}(\\mu,\\sigma)$",
     #                "mean": 0
     #               }
-    definition(state, distribution, parameters(distribution, state), population, sample)
+    definition(state, dist, parameters(dist, state), population, sample)

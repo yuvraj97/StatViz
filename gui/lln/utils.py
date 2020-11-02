@@ -48,13 +48,16 @@ def stDistribution(dist, state, sidebar):
     new_n_sample = sample.slider("Sample Size", min_value = 10, max_value = 100, value = state.lln["n_samples"], step = 5)
     state.lln["n_population"], state.lln["n_samples"] = new_n_population, new_n_sample
     writeParameter.markdown("## Parameters")
+    var = {}    
     if(dist =="gauss"):
         new_mu = mu.slider(f"Mean(μ)", min_value = -10.0, max_value = 10.0, value = state.lln[dist]["mu"] , step = 0.5)
         new_sigma = sigma.slider("Standard deviation(σ)", min_value = 0.1, max_value = 3.0, value = state.lln[dist]["sigma"], step = 0.1)
         var = {"idx": state.lln[dist]["idx"], "mu" : new_mu, "sigma" : new_sigma}
     elif(dist =="unif" or dist == "beta"):
-        new_a = a.slider("a", min_value = -10.0, max_value = 10.0, value = state.lln[dist]["a"], step = 0.5)
-        new_b = b.slider("b", min_value = new_a + 1, max_value = new_a + 11, value = new_a + 6, step = 0.5)
+        a_min, a_max = (-10.0, 10.0) if dist == "unif" else (1.0, 10.0)
+        new_a = a.slider("a", min_value = a_min, max_value = a_max, value = state.lln[dist]["a"], step = 0.5)
+        b_min, b_max = (new_a + 1, new_a + 11) if dist == "unif" else (1.0, 10.0)
+        new_b = b.slider("b", min_value = b_min, max_value = b_max + 11, value = new_a + 6 if dist == "unif" else state.lln[dist]["b"], step = 0.5)
         var = {"idx": state.lln[dist]["idx"], "a"  : new_a, "b"   : new_b}
     elif(dist =="ber" or dist == "geo"):
         new_p = p.slider("p", min_value = 0.0, max_value = 1.0, value = state.lln[dist]["p"], step = 0.05)
