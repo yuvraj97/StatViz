@@ -1,4 +1,5 @@
-from apps import lln, clt, stats
+from gui.stats import stats
+from gui.lln import lln
 from auth.stInputs import stEmpty
 
 def clear(elements):
@@ -23,5 +24,7 @@ def main(elements, email, state, GlobalElements):
         stats.main(state, GlobalElements)
     elif(option=="Law of Large Number (patreon)"):
         lln.main(state, GlobalElements)
+    """
     elif(option=="Central Limit Theorem (patreon)"):
         clt.main()
+    """

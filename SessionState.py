@@ -74,14 +74,17 @@ def _get_session():
     if session_info is None:
         raise RuntimeError("Couldn't get your Streamlit Session object.")
     
-    return session_info.session
+    return session_info
 
 
 def get_state(hash_funcs=None):
-    session = _get_session()
-
+    session_info = _get_session()
+    session = session_info.session
+    
     if not hasattr(session, "_custom_session_state"):
         session._custom_session_state = _SessionState(session, hash_funcs)
 
-    return session._custom_session_state
+    result = session._custom_session_state
+    result.__header =  session_info.ws.request.headers
+    return result
 

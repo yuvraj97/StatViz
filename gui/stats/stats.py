@@ -1,31 +1,7 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from PIL import Image
 import os
+from PIL import Image
+from logic.stats.run import simulate
 from auth.stInputs import stSlider, stNumberInput, stEmpty
-
-def get_sample_with_true_p(population,p):
-    a=[0]*population
-    _1_s = int(population*p)
-    for i in range(0,_1_s):
-        a[i]=1
-    np.random.shuffle(a)
-    return a
-
-def simulate(n_population, n_sample, true_p, n_simulation):
-    population_sample = get_sample_with_true_p(n_population, true_p)
-    estimators = []
-    for i in range(0,n_simulation):
-        # Here we randomly select 124 couples out of 5000
-        sample = np.random.choice(population_sample,n_sample)
-        estimators.append(sum(sample)/n_sample)
-    fig = plt.figure()
-    ax = fig.gca()
-    ax.hist(estimators, histtype='bar', rwidth=0.95)
-    #ax.set_xlim(0,1)
-    ax.set_xlabel("Proportion of people turning their head to right (p)")
-    ax.set_ylabel("# occurence of certain (p) in our simulation")
-    return fig, sum(estimators)/ n_simulation, estimators
 
 def main(state, GlobalElements):
     e_population = stEmpty(sidebar=True)
@@ -37,9 +13,9 @@ def main(state, GlobalElements):
     n_population = e_population.number_input("Enter population size (Total Population)", min_value=100, max_value=5000, value=3000)
     n_sample = e_sample.number_input("Enter sample size (# couples observed)", min_value=10, max_value=200, value=124)
     true_p = e_true_p.slider("Enter proportion of people turning their head to right (p)", min_value=0.0, max_value=1.0, value=0.35, step=0.05)
-    n_simulation = e_simulation.number_input("Enter number of simulation", min_value=10, max_value=200, value=50)
+    n_populationulation = e_simulation.number_input("Enter number of simulation", min_value=10, max_value=200, value=50)
     
-    fig, estimate, estimators = simulate(n_population, n_sample, true_p, n_simulation)
+    fig, estimate, estimators = simulate(n_population, n_sample, true_p, n_populationulation)
     estimate = "{:.4f}".format(estimate)
 
     tex = []
@@ -70,17 +46,17 @@ def main(state, GlobalElements):
     Here we specify,    
     - A population of **{n_population}** kissing couples.   
     - Out of **{n_population}** kissing couples we observe **{n_sample}** couples and record where they turn there head.   
-    - We repeat this experiment **{n_simulation}** times.   
+    - We repeat this experiment **{n_populationulation}** times.   
     ## Statistics    
     **Statistics** gives us an estimate of true "proportion" (that we set to **{true_p}**).    
-    Here we don't know what the real proportion is we just have a data of **{n_simulation}** experiments
+    Here we don't know what the real proportion is we just have a data of **{n_populationulation}** experiments
     with **{n_sample}** data points each.    
     We use Statistics to estimate the true proportion (of all **{n_population}** couples),
     in this case we just see how many couples turn there head to the right,
     and divide by total number of couples observed.    
 
     ### Observation     
-    We have data for **{n_simulation}** experiments, lets see the data for first 3 experiments.      
+    We have data for **{n_populationulation}** experiments, lets see the data for first 3 experiments.      
     #### Experiment 1: 
     *   In first experiment out of **{n_sample}**.  **{int(estimators[0]*n_sample)}** couples turn there head to right.    
         So estimate for first experiment is {tex[0]}    
