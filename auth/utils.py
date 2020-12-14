@@ -2,6 +2,7 @@ import json
 import numpy as np
 from hashlib import sha256
 import auth.forgotPasswd
+from auth.forgotPasswd import send
 
 def hashPasswd(passwd):
     h = sha256()
@@ -20,7 +21,8 @@ def write_JSON(json_file, path):
         json.dump(json_file, indent=4, sort_keys=False, fp=f)
     f.close()
 
-def sendOTP(email):
+def sendOTP(state, email):
+    state.experimental_rerun = True
     OTP = np.random.randint(100001,999999)
-    forgotPasswd.send(email, OTP)
+    #send(email, OTP)
     return OTP

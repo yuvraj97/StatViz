@@ -84,7 +84,8 @@ def get_state(hash_funcs=None):
     if not hasattr(session, "_custom_session_state"):
         session._custom_session_state = _SessionState(session, hash_funcs)
 
-    result = session._custom_session_state
-    result.__header =  session_info.ws.request.headers
-    return result
+    return session._custom_session_state
 
+def get_ID():
+    session_info = _get_session()
+    return session_info.ws.get_cookie("quantml-ID")

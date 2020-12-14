@@ -35,8 +35,9 @@ def simulation_mpl(distribution, n_samples, name=""):
     return fig
 
 def continuous_chart(fig, iid_rvs, pdf_rvs):
+    #print("              - continuous_chart(fig, iid_rvs, pdf_rvs)")
     std = np.std(iid_rvs)
-    print(std)
+    #print("                  * std: " + str(std))
     pdf_lower, pdf_upper = pdf_rvs - std/2, pdf_rvs + std/2
     fig.add_trace(go.Scatter(x=iid_rvs, y=pdf_rvs,
                              mode='lines',
@@ -57,6 +58,7 @@ def continuous_chart(fig, iid_rvs, pdf_rvs):
 
 
 def discreat_chart(fig, iid_rvs, pdf_rvs):
+    #print("              - discreat_chart(fig, iid_rvs, pdf_rvs)")
     n_samples = len(iid_rvs)
     x = [0]*(3 * n_samples - 1)
     y = [0]*(3 * n_samples - 1)
@@ -84,6 +86,7 @@ def discreat_chart(fig, iid_rvs, pdf_rvs):
     
 
 def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
+    #print("            - get_pdf(iid_rvs, pdf_rvs, name="+ name + ", iscontinuous=" + str(iscontinuous) +")")
     idx = np.argsort(iid_rvs)
     fig = go.Figure()
 
@@ -92,17 +95,18 @@ def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
     # Add traces
     if(iscontinuous):
         continuous_chart(fig, iid_rvs, pdf_rvs)
-
     else:
         discreat_chart(fig, iid_rvs, pdf_rvs)
 
-    fig.update_layout(title=name)
     # Edit the layout
+    fig.update_layout(title=name)
     
     return fig
         
 
-def simulation(iid_rvs, mean, sigma, n_samples, name=""):
+def simulation(iid_rvs, mean, n_samples, name=""):
+    #print("            - simulation(iid_rvs, n_samples=" + str(n_samples) + ", name=" + name)
+    #print("                  * mean: " + str(mean))
     ns = np.linspace(1, n_samples, n_samples, dtype = int)
     
     # sample mean for each n
@@ -133,14 +137,17 @@ def simulation(iid_rvs, mean, sigma, n_samples, name=""):
     fig.add_trace(go.Scatter(x=ns, y=average,
                         mode='lines',
                         name='Sample Average',
+                        hovertemplate='In this Simulation<br>For <b style="color:pink">Sample Size</b>=%{x}<br>Sample Average=%{y}',
                         line=dict(color='royalblue')))
     fig.add_trace(go.Scatter(x=ns, y=iid_rvs,
                         mode='markers',
                         name='Random variable(x)',
+                        hovertemplate='Randon Draw(x): %{y}',
                         line=dict(color='purple')))
     fig.add_trace(go.Scatter(x = ns, y = [mean] * n_samples,
                              mode='lines',
                              name='mean',
+                             hovertemplate='True mean: %{y}',
                              line=dict(
                                          color="green",
                                          width=4,
@@ -149,6 +156,7 @@ def simulation(iid_rvs, mean, sigma, n_samples, name=""):
                             )
     
     # Edit the layout
-    fig.update_layout(xaxis_title='Number of simulations',
+    fig.update_layout(title=name,
+                       xaxis_title='Sample Size',
                        yaxis_title='<b>iid</b> Random Variable')
     return fig

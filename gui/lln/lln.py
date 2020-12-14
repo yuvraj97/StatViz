@@ -1,40 +1,31 @@
 import streamlit as st
-from logic.lln.run import run_dist
-from gui.lln.utils import distributions_properties, which_distribution, stDistribution, getDistByIndex
+import logic.lln.lln as lln
+import logic.lln.display as stDisplay
+from logic.lln.utils import urlIndex
+from utils import set_get_URL
+from distribution import distributions_properties, n, which_distribution, stDistribution, idx2distribution, distribution2idx, distribution2url
 
 def main(state, GlobalElements):
-    print("########## lln.main() ##########")
-    if(state.lln_init == None):
-        print("\t  lln.main state initializing ...")
-        state.lln_init = True
-        state.lln = distributions_properties
-        state.lln_index = 0
-        print("\t  lln.main state initialized !  ")
-        
-    option = st.sidebar.selectbox("Select Distribution", which_distribution, index = state.lln_index)
-    print("Option:", option)
+    #print("    ======== lln.py ========")
+    #print("    ARGUMENTS: state, GlobalElements")
+    option = st.sidebar.selectbox("Select Distribution", list(which_distribution.keys()), index = urlIndex(state.url))
+    dist = which_distribution[option]
+    #print("          * option: ",option)
+    #print("          * dist: ",dist)
 
-    plot_TF = False
-    idx = which_distribution.index(option)
-    dist = getDistByIndex(idx)
-    var = stDistribution(dist, state, True)
-    if(state.lln_index == idx and state.lln[dist] == var):
-        print("\t plotit :)")
-        plot_TF = True
-        pdf, simulation = run_dist(dist, var, state.lln["n_population"], state.lln["n_samples"])
-    else:
-        print("\t wait to plot !")
-        state.lln[dist] = var
-    state.lln_index = idx
+    url = set_get_URL(dist = distributions_properties[dist]["name"])
+
+    #print("          * state.URL: ",state.url)
+
+    var, n = stDistribution(dist, state)
+    #print("          * var: ", var)
+    #print("          * n: ", n)
     
-    if(plot_TF):
-        success = st.empty()
-        success.success("Loading...")
-        print("\t Loading...")
-        
-        plot = st.empty()
-        plot.plotly_chart(pdf)#, filename='latex', include_mathjax='cdn')
-        plot = st.empty()
-        plot.plotly_chart(simulation)#, filename='latex', include_mathjax='cdn')
-        
-        success.empty()
+    mean, population, sample, pdf, simulation = lln.run(dist, var, n)
+    
+    #print("      Loading...")
+    
+    
+    st.plotly_chart(simulation)#, filename='latex', include_mathjax='cdn')
+    stDisplay.run(dist, population, sample, var, n, mean, pdf, simulation)
+    

@@ -7,18 +7,19 @@ from auth.utils import read_JSON
 from auth.login import alreadyLoggedIn, logout_button, login
 
 def clear(elements):
+    #print("        - clear(elements)")
     for element in elements:
         element.empty()
 
 def initializeID(state, CURRENTLY_LOGIN_JSON):
-    if state.ID_TAKEN == None:
-        print("Initializing ID")
-        state.ID_TAKEN = True
-        for i in range(100):
-            #print(f"itter: {i}")
-            state.ID = str(np.random.randint(0,2147483646))
-            if(state.ID not in CURRENTLY_LOGIN_JSON):
-                break
+    #print("  initializeID(state, CURRENTLY_LOGIN_JSON)")
+    if state.ID == None:
+        state.ID = "123kjgg4"#SessionState.get_ID()
+        state.url = st.experimental_get_query_params()
+        #print("        * ID: ", state.ID)
+        #print("        * url: ", str(state.url))
+        return
+    #print("  ID already initialized!")
 
 
 def main(GlobalElements):
@@ -27,7 +28,8 @@ def main(GlobalElements):
     LOGIN_JSON = read_JSON(LOGIN_JSON_PATH)
     CURRENTLY_LOGIN_JSON = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
     state = SessionState.get_state()
-       
+    state.experimental_rerun = False
+
     #state.ID_TAKEN
     #state.ID
     #state.SET_TOTAL_RELOADS
@@ -40,26 +42,35 @@ def main(GlobalElements):
     initializeID(state, CURRENTLY_LOGIN_JSON)
     
     if(state.SET_TOTAL_RELOADS!=True):
+        #print("  Initialized state.TOTAL_RELOADS = 0")
         state.SET_TOTAL_RELOADS = True
         state.TOTAL_RELOADS = 0
     state.TOTAL_RELOADS += 1
     
-    print(f"=====================START [{state.TOTAL_RELOADS}]=====================")
+    #print(f"=====================START [{state.TOTAL_RELOADS}]=====================")
     access_granted, email = alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON)
+    #print("      - RETURNED FROM alreadyLoggedIn()")
+    #print("          * access_granted: ", access_granted)
+    #print("          * email: ", email)
     elements = []
     if(not access_granted):
         access_granted, email, elements = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True, GlobalElements)
+        #print("      - RETURNED FROM login()")
+        #print("          * access_granted: ", access_granted)
+        #print("          * email: ", email)
+        if(access_granted): state.experimental_rerun = True
     if(access_granted):
-        st.sidebar.info('''Don\'t refresh this page   
-                           Use "R" to rerun''')
         logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON, GlobalElements)
 
     success.main([],email, state, GlobalElements)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
-    state.sync()
-    print(f"======================END [{state.TOTAL_RELOADS}]======================")
+    #state.sync()
+    if(state.experimental_rerun): 
+        st.experimental_rerun()
+    #print(f"======================END [{state.TOTAL_RELOADS}]======================")
 
 if __name__ == '__main__':
+    #print("================ Statistics.py [START] ================")
     GlobalElements = []
     st.sidebar.title("[QuantML](https://quantml.org)")
     #try:
@@ -69,3 +80,4 @@ if __name__ == '__main__':
     #    st.error("""Unexpected error Occured please try refreshing page "CTRL + R" of "F5"     
     #    If problem still there please contact **support@quantml.org**
     #    """)
+    #print("================ Statistics.py  [END]  ================")
