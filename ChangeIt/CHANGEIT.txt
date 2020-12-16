@@ -28,3 +28,22 @@ class StaticFileHandler(tornado.web.StaticFileHandler):
         #self.set_cookie("quantml-ID", "oooo")
 		# ===================== Custom END ===========================
 
+
+
+
+# streamlit.css
+	#f63366 -> #0073b1
+	rgba(246, 51, 102, 0.5) -> rgb(0, 115, 177, 0.5)
+# main.*****.chunk.css
+	rgba(246,51,102,.5) -> rgb(0, 115, 177, 0.5)
+# main.*****.chunk.js
+	rgba(246,51,102,0.5) -> rgb(0, 115, 177, 0.5)
+	
+	
+# static/index.html
+<script src="./static/js/quantml-init.js"></script>
+<script src="./static/js/quantml.js"></script>
+
+# [ADD] static/static/js/quantml-init.js
+# [ADD] static/static/js/quantml.js
+# [CHANGE] static/favicon.png
