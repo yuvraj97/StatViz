@@ -10,7 +10,7 @@ def applyDarkTheme():
         }
         
         div[role=listbox]{
-            box-shadow: .05rem .05rem 0.4rem .02rem rgb(255, 255, 255, 0.7);
+            box-shadow: .05rem .05rem 0.4rem 0rem rgb(255, 255, 255, 0.5);
         }
         div[role=listbox], 
         div[role=listbox] *{
@@ -18,6 +18,16 @@ def applyDarkTheme():
             color: rgb(231, 232, 235);
         }
 
+        .css-9eqr5v {
+            background-color: transparent
+        }
+        .css-9eqr5v:hover {
+            background-color: rgb(25, 25, 25)
+        }
+        
+        .css-9eqr5v *{
+            color: rgb(231, 232, 235);
+        }
         /* Sidebar styling */
         .css-1aumxhk{
             background-color: rgb(45, 45, 45);
@@ -99,6 +109,14 @@ def applyDarkTheme():
 
         .stNumberInput > div > div > button *{
             color: rgb(25, 25, 25);
+        }
+
+        .stNumberInput > div > div > button {
+            background-color: rgb(231, 232, 235)
+        }
+
+        .stNumberInput > div > div > button:hover {
+            background-color: rgb(255, 180, 100)
         }
 
         .row-widget.stCheckbox > label{

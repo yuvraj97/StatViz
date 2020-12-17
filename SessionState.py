@@ -104,10 +104,3 @@ def set_title(title):
     ctx = get_report_ctx()
     if ctx != None:
         ctx.enqueue(msg)
-
-def testing_cookies():
-    session_info = _get_session()
-    session_info.ws.set_secure_cookie(name="NEW_COOKIE", value="YO")
-    #session_info.ws._new_cookie["NEW_COOKIE"] = "value"
-    import streamlit as st
-    st.write("COOKIE set")

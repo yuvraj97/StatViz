@@ -6,6 +6,7 @@ import success
 from auth.utils import read_JSON
 from auth.login import alreadyLoggedIn, logout_button, login
 from themes import applyDarkTheme
+from js import set_cookie
 
 def clear(elements):
     #print("        - clear(elements)")
@@ -33,13 +34,14 @@ def main(GlobalElements):
     state.theme = "light"
     state.isMobile = True if(SessionState.get_cookie("notDesktop")=="true") else False
     print("isMobile: ", state.isMobile)
-    SessionState.testing_cookies()
 
     with st.sidebar.beta_expander("Settings", expanded=False):
-        if(st.checkbox("Apply Dark Theme", False)):
+        if(st.checkbox("Apply Dark Theme", True if SessionState.get_cookie('theme') =="dark" else False )):
             state.theme = "dark"
+            set_cookie("theme", "dark")
         else:
             state.theme = "light"
+            set_cookie("theme", "light")
     if(state.theme=="dark"):
         applyDarkTheme()
 

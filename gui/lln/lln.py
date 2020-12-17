@@ -21,11 +21,10 @@ def main(state, GlobalElements):
     #print("          * var: ", var)
     #print("          * n: ", n)
     
-    mean, population, sample, pdf, simulation = lln.run(dist, var, n)
+    mean, population, sample, pdf, simulation = lln.run(dist, var, n, state)
     
     #print("      Loading...")
     
     
-    st.plotly_chart(simulation)#, filename='latex', include_mathjax='cdn')
+    st.plotly_chart(simulation, use_container_width=True)#, filename='latex', include_mathjax='cdn')
     stDisplay.run(dist, population, sample, var, n, mean, pdf, simulation)
-    
