@@ -1,14 +1,8 @@
-#import streamlit as st
+# import streamlit as st
 from streamlit.hashing import _CodeHasher
+from streamlit.report_thread import get_report_ctx
+from streamlit.server.server import Server
 
-try:
-    # Before Streamlit 0.65
-    from streamlit.ReportThread import get_report_ctx
-    from streamlit.server.Server import Server
-except ModuleNotFoundError:
-    # After Streamlit 0.65
-    from streamlit.report_thread import get_report_ctx
-    from streamlit.server.server import Server
 
 class _SessionState:
 
@@ -31,7 +25,7 @@ class _SessionState:
     def __getitem__(self, item):
         """Return a saved state value, None if item is undefined."""
         return self._state["data"].get(item, None)
-        
+
     def __getattr__(self, item):
         """Return a saved state value, None if item is undefined."""
         return self._state["data"].get(item, None)
@@ -43,12 +37,12 @@ class _SessionState:
     def __setattr__(self, item, value):
         """Set state value."""
         self._state["data"][item] = value
-    
+
     def clear(self):
         """Clear session state and request a rerun."""
         self._state["data"].clear()
         self._state["session"].request_rerun()
-    
+
     def sync(self):
         """Rerun the app with all state values up to date from the beginning to fix rollbacks."""
 
@@ -58,7 +52,7 @@ class _SessionState:
         # Example: state.value += 1
         if self._state["is_rerun"]:
             self._state["is_rerun"] = False
-        
+
         elif self._state["hash"] is not None:
             if self._state["hash"] != self._state["hasher"].to_bytes(self._state["data"], None):
                 self._state["is_rerun"] = True
@@ -73,29 +67,34 @@ def _get_session():
 
     if session_info is None:
         raise RuntimeError("Couldn't get your Streamlit Session object.")
-    
+
     return session_info
 
 
 def get_state(hash_funcs=None):
     session_info = _get_session()
     session = session_info.session
-    
+
     if not hasattr(session, "_custom_session_state"):
         session._custom_session_state = _SessionState(session, hash_funcs)
 
     return session._custom_session_state
 
+
 def get_ID():
     session_info = _get_session()
     return session_info.ws.get_cookie("quantml-ID")
 
+
 def get_cookie(name):
     session_info = _get_session()
     return session_info.ws.get_cookie(name)
+
+
 def set_cookie(name, value):
     session_info = _get_session()
     session_info.ws.set_cookie(name, value)
+
 
 def set_title(title):
     from streamlit.proto import ForwardMsg_pb2
