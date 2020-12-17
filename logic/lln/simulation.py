@@ -20,9 +20,9 @@ def simulation_mpl(distribution, n_samples, name=""):
         sample_mean.append(np.mean(iid_rvs[:n + 1]))
 
     ax.plot(ns, iid_rvs, 'o', color='grey', alpha=0.5)
-    label = '$\\bar X_n$ for $X_i \sim$' + name
+    label = '$\\bar X_n$ for $X_i \\sim$' + name
     ax.plot(ns, sample_mean, 'g-', lw=3, alpha=0.6, label=label)
-    ax.plot(ns, [mean] * n_samples, 'k--', lw=1.5, label='$\mu$')
+    ax.plot(ns, [mean] * n_samples, 'k--', lw=1.5, label='$\\mu$')
     ax.vlines(ns, mean, iid_rvs, lw=0.2)
 
     bbox = (0.0, 1.0, 1.0, 0.1)
@@ -57,14 +57,14 @@ def continuous_chart(fig, iid_rvs, pdf_rvs):
                       yaxis_title='PDF(x)')
 
 
-def discreat_chart(fig, iid_rvs, pdf_rvs):
-    # print("              - discreat_chart(fig, iid_rvs, pdf_rvs)")
+def discrete_chart(fig, iid_rvs, pdf_rvs):
+    # print("              - discrete_chart(fig, iid_rvs, pdf_rvs)")
     n_samples = len(iid_rvs)
     x = [0] * (3 * n_samples - 1)
     y = [0] * (3 * n_samples - 1)
     n, counter = 0, 0
-    while (n < 3 * n_samples - 1):
-        if ((n + 1) % 3 == 0):
+    while n < 3 * n_samples - 1:
+        if (n + 1) % 3 == 0:
             x[n], y[n] = None, None
         else:
             x[n], y[n] = iid_rvs[counter], pdf_rvs[counter]
@@ -93,10 +93,10 @@ def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
     iid_rvs, pdf_rvs = iid_rvs[idx], pdf_rvs[idx]
 
     # Add traces
-    if (iscontinuous):
+    if iscontinuous:
         continuous_chart(fig, iid_rvs, pdf_rvs)
     else:
-        discreat_chart(fig, iid_rvs, pdf_rvs)
+        discrete_chart(fig, iid_rvs, pdf_rvs)
 
     # Edit the layout
     fig.update_layout(title=name)
@@ -113,13 +113,13 @@ def simulation(iid_rvs, mean, n_samples, name, state):
     average = [0] * n_samples
     x = [0] * (3 * n_samples - 1)
     y = [0] * (3 * n_samples - 1)
-    n, counter, sum = 0, 0, 0
-    while (n < 3 * n_samples - 1):
-        if ((n + 1) % 3 == 0):
+    n, counter, _sum = 0, 0, 0
+    while n < 3 * n_samples - 1:
+        if (n + 1) % 3 == 0:
             x[n], y[n] = None, None
         else:
-            sum += iid_rvs[counter]
-            average[counter] = sum / (counter + 1)
+            _sum += iid_rvs[counter]
+            average[counter] = _sum / (counter + 1)
             x[n], y[n] = ns[counter], iid_rvs[counter]
             x[n + 1], y[n + 1] = ns[counter], mean
             counter += 1
@@ -142,7 +142,7 @@ def simulation(iid_rvs, mean, n_samples, name, state):
     fig.add_trace(go.Scatter(x=ns, y=iid_rvs,
                              mode='markers',
                              name='Random variable(x)',
-                             hovertemplate='Randon Draw(x): %{y}',
+                             hovertemplate='Random Draw(x): %{y}',
                              line=dict(color='purple')))
     fig.add_trace(go.Scatter(x=ns, y=[mean] * n_samples,
                              mode='lines',

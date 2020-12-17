@@ -6,9 +6,11 @@ Created on Fri Oct 30 04:32:01 2020
 """
 
 import os
-import streamlit as st
+
 import pandas as pd
+import streamlit as st
 from PIL import Image
+
 from distribution import distributions_properties
 
 
