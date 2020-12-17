@@ -42,6 +42,12 @@ def main(GlobalElements):
         else:
             state.theme = "light"
             set_cookie("theme", "light")
+        state.stSettings = {
+            "seed-checkbox": st.empty(), 
+            "seed-number": st.empty(),
+            "seed": None
+        }
+        
     if(state.theme=="dark"):
         applyDarkTheme()
 

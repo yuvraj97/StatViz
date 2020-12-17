@@ -20,11 +20,12 @@ def main(state, GlobalElements):
     var, n = stDistribution(dist, state)
     #print("          * var: ", var)
     #print("          * n: ", n)
-    
+
+    if(state.stSettings["seed-checkbox"].checkbox("Enable Seed", True)):
+        state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)
+
     mean, population, sample, pdf, simulation = lln.run(dist, var, n, state)
     
     #print("      Loading...")
-    
-    
-    st.plotly_chart(simulation, use_container_width=True)#, filename='latex', include_mathjax='cdn')
-    stDisplay.run(dist, population, sample, var, n, mean, pdf, simulation)
+    # st.plotly_chart(simulation, use_container_width=True)#, filename='latex', include_mathjax='cdn')
+    stDisplay.run(dist, population, sample, var, n, mean, pdf, simulation, state)

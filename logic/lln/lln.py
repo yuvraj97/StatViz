@@ -1,5 +1,6 @@
 from logic.lln.simulation import get_pdf, simulation
 from distribution import distributions_properties, get_distribution, graph_label
+import numpy as np
 
 def run(dist, var, n, state):
     #print("          - run(dist=" + dist + ", var=" + str(var) + ", n=" + str(n))
@@ -12,4 +13,8 @@ def run(dist, var, n, state):
     pdf_rvs = distribution.pdf(iid_rvs) if iscontinuous else distribution.pmf(iid_rvs)
     name = graph_label(dist, var)
     mean = distribution.mean()
-    return mean, population, iid_rvs, get_pdf(iid_rvs, pdf_rvs, name, iscontinuous), simulation(iid_rvs, mean, n_samples, name, state)
+    if(state.stSettings["seed"] != None): np.random.seed(state.stSettings["seed"])
+    pdf_plot = get_pdf(iid_rvs, pdf_rvs, name, iscontinuous)
+    if(state.stSettings["seed"] != None): np.random.seed(state.stSettings["seed"])
+    simulation_plot = simulation(iid_rvs, mean, n_samples, name, state)
+    return mean, population, iid_rvs, pdf_plot, simulation_plot

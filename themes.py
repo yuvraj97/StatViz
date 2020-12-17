@@ -2,6 +2,21 @@ import streamlit as st
 def applyDarkTheme():
     st.markdown("""
     <style>
+        /*
+        .row-widget.stSelectbox > div > div:focus,
+        .stNumberInput > div > div > div:focus,
+        .stNumberInput > div > div > div > input:focus,
+        .row-widget.stTextInput > div > div:focus,
+        .row-widget.stTextInput > div > div > input:focus {
+            border-color: red;
+        }
+        */
+
+        /*top bar*/
+        .css-158te0l {
+            background-image: linear-gradient(90deg, rgb(0, 115, 177), rgb(255, 253, 128))
+        }
+
         .css-1v4eu6x a{
             color: rgba(255, 180, 100, 1);
         }
@@ -47,10 +62,17 @@ def applyDarkTheme():
         .stSlider > div  > div > div > div {
             background-color: rgb(255, 160, 102)
         }
+        .stSlider *{
+            color: rgb(231, 232, 235);
+        }
         .css-1t42vg8 {
             background-color: transparent !important;
         }
         .css-a8dgif {
+            /*margin-bottom: 0.533333rem;
+            padding-bottom: 0%;
+            border-radius: 5px;
+            background-color: rgb(25, 25, 25);*/
             color: rgb(231, 232, 235);
         }
 
@@ -97,26 +119,26 @@ def applyDarkTheme():
             color: rgb(231, 232, 235);
         }
 
-        /*
-        .row-widget.stSelectbox > div > div:focus,
-        .stNumberInput > div > div > div:focus,
-        .stNumberInput > div > div > div > input:focus,
-        .row-widget.stTextInput > div > div:focus,
-        .row-widget.stTextInput > div > div > input:focus {
-            border-color: red;
+        .row-widget.stTextInput > div > div > input:hover,
+        .row-widget.stTextInput > div > div > input:focus{
+            color: rgba(255, 180, 100, 1);
         }
-        */
+
+        .stNumberInput > div > div > div > input:hover,
+        .stNumberInput > div > div > div > input:focus {
+            color: rgba(255, 180, 100, 1);
+        }
 
         .stNumberInput > div > div > button *{
             color: rgb(25, 25, 25);
         }
 
         .stNumberInput > div > div > button {
-            background-color: rgb(231, 232, 235)
+            background-color: rgb(231, 232, 235, 0.8)
         }
 
         .stNumberInput > div > div > button:hover {
-            background-color: rgb(255, 180, 100)
+            background-color: rgb(231, 232, 235)
         }
 
         .row-widget.stCheckbox > label{

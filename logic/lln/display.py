@@ -11,8 +11,7 @@ import pandas as pd
 from PIL import Image
 from distribution import distributions_properties
 
-
-def stDisplay(dist, parameters, population, sample, n, mean, pdf, simulation):
+def stDisplay(dist, parameters, population, sample, n, mean, pdf, simulation, state):
     #print("            - definitions(state, distribution=" + str(distribution) + ", parameters="+ str(parameters) + ", population=" + str(population) + ", sample=" + str(sample) + ")")
 
     total_population = str(n["population"])
@@ -20,7 +19,7 @@ def stDisplay(dist, parameters, population, sample, n, mean, pdf, simulation):
     mean = "{:.4f}".format(mean)
     sample_mean = "{:.4f}".format(sample.iloc[0].mean())
     
-    image_path = os.path.join(os.getcwd(), "img","dogma.png")
+    image_path = os.path.join(os.getcwd(), "img" if state.theme != "dark" else "img-dark","dogma.png")
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
@@ -58,21 +57,21 @@ def stDisplay(dist, parameters, population, sample, n, mean, pdf, simulation):
         $X_1, X_2, \\cdots, X_{""" +sample_size+"""}$.    
         According to **Law of Large Numbers**,    
         
-        > Sample Average $(\\overline{X}_n)$ tends to the the **true mean** as
+        > Sample mean $(\\overline{X}_n)$ tends to the the **true mean** as
         **Our sample size $\\to \\infty$**""")
         
         st.latex("\\overline{X}_n:=\\frac{1}{n}\\sum _{i=1}^ n X_ i \\xrightarrow [n\\to \\infty ]{\\text{ a.s.}} \\mu")    
 
         st.markdown("""    
         ## Estimation
-        We can estimate **True mean $(\\mu)$** by taking the sample average, and our estimate get better as our sample size increases.
+        We can estimate **True mean $(\\mu)$** by taking the sample mean, and our estimate get better as our sample size increases.
         """)
 
         st.latex("\\hat{\\mu} = \\frac{1}{"+ sample_size +"}\\sum _{i=1}^ {"+ sample_size +"} X_ i = "+ sample_mean  )
         st.info("Here our estimate is $\\hat\\mu="+ sample_mean +"$")
     
     st.markdown("""
-    In the graph below you can see as we increases the Sample size, Sample average goes toward true mean.    
+    In the graph below you can see as we increases the Sample size, Sample mean goes toward true mean.    
     Here the **true mean** is $""" + mean + """$
     """)
     st.plotly_chart(simulation, use_container_width=True)
@@ -93,7 +92,7 @@ def get_parameters(dist, vars):
         i += 1
     return parameters
 
-def run(dist, population, sample, vars, n, mean, pdf, simulation):
+def run(dist, population, sample, vars, n, mean, pdf, simulation, state):
     #print("          - definitions(dist=" + str(dist) + ", population="+ str(population) + ", sample=" + str(sample) + ")")
     population = population.reshape((1,len(population)))
     population = pd.DataFrame(data=population, index=['Random draws'])
@@ -101,4 +100,4 @@ def run(dist, population, sample, vars, n, mean, pdf, simulation):
     sample = sample.reshape((1,len(sample)))
     sample = pd.DataFrame(data=sample, index=['Sample r.v.'])
     sample.columns += 1
-    stDisplay(dist, get_parameters(dist, vars), population, sample, n, mean, pdf, simulation)
+    stDisplay(dist, get_parameters(dist, vars), population, sample, n, mean, pdf, simulation, state)
