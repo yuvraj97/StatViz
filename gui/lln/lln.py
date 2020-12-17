@@ -7,9 +7,9 @@ from logic.lln.utils import urlIndex
 from utils import set_get_URL
 
 
-def main(state, GlobalElements):
+def main(state):
     # print("    ======== lln.py ========")
-    # print("    ARGUMENTS: state, GlobalElements")
+    # print("    ARGUMENTS: state")
     option = st.sidebar.selectbox("Select Distribution", list(which_distribution.keys()), index=urlIndex(state.url))
     dist = which_distribution[option]
     # print("          * option: ",option)

@@ -27,7 +27,7 @@ def verifyEmail(email):
         return False
 
 
-def initializeLogin(state, LOGIN_JSON, sidebar, GlobalElements):
+def initializeLogin(state, LOGIN_JSON, sidebar):
     # print("\t Login...")
     elements = []
     with st.sidebar.beta_expander("Login", expanded=False) if (sidebar) else st.beta_expander("Login", expanded=False):
@@ -68,7 +68,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar, GlobalElements):
         elif email in LOGIN_JSON:
             # print(f"\t \t {email} is a verified email address")
             if (LOGIN_JSON[email]['pass'] == "None"):
-                resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements)
+                resetPassword(state, email, LOGIN_JSON, sidebar)
             else:
                 password = passwd_txt.text_input("Password", type="password")
                 # print(password)
@@ -88,7 +88,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar, GlobalElements):
                     if (status):
                         # print("\t \t \t \t Reseting password...")
                         incorrectPassword_warn.empty()
-                        if (resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements)):
+                        if (resetPassword(state, email, LOGIN_JSON, sidebar)):
                             return True, email, elements
         # print("")
     return False, email, elements
@@ -109,8 +109,8 @@ def onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     # print("")
 
 
-def login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, sidebar, GlobalElements):
-    access_granted, email, elements = initializeLogin(state, LOGIN_JSON, sidebar, GlobalElements)
+def login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, sidebar):
+    access_granted, email, elements = initializeLogin(state, LOGIN_JSON, sidebar)
     if (access_granted):
         onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
@@ -127,7 +127,7 @@ def logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     # print("")
 
 
-def logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON, GlobalElements):
+def logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     status = st.sidebar.button("Logout")
     if (status):
         logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)

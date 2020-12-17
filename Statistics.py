@@ -16,7 +16,7 @@ def clear(elements):
 
 def initializeID(state, CURRENTLY_LOGIN_JSON):
     # print("  initializeID(state, CURRENTLY_LOGIN_JSON)")
-    if state.ID == None:
+    if state.ID is None:
         state.ID = "123kjgg4"  # SessionState.get_ID()
         state.url = st.experimental_get_query_params()
         # print("        * ID: ", state.ID)
@@ -25,7 +25,7 @@ def initializeID(state, CURRENTLY_LOGIN_JSON):
     # print("  ID already initialized!")
 
 
-def main(GlobalElements):
+def main():
     LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "login.json")
     CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
     LOGIN_JSON = read_JSON(LOGIN_JSON_PATH)
@@ -37,7 +37,7 @@ def main(GlobalElements):
     print("isMobile: ", state.isMobile)
 
     with st.sidebar.beta_expander("Settings", expanded=False):
-        if (st.checkbox("Apply Dark Theme", True if SessionState.get_cookie('theme') == "dark" else False)):
+        if st.checkbox("Apply Dark Theme", True if SessionState.get_cookie('theme') == "dark" else False):
             state.theme = "dark"
             set_cookie("theme", "dark")
         else:
@@ -49,7 +49,7 @@ def main(GlobalElements):
             "seed": None
         }
 
-    if (state.theme == "dark"):
+    if state.theme == "dark":
         applyDarkTheme()
 
     # state.ID_TAKEN
@@ -63,7 +63,7 @@ def main(GlobalElements):
 
     initializeID(state, CURRENTLY_LOGIN_JSON)
 
-    if (state.SET_TOTAL_RELOADS != True):
+    if not state.SET_TOTAL_RELOADS:
         # print("  Initialized state.TOTAL_RELOADS = 0")
         state.SET_TOTAL_RELOADS = True
         state.TOTAL_RELOADS = 0
@@ -74,22 +74,21 @@ def main(GlobalElements):
     # print("      - RETURNED FROM alreadyLoggedIn()")
     # print("          * access_granted: ", access_granted)
     # print("          * email: ", email)
-    elements = []
-    if (not access_granted):
-        access_granted, email, elements = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True, GlobalElements)
+    if not access_granted:
+        access_granted, email, elements = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
         print("      - RETURNED FROM login()")
         # print("          * access_granted: ", access_granted)
         # print("          * email: ", email)
-        if (access_granted):
+        if access_granted:
             print("if(access_granted): ")
             state.experimental_rerun = True
-    if (access_granted):
-        logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON, GlobalElements)
+    if access_granted:
+        logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
 
-    success.main([], email, state, GlobalElements)
+    success.main([], email, state)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
     # state.sync()
-    if (state.experimental_rerun):
+    if state.experimental_rerun:
         st.experimental_rerun()
     # print(f"======================END [{state.TOTAL_RELOADS}]======================")
 
@@ -134,16 +133,14 @@ if __name__ == '__main__':
         """, unsafe_allow_html=True
                 )
     # print("================ Statistics.py [START] ================")
-    GlobalElements = []
     st.sidebar.markdown(
         "<h1 style='font-family:Arial;text-align:center;'><a href='https://quantml.org'>QuantML</a></h1>",
         unsafe_allow_html=True)
     st.sidebar.markdown("")
     # try:
-    main(GlobalElements)
+    main()
     # except:
-    #    clear(GlobalElements)
-    #    st.error("""Unexpected error Occured please try refreshing page "CTRL + R" of "F5"     
+    #    st.error("""Unexpected error Occured please try refreshing page "CTRL + R" of "F5"
     #    If problem still there please contact **support@quantml.org**
     #    """)
     # print("================ Statistics.py  [END]  ================")

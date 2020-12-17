@@ -16,7 +16,7 @@ def updateNewPassword(state, email, LOGIN_JSON, password):
     # print("")
 
 
-def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar, GlobalElements):
+def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar):
     # print("\t New Password")
     # print("\t \t OTP is verified")
     newpasswd = st.text_input("New Password", type="password")
@@ -39,18 +39,16 @@ def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar, GlobalElements):
     return False
 
 
-def resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements):
+def resetPassword(state, email, LOGIN_JSON, sidebar):
     # print("\t Reset Password")
     # print("OTP_COUNT",LOGIN_JSON[email]["OTP_COUNT"])
     status, stlog = askForOTP(state, email, LOGIN_JSON)
     # print("OTP_COUNT",LOGIN_JSON[email]["OTP_COUNT"])
     if (status):
-        if (LOGIN_JSON[email]["OTP_VERIFICATION_ID"] == state.ID or verifyOTP(state, email, LOGIN_JSON, sidebar,
-                                                                              GlobalElements)):
-            if (newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar, GlobalElements)):
+        if (LOGIN_JSON[email]["OTP_VERIFICATION_ID"] == state.ID or verifyOTP(state, email, LOGIN_JSON, sidebar)):
+            if (newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar)):
                 return True
     else:
         st.warning(stlog)
-        GlobalElements.append(element)
     # print("")
     return False

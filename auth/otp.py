@@ -60,15 +60,13 @@ def askForOTP(state, email, LOGIN_JSON):
             return True, None
 
 
-def verifyOTP(state, email, LOGIN_JSON, sidebar, GlobalElements):
+def verifyOTP(state, email, LOGIN_JSON, sidebar):
     # print("\t Verifing OTP...")
 
     otpHeader_info = stOTPHeaderInfo(
         f"""An OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over *{email}* also check the **Spam folder**""",
         sidebar)
-    GlobalElements.append(otpHeader_info)
     enter_OTP_txt, enteredOTP = stEnterOTP(sidebar)
-    GlobalElements.append(enter_OTP_txt)
     # print("OTP:", state.OTP)
     import streamlit as st
     st.write("OTP:" + str(state.OTP))
@@ -92,7 +90,6 @@ def verifyOTP(state, email, LOGIN_JSON, sidebar, GlobalElements):
                         Another OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over *{email}* also check the **Spam folder**.
                     """
             element = stIncorrectOTPError(incorrectOTPText, sidebar)
-            GlobalElements.append(element)
             # print("\t \t \t ======FAILED======")
     elif (state.OTP != enteredOTP):
         # print("\t \t OTP is incorrect")
@@ -123,7 +120,6 @@ def verifyOTP(state, email, LOGIN_JSON, sidebar, GlobalElements):
         return True
     else:
         element = stUnknownOTPError(sidebar)
-        GlobalElements.append(element)
         # print("\t \t ======FAILED======")
     # print("")
 

@@ -12,9 +12,9 @@ def clear(elements):
         element.empty()
 
 
-def main(elements, email, state, GlobalElements):
+def main(elements, email, state):
     # print("    ======== success.py [START] ========")
-    # print("    ARGUMENTS: elemants, email=" + email + ", state, GlobalElements")
+    # print("    ARGUMENTS: elemants, email=" + email + ", state")
     clear(elements)
     # stwrite(":floppy_disk:")
     idx = getChapterIndexByURL(state.url)  # if state.TOTAL_RELOADS==1 else state.url)
@@ -26,11 +26,11 @@ def main(elements, email, state, GlobalElements):
     # print("          * url: ",url)
 
     # if(option==chapters[0]):
-    #    stats.main(state, GlobalElements)
+    #    stats.main(state)
     #    set_get_URL(dist = "remove")
     if (option == chapters[0]):
         set_title('Weak Law of Large Numbers | Visualization | Statistics - QuantML')
-        lln.main(state, GlobalElements)
+        lln.main(state)
     elif (option == chapters[1]):
         set_title('Central Limit Theorem | Visualization | Statistics - QuantML')
         clt.main()

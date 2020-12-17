@@ -12,7 +12,7 @@ def stPandas(npArray, label="Random Draws"):
     return npArray
 
 
-def stDisplay(n_population, n_sample, true_p, n_simulations, GlobalElements):
+def stDisplay(n_population, n_sample, true_p, n_simulations):
     population_sample, samples, fig, estimate, estimators = run(n_population, n_sample, true_p, n_simulations)
     population_sample = stPandas(population_sample, "Random Draws")
     redballs = [sample.sum() for sample in samples]
@@ -87,7 +87,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, GlobalElements):
     st.success("Here our estimate is $\\bf{\widehat{p} = " + estimate + "}$")
 
 
-def main(state, GlobalElements):
+def main(state):
     # print("    ======== stats.py [START] ========")
 
     if (state.stats_init == None):
@@ -102,5 +102,5 @@ def main(state, GlobalElements):
 
     vars = [n_population, n_sample, true_p, n_simulations]
 
-    stDisplay(n_population, n_sample, true_p, n_simulations, GlobalElements)
+    stDisplay(n_population, n_sample, true_p, n_simulations)
     # print("    ======== stats.py  [END]  ========")
