@@ -4,6 +4,7 @@ from gui.clt import clt
 from auth.stInputs import stEmpty
 from utils import chapters, chapters_acronyms, chapter2idx, getChapterIndexByURL, set_get_URL
 import streamlit as st
+from SessionState import set_title
 
 def clear(elements):
     #print("      clear(elements)")
@@ -27,8 +28,10 @@ def main(elements, email, state, GlobalElements):
     #    stats.main(state, GlobalElements)
     #    set_get_URL(dist = "remove")
     if(option==chapters[0]):
+        set_title('Weak Law of Large Numbers | Visualization | Statistics - QuantML')
         lln.main(state, GlobalElements)
     elif(option==chapters[1]):
+        set_title('Central Limit Theorem | Visualization | Statistics - QuantML')
         clt.main() 
 
     #print("    ======== success.py  [END]  ========")

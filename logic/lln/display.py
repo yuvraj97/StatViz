@@ -24,55 +24,58 @@ def stDisplay(dist, parameters, population, sample, n, mean, pdf, simulation):
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
-    st.markdown("""
-    [Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)    
-    # Truth
-    Firstly, we define the **Truth**, in this case the truth is,     
-    
-    - Data is drawn from a **"""+distributions_properties[dist]["name"]+"**, "+distributions_properties[dist]["latex"]+"""
-    """ + parameters + """
-    
-    # Probability
-    *Here we use probability to generate our data using the **Truth** we defined above.*   
-    Using the knowledge of truth we generate a (synthetic) population of $"""+total_population+"""$ observations.   
-    """)
-    st.write(population)
-    
-    st.markdown("""
-    These observations are *realization* of a **random process**,
-    We call these observations as **Random variables**,
-    in this case we have drawn these **random variables** from a """ +distributions_properties[dist]["name"]+ ", " +distributions_properties[dist]["latex"]+ """.    
-    
-    # Observation
-    *Here we took a sample from our population.*   
-    Now we have our $""" + total_population + """$ **observations**, we took a **sample** of $""" + sample_size + """$ observations.
-    """)
+    st.markdown('[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)')
+    truth = """- Data is drawn from a **"""+distributions_properties[dist]["name"]+"**, "+distributions_properties[dist]["latex"]+"""    
+""" + parameters
+    with st.beta_expander("Truth", expanded=True):
+        st.markdown("""Let's, first define the **Truth**, in this case the truth is,""")
+        st.markdown(truth)
+        
+    with st.beta_expander("Probability", expanded=True):
+        st.markdown("""
+        *Here we use probability to generate our data using the **Truth** we defined above.*   
+        Using the knowledge of truth we generate a (synthetic) population of $"""+total_population+"""$ observations.   
+        """)
+        st.write(population)
+        
+        st.markdown("""
+        These observations are *realization* of a **random process**,
+        We call these observations as **Random variables**,
+        in this case we have drawn these **random variables** from a """ +distributions_properties[dist]["name"]+ ", " +distributions_properties[dist]["latex"]+ """.    
+        """)
 
-    st.write(sample)
-    st.markdown("# Statistics")
-    st.plotly_chart(pdf)
-    st.markdown("""
-    So now we have $"""+sample_size+"""$ Random variables,
-    $X_1, X_2, \\cdots, X_{""" +sample_size+"""}$.    
-    According to **Law of Large Numbers**,    
+    with st.beta_expander("Observation", expanded=True):
+        st.markdown("""
+        *Here we took a sample from our population.*   
+        Now we have our $""" + total_population + """$ **observations**, we took a **sample** of $""" + sample_size + """$ observations.
+        """)
+        st.write(sample)
     
-    > Sample Average $(\\overline{X}_n)$ tends to the the **true mean** as
-      **Our sample size $\\to \\infty$**""")
+    with st.beta_expander("Statistics", expanded=True):
+        st.plotly_chart(pdf, use_container_width=True)
+        st.markdown("""
+        So now we have $"""+sample_size+"""$ Random variables,
+        $X_1, X_2, \\cdots, X_{""" +sample_size+"""}$.    
+        According to **Law of Large Numbers**,    
+        
+        > Sample Average $(\\overline{X}_n)$ tends to the the **true mean** as
+        **Our sample size $\\to \\infty$**""")
+        
+        st.latex("\\overline{X}_n:=\\frac{1}{n}\\sum _{i=1}^ n X_ i \\xrightarrow [n\\to \\infty ]{\\text{ a.s.}} \\mu")    
+
+        st.markdown("""    
+        ## Estimation
+        We can estimate **True mean $(\\mu)$** by taking the sample average, and our estimate get better as our sample size increases.
+        """)
+
+        st.latex("\\hat{\\mu} = \\frac{1}{"+ sample_size +"}\\sum _{i=1}^ {"+ sample_size +"} X_ i = "+ sample_mean  )
+        st.info("Here our estimate is $\\hat\\mu="+ sample_mean +"$")
     
-    st.latex("\\overline{X}_n:=\\frac{1}{n}\\sum _{i=1}^ n X_ i \\xrightarrow [n\\to \\infty ]{\\text{ a.s.}} \\mu")    
-
-    st.markdown("""    
-    ## Estimation
-    We can estimate **True mean $(\\mu)$** by taking the sample average, and our estimate get better as our sample size increases.
-    """)
-
-    st.latex("\\hat{\\mu} = \\frac{1}{"+ sample_size +"}\\sum _{i=1}^ {"+ sample_size +"} X_ i = "+ sample_mean  )
-    st.info("Here our estimate is $\\hat\\mu="+ sample_mean +"$")
     st.markdown("""
     In the graph below you can see as we increases the Sample size, Sample average goes toward true mean.    
     Here the **true mean** is $""" + mean + """$
     """)
-    st.plotly_chart(simulation)
+    st.plotly_chart(simulation, use_container_width=True)
 
     st.markdown("""
     
@@ -86,7 +89,7 @@ def get_parameters(dist, vars):
     i = 0
     for parameter in distributions_properties[dist]["stSlider"]:
         parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" +str(vars[parameter]) +"""$
-    """
+"""
         i += 1
     return parameters
 

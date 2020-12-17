@@ -1,7 +1,7 @@
 import os
+import streamlit as st
 from auth.resetPassword import resetPassword
 from auth.utils import hashPasswd, write_JSON
-from auth.stInputs import stLoginTitle, stLoginEmail, stLoginPasswordTitle, stLoginPassword, stLoginIncorrectPassword, stLoginResetPassword, stLoginIncorrectEmail, stLoginInvalidEmail, stLogoutButton
 
 LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data","login.json")
 CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data","currently-loggedin.json")
@@ -27,77 +27,67 @@ def verifyEmail(email):
 def initializeLogin(state, LOGIN_JSON, sidebar, GlobalElements):
     #print("\t Login...")
     elements = []
-    element = stLoginTitle(sidebar)
-    elements.append(element)
-    GlobalElements.append(element)
-    
-    email_txt, email = stLoginEmail(sidebar)
-    elements.append(email_txt)
-    GlobalElements.append(email_txt)
-    email = email.lower()
-    
-    if email == "name@example.com" or email.replace(' ','') == "":
-        #print("\t \t Email not set (empty)")
-        #print("\t \t ======Failed======")
-        pass
-    elif(not verifyEmail(email)):
-        #print("\t \t Invalid Email Address")
-        element = stLoginInvalidEmail(f'"**{email}**" is **not** a valid email address', sidebar)
-        GlobalElements.append(element)
-        return False, email, elements
+    with st.sidebar.beta_expander("Login", expanded=False) if(sidebar) else st.beta_expander("Login", expanded=False):
+        email_txt = st.empty()
+        email_err = st.empty()
+        incorrectEmail_warn = st.empty()
+        passwd_txt = st.empty()
+        incorrectPassword_warn = st.empty()
+        resetPassword_check = st.empty()
 
-    elif email  not in LOGIN_JSON:
-        #print(f"\t \t {email} is not in our data base")
-        #element = stEmpty()
-        #element.error('''**'''+ email + """**
-        #            is not registered as a **[patreon](https://www.patreon.com/quantml)**    
-        #            This app is under development, it's not finalized yet.    
-        #            To get **early access** to this app, **Join us at [patreon](https://www.patreon.com/quantml)**
-        #        """)
-        msg  =  f"""
-                    **{email}** is not registered as a *developer*.    
-                    This app is under development so only *developer* can access it.   
-                    It will soon be publicly available.
-                """
-        element = stLoginIncorrectEmail(msg, sidebar)
-        elements.append(element)
-        GlobalElements.append(element)
-        #print("\t \t ======Failed======")
-    elif email in LOGIN_JSON:
-        #print(f"\t \t {email} is a verified email address")
-        if(LOGIN_JSON[email]['pass'] == "None"):
-            element = stLoginPasswordTitle("Create Password", sidebar)
-            elements.append(element)
-            GlobalElements.append(element)
-            resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements)
-        else:
-            #elements.append(stLoginPasswordTitle("Password", sidebar))
-            passwd_txt, password = stLoginPassword(sidebar)
-            GlobalElements.append(passwd_txt)
-            #print(password)
-            elements.append(passwd_txt)
-            if(password == ''):
-                #print("\t \t \t password field is (empty)")
-                #print("\t \t \t ======Failed======")
-                pass
-            elif(hashPasswd(password) == LOGIN_JSON[email]['pass']):
-                #print("\t \t \t password Matched")
-                #print("\t \t \t ======DONE======")
-                #print("")
-                return True, email, elements
+        email = email_txt.text_input('Enter your E-mail', value="name@example.com")
+        email = email.lower()
+            
+        if email == "name@example.com" or email.replace(' ','') == "":
+            #print("\t \t Email not set (empty)")
+            #print("\t \t ======Failed======")
+            pass
+        elif(not verifyEmail(email)):
+            #print("\t \t Invalid Email Address")
+            email_err.error(f'"**{email}**" is **not** a valid email address')
+            return False, email, elements
+
+        elif email  not in LOGIN_JSON:
+            #print(f"\t \t {email} is not in our data base")
+            #element = stEmpty()
+            #element.error('''**'''+ email + """**
+            #            is not registered as a **[patreon](https://www.patreon.com/quantml)**    
+            #            This app is under development, it's not finalized yet.    
+            #            To get **early access** to this app, **Join us at [patreon](https://www.patreon.com/quantml)**
+            #        """)
+            msg  =  f"""
+                        **{email}** is not registered as a *developer*.    
+                        This app is under development so only *developer* can access it.   
+                        It will soon be publicly available.
+                    """
+            incorrectEmail_warn.warning(msg)
+            #print("\t \t ======Failed======")
+        elif email in LOGIN_JSON:
+            #print(f"\t \t {email} is a verified email address")
+            if(LOGIN_JSON[email]['pass'] == "None"):
+                resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements)
             else:
-                #print("\t \t \t password didn't Match")
-                incorrectPassword_warn = stLoginIncorrectPassword(sidebar)
-                GlobalElements.append(incorrectPassword_warn)
-                resetPassword_check, status = stLoginResetPassword(sidebar)
-                GlobalElements.append(resetPassword_check)
-                elements.append(resetPassword_check)
-                if(status):
-                    #print("\t \t \t \t Reseting password...")
-                    incorrectPassword_warn.empty()
-                    if(resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements)):
-                        return True, email, elements
-    #print("")
+                password = passwd_txt.text_input("Password", type="password")
+                #print(password)
+                if(password == ''):
+                    #print("\t \t \t password field is (empty)")
+                    #print("\t \t \t ======Failed======")
+                    pass
+                elif(hashPasswd(password) == LOGIN_JSON[email]['pass']):
+                    #print("\t \t \t password Matched")
+                    #print("\t \t \t ======DONE======")
+                    #print("")
+                    return True, email, elements
+                else:
+                    #print("\t \t \t password didn't Match")
+                    incorrectPassword_warn.warning("Incorrect Password")
+                    status = resetPassword_check.checkbox("Reset Password")
+                    if(status):
+                        #print("\t \t \t \t Reseting password...")
+                        incorrectPassword_warn.empty()
+                        if(resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements)):
+                            return True, email, elements
+        #print("")
     return False, email, elements
 
 def onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
@@ -131,8 +121,7 @@ def logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     #print("")
 
 def logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON, GlobalElements):
-    element, status = stLogoutButton()
-    GlobalElements.append(element)
+    status = st.sidebar.button("Logout")
     if(status):
         logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)

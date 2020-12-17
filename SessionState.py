@@ -89,3 +89,25 @@ def get_state(hash_funcs=None):
 def get_ID():
     session_info = _get_session()
     return session_info.ws.get_cookie("quantml-ID")
+
+def get_cookie(name):
+    session_info = _get_session()
+    return session_info.ws.get_cookie(name)
+def set_cookie(name, value):
+    session_info = _get_session()
+    session_info.ws.set_cookie(name, value)
+
+def set_title(title):
+    from streamlit.proto import ForwardMsg_pb2
+    msg = ForwardMsg_pb2.ForwardMsg()
+    msg.page_config_changed.title = title
+    ctx = get_report_ctx()
+    if ctx != None:
+        ctx.enqueue(msg)
+
+def testing_cookies():
+    session_info = _get_session()
+    session_info.ws.set_secure_cookie(name="NEW_COOKIE", value="YO")
+    #session_info.ws._new_cookie["NEW_COOKIE"] = "value"
+    import streamlit as st
+    st.write("COOKIE set")

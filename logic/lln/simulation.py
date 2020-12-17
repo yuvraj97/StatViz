@@ -104,7 +104,7 @@ def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
     return fig
         
 
-def simulation(iid_rvs, mean, n_samples, name=""):
+def simulation(iid_rvs, mean, n_samples, name, state):
     #print("            - simulation(iid_rvs, n_samples=" + str(n_samples) + ", name=" + name)
     #print("                  * mean: " + str(mean))
     ns = np.linspace(1, n_samples, n_samples, dtype = int)
@@ -159,4 +159,5 @@ def simulation(iid_rvs, mean, n_samples, name=""):
     fig.update_layout(title=name,
                        xaxis_title='Sample Size',
                        yaxis_title='<b>iid</b> Random Variable')
+    fig.update_layout(showlegend=False if state.isMobile else True)
     return fig

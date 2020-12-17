@@ -39,10 +39,10 @@ distributions_properties = {
         "stSlider2idx": {"Mean(μ)": 0, "Standard deviation(σ)": 1},
         "stSlider": {
             "Mean(μ)":{
-                "max": -10.0, "min" : 10.0, "value": 0.0, "increment" : 0.5
+                "min": -10.0, "max" : 10.0, "value": 0.0, "increment" : 0.5
             },
             "Standard deviation(σ)":{
-                "max": 1.0, "min" : 3.0, "value": 0.3, "increment" : 0.1
+                "min": 0.1, "max" : 10.0, "value": 1.0, "increment" : 0.5
             }
         }
     },
@@ -56,10 +56,10 @@ distributions_properties = {
         "stSlider2idx": {"Lower Bound(a)": 0, "Scale(Δ)": 1},
         "stSlider": {
             "Lower Bound(a)":{
-                "max": -10.0, "min" : 10.0, "value": 0.0, "increment" : 0.5
+                "min": -10.0, "max" : 10.0, "value": 0.0, "increment" : 0.5
             },
             "Scale(Δ)":{
-                "max": 0.0, "min" : 20.0, "value": 10.0, "increment" : 0.5
+                "min": 0.0, "max" : 20.0, "value": 10.0, "increment" : 0.5
             }
         }
     },
@@ -73,7 +73,7 @@ distributions_properties = {
         "stSlider2idx": {"probability(p)": 0},
         "stSlider": {
             "probability(p)":{
-                "max": 0.0, "min" : 1.0, "value": 0.5, "increment" : 0.05
+                "min": 0.0, "max" : 1.0, "value": 0.5, "increment" : 0.05
             }
         }
     },
@@ -87,7 +87,7 @@ distributions_properties = {
         "stSlider2idx": {"probability(p)": 0},
         "stSlider": {
             "probability(p)":{
-                "max": 0.1, "min" : 1.0, "value": 0.5, "increment" : 0.05
+                "min": 0.1, "max" : 1.0, "value": 0.5, "increment" : 0.05
             }
         }
     },
@@ -101,10 +101,10 @@ distributions_properties = {
         "stSlider2idx": {"Total trials(n)": 0, "probability(p)": 1},
         "stSlider": {
             "Total trials(n)":{
-                "max": 1, "min" : 100, "value": 50, "increment" : 1
+                "min": 1, "max" : 100, "value": 50, "increment" : 1
             },
             "probability(p)":{
-                "max": 0.0, "min" : 1.0, "value": 0.5, "increment" : 0.05
+                "min": 0.0, "max" : 1.0, "value": 0.5, "increment" : 0.05
             },
         }
     },
@@ -118,7 +118,7 @@ distributions_properties = {
         "stSlider2idx": {"#Expected occurence(λ)": 0},
         "stSlider": {
             "#Expected occurence(λ)":{
-                "max": 0.0, "min" : 30.0, "value":1.0 , "increment" : 0.5
+                "min": 0.0, "max" : 30.0, "value":1.0 , "increment" : 0.5
             }
         }
     },
@@ -132,10 +132,10 @@ distributions_properties = {
         "stSlider2idx": {"Shape Parameter(α)": 0, "Shape Parameter(β)": 1},
         "stSlider": {
             "Shape Parameter(α)":{
-                "max": 1.0, "min" : 10.0, "value": 5.0, "increment" : 0.5
+                "min": 1.0, "max" : 10.0, "value": 5.0, "increment" : 0.5
             },
             "Shape Parameter(β)":{
-                "max": 1.0, "min" : 10.0, "value": 5.0, "increment" : 0.5
+                "min": 1.0, "max" : 10.0, "value": 5.0, "increment" : 0.5
             }
         }
     },
@@ -149,7 +149,7 @@ distributions_properties = {
         "stSlider2idx": {"#Expected occurence(λ)": 0},
         "stSlider": {
             "Rate Parameter(λ)":{
-                "max": 0.5, "min" : 30.0, "value": 1.0, "increment" : 0.5
+                "min": 0.5, "max" : 30.0, "value": 1.0, "increment" : 0.5
             }
         }
     }
@@ -187,7 +187,7 @@ def stGetParameters(dist):
     params = distributions_properties[dist]["stSlider"]
     #print("              * params: ", params)
     var = {}
-    for k in params.keys(): var[k] = st.sidebar.slider(k, params[k]["max"], params[k]["min"], params[k]["value"], params[k]["increment"])
+    for k in params.keys(): var[k] = st.sidebar.slider(k, params[k]["min"], params[k]["max"], params[k]["value"], params[k]["increment"])
     #print("              * var: ", var)
     return var
 

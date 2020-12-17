@@ -1,7 +1,7 @@
 import os
+import streamlit as st
 from auth.otp import askForOTP, verifyOTP
 from auth.utils import write_JSON, hashPasswd
-from auth.stInputs import stNewPassword,  stConfirmPassword,  stIncorrectNewPassword,  stSuccess, stResetPasswordError
 
 LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data","login.json")
 CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data","currently-loggedin.json")
@@ -17,23 +17,17 @@ def updateNewPassword(state, email, LOGIN_JSON, password):
 def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar, GlobalElements):
     #print("\t New Password")
     #print("\t \t OTP is verified")
-    newPassword_passwd, newpasswd = stNewPassword(sidebar)
-    GlobalElements.append(newPassword_passwd)
-    confirmPassword_passwd, confirmpasswd = stConfirmPassword(sidebar)
-    GlobalElements.append(confirmPassword_passwd)
+    newpasswd = st.text_input("New Password", type="password")
+    confirmpasswd = st.text_input("Confirm Password", type="password")
     if(newpasswd =="" or confirmpasswd==""):
         #print("\t \t \t Password not Entered (empty)")
         pass
     elif(newpasswd != confirmpasswd):
-        element = stIncorrectNewPassword(sidebar)
-        GlobalElements.append(element)
+        st.warning("Password doesn't match please enter again.")
         #print("\t \t \t Incorrect Password")
     elif(newpasswd == confirmpasswd):
-        newPassword_passwd.empty()
-        confirmPassword_passwd.empty()
         updateNewPassword(state, email, LOGIN_JSON, newpasswd)
-        element = stSuccess(sidebar)
-        GlobalElements.append(element)
+        st.success("Successfully Updated Your Password")
         #print("\t \t \t Successfully Updated the Password")
         #print("\t \t \t ======DONE======")
         #print("")
@@ -52,7 +46,7 @@ def resetPassword(state, email, LOGIN_JSON, sidebar, GlobalElements):
             if(newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar, GlobalElements)):
                 return True
     else:
-        element = stResetPasswordError(stlog, sidebar)
+        st.warning(stlog)
         GlobalElements.append(element)
     #print("")
     return False
