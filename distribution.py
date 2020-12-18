@@ -33,7 +33,7 @@ distributions_properties = {
         "name": "Normal distribution",
         "iscontinuous": True,
         "latex": "$\\mathcal{N}(\\mu,\\sigma)$",
-        "parameters": ["$\\text{mean}(\\mu)$", "$\\text{Standerd Deviation}(\\sigma)$"],
+        "parameters": ["$\\text{mean}(\\mu)$", "$\\text{Standard Deviation}(\\sigma)$"],
         "parameters-repr": ["μ", "σ"],
         "parameters-latex": ["$\\mu$", "$\\sigma$"],
         "stSlider2idx": {"Mean(μ)": 0, "Standard deviation(σ)": 1},
@@ -112,12 +112,12 @@ distributions_properties = {
         "name": "Poisson distribution",
         "iscontinuous": False,
         "latex": "$\\text{Poisson}(\\lambda)$",
-        "parameters": ["$\\text{#Expected occurence}(\\lambda)$"],
+        "parameters": ["$\\text{#Expected occurrence}(\\lambda)$"],
         "parameters-repr": ["λ"],
         "parameters-latex": ["$\\lambda$"],
-        "stSlider2idx": {"#Expected occurence(λ)": 0},
+        "stSlider2idx": {"#Expected occurrence(λ)": 0},
         "stSlider": {
-            "#Expected occurence(λ)": {
+            "#Expected occurrence(λ)": {
                 "min": 0.0, "max": 30.0, "value": 1.0, "increment": 0.5
             }
         }
@@ -146,7 +146,7 @@ distributions_properties = {
         "parameters": ["$\\text{Rate Parameter}(\\lambda)$"],
         "parameters-repr": ["λ"],
         "parameters-latex": ["$\\lambda$"],
-        "stSlider2idx": {"#Expected occurence(λ)": 0},
+        "stSlider2idx": {"#Expected occurrence(λ)": 0},
         "stSlider": {
             "Rate Parameter(λ)": {
                 "min": 0.5, "max": 30.0, "value": 1.0, "increment": 0.5
@@ -184,6 +184,7 @@ def clear(L):
         e.empty()
 
 
+# noinspection PyTypeChecker
 def stGetParameters(dist):
     # print("          - stGetParameters(dist="+ dist +")")
     params = distributions_properties[dist]["stSlider"]
@@ -195,51 +196,52 @@ def stGetParameters(dist):
     return var
 
 
-def stDistribution(dist, state):
+def stDistribution(dist):
     # print("          - stDistribution(dist="+ dist + ", state)")
-    n = {}
-    n["population"] = st.sidebar.number_input("Enter Population size", min_value=100, max_value=400, value=200, step=10)
-    n["samples"] = st.sidebar.slider("Sample Size", min_value=10, max_value=100, value=50, step=5)
+    _n = {
+        "population": st.sidebar.number_input("Enter Population size", min_value=100, max_value=400, value=200, step=10),
+        "samples": st.sidebar.slider("Sample Size", min_value=10, max_value=100, value=50, step=5)
+    }
     st.sidebar.markdown("## Parameters")
     # print("              * n: ",n)
-    return stGetParameters(dist), n
+    return stGetParameters(dist), _n
 
 
 def get_distribution(dist, var):
     # print("          - get_distribution(dist="+ dist + ", var= " + str(var) +")")
-    if (dist == "gauss"):
+    if dist == "gauss":
         return norm(*var)
-    elif (dist == "unif"):
+    elif dist == "unify":
         return uniform(*var)
-    elif (dist == "ber"):
+    elif dist == "ber":
         return bernoulli(*var)
-    elif (dist == "geo"):
+    elif dist == "geo":
         return geom(*var)
-    elif (dist == "bin"):
+    elif dist == "bin":
         return binom(*var)
-    elif (dist == "poiss"):
+    elif dist == "poiss":
         return poisson(*var)
-    elif (dist == "beta"):
+    elif dist == "beta":
         return beta(*var)
-    elif (dist == "exp"):
+    elif dist == "exp":
         return expon(1 / var[0])
 
 
 def graph_label(dist, var):
     # print("          - graph_label(dist="+ dist + ", var= " + str(var) +")")
-    if (dist == "gauss"):
+    if dist == "gauss":
         return f'N(μ={var[0]}, σ={var[1]})'
-    elif (dist == "unif"):
+    elif dist == "unif":
         return f'Unif(a={var[0]}, b={var[0] + var[1]})'
-    elif (dist == "ber"):
+    elif dist == "ber":
         return f'Ber(p={var[0]})'
-    elif (dist == "geo"):
+    elif dist == "geo":
         return f'Geo(p={var[0]})'
-    elif (dist == "bin"):
+    elif dist == "bin":
         return f'Bin(n={var[0]}, p={var[1]})'
-    elif (dist == "poiss"):
+    elif dist == "poiss":
         return f'Poisson(p={var[0]})'
-    elif (dist == "beta"):
+    elif dist == "beta":
         return f'Beta(α={var[0]}, β={var[1]})'
-    elif (dist == "exp"):
+    elif dist == "exp":
         return f'Exp(λ={var[0]})'

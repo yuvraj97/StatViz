@@ -15,15 +15,15 @@ def main(state):
     # print("          * option: ",option)
     # print("          * dist: ",dist)
 
-    url = set_get_URL(dist=distributions_properties[dist]["name"])
+    set_get_URL(dist=distributions_properties[dist]["name"])
 
     # print("          * state.URL: ",state.url)
 
-    var, n = stDistribution(dist, state)
+    var, n = stDistribution(dist)
     # print("          * var: ", var)
     # print("          * n: ", n)
 
-    if (state.stSettings["seed-checkbox"].checkbox("Enable Seed", True)):
+    if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
         state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)
 
     mean, population, sample, pdf, simulation = lln.run(dist, var, n, state)

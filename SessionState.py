@@ -1,4 +1,3 @@
-# import streamlit as st
 from streamlit.hashing import _CodeHasher
 from streamlit.report_thread import get_report_ctx
 from streamlit.server.server import Server
@@ -101,5 +100,5 @@ def set_title(title):
     msg = ForwardMsg_pb2.ForwardMsg()
     msg.page_config_changed.title = title
     ctx = get_report_ctx()
-    if ctx != None:
+    if ctx is not None:
         ctx.enqueue(msg)

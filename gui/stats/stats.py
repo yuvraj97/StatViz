@@ -15,7 +15,7 @@ def stPandas(npArray, label="Random Draws"):
 def stDisplay(n_population, n_sample, true_p, n_simulations):
     population_sample, samples, fig, estimate, estimators = run(n_population, n_sample, true_p, n_simulations)
     population_sample = stPandas(population_sample, "Random Draws")
-    redballs = [sample.sum() for sample in samples]
+    redBalls = [sample.sum() for sample in samples]
     samples = [stPandas(sample, "Random Draws") for sample in samples]
     estimate = "{:.4f}".format(estimate)
 
@@ -33,7 +33,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations):
 
     st.markdown("""
     [Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)    
-    ## Scenerio
+    ## Scenario
     Say we have a bag full of """ + "$\\color{red}{\\text{red balls}}$" + " and " + "$\\color{blue}{\\text{blue balls}}.$" + """
     And we want to determine probability of drawing a """ + "$\\color{red}{\\text{red balls}}$" + """    
     
@@ -43,7 +43,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations):
     Here the **truth** is, "Proportion of """ + "$\\color{red}{\\text{red balls}}$" + """ = $""" + str(true_p) + """$"    
     ## Probability    
     **Probability** tell us what our data look like, so we know that $p = """ + str(true_p) + """$
-    so using this probability we generate(synthatic) data.""")
+    so using this probability we generate(synthetic) data.""")
 
     st.write(population_sample)
 
@@ -61,9 +61,9 @@ def stDisplay(n_population, n_sample, true_p, n_simulations):
     We use Statistics to estimate the true proportion (of all $""" + str(n_population) + """$ balls),
     in this case we just see how many balls are $\\color{red}{\\text{red}}$ balls do we have and divide it by total number of balls(=$""" + str(
         n_sample) + """$).    
-    In our sample we have $""" + str(redballs[0]) + """ \\color{red}{\\text{red balls}}$ so for this simulation
-    our estimate is $\\hat{p} = """ + str(redballs[0]) + """/""" + str(n_sample) + """=""" + str(
-        redballs[0] / n_sample) + """$
+    In our sample we have $""" + str(redBalls[0]) + """ \\color{red}{\\text{red balls}}$ so for this simulation
+    our estimate is $\\hat{p} = """ + str(redBalls[0]) + """/""" + str(n_sample) + """=""" + str(
+        redBalls[0] / n_sample) + """$
 
     Our population is much larger as compare to our sample so we perform this cycle multiple times and get multiple estimates, 
     then we combine those estimate to create a final estimate.    
@@ -84,13 +84,13 @@ def stDisplay(n_population, n_sample, true_p, n_simulations):
     .    
     .    
     .""")
-    st.success("Here our estimate is $\\bf{\widehat{p} = " + estimate + "}$")
+    st.success("Here our estimate is $\\bf{\\widehat{p} = " + estimate + "}$")
 
 
 def main(state):
     # print("    ======== stats.py [START] ========")
 
-    if (state.stats_init == None):
+    if state.stats_init is None:
         # print("        stats.main state initializing ...")
         state.stats_init = True
         state.vars = []
@@ -99,8 +99,6 @@ def main(state):
     n_sample = st.sidebar.number_input("Enter sample size", min_value=10, max_value=100, value=50)
     true_p = st.sidebar.slider("Proportion of Red balls (p)", min_value=0.0, max_value=1.0, value=0.35, step=0.05)
     n_simulations = st.sidebar.number_input("Enter number of simulation", min_value=10, max_value=30, value=15)
-
-    vars = [n_population, n_sample, true_p, n_simulations]
 
     stDisplay(n_population, n_sample, true_p, n_simulations)
     # print("    ======== stats.py  [END]  ========")

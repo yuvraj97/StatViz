@@ -5,9 +5,9 @@ import plotly.express as px
 def get_plot(data):
     counts, bins = np.histogram(np.array(data * 100, dtype=int), bins=range(0, 100, 2))
     bins = 0.5 * (bins[:-1] + bins[1:]) / 100
-    fig = px.bar(x=bins, y=counts, labels={'x': 'p', 'y': '# occurence'})
+    fig = px.bar(x=bins, y=counts, labels={'x': 'p', 'y': '# occurrence'})
     fig.update_layout(xaxis_title='Proportion of people turning their head to right (p)',
-                      yaxis_title='# occurence of certain (p) in our simulation')
+                      yaxis_title='# occurrence of certain (p) in our simulation')
     return fig
 
 

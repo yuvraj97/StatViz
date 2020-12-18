@@ -119,6 +119,7 @@ def simulation(iid_rvs, mean, n_samples, name, state):
             x[n], y[n] = None, None
         else:
             _sum += iid_rvs[counter]
+            # noinspection PyTypeChecker
             average[counter] = _sum / (counter + 1)
             x[n], y[n] = ns[counter], iid_rvs[counter]
             x[n + 1], y[n + 1] = ns[counter], mean

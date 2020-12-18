@@ -88,18 +88,18 @@ def stDisplay(dist, parameters, population, sample, n, mean, pdf, simulation, st
     """)
 
 
-def get_parameters(dist, vars):
+def get_parameters(dist, _vars):
     # print("            - parameters(dist="+ dist + ", vars="+ str(vars) +")")
     parameters = ""
     i = 0
     for parameter in distributions_properties[dist]["stSlider"]:
-        parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(vars[parameter]) + """$
+        parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(_vars[parameter]) + """$
 """
         i += 1
     return parameters
 
 
-def run(dist, population, sample, vars, n, mean, pdf, simulation, state):
+def run(dist, population, sample, _vars, n, mean, pdf, simulation, state):
     # print("          - definitions(dist=" + str(dist) + ", population="+ str(population) + ", sample=" + str(sample) + ")")
     population = population.reshape((1, len(population)))
     population = pd.DataFrame(data=population, index=['Random draws'])
@@ -107,4 +107,4 @@ def run(dist, population, sample, vars, n, mean, pdf, simulation, state):
     sample = sample.reshape((1, len(sample)))
     sample = pd.DataFrame(data=sample, index=['Sample r.v.'])
     sample.columns += 1
-    stDisplay(dist, get_parameters(dist, vars), population, sample, n, mean, pdf, simulation, state)
+    stDisplay(dist, get_parameters(dist, _vars), population, sample, n, mean, pdf, simulation, state)

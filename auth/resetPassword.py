@@ -19,16 +19,16 @@ def updateNewPassword(state, email, LOGIN_JSON, password):
 def newPasswordOTPConfirmed(state, email, LOGIN_JSON):
     # print("\t New Password")
     # print("\t \t OTP is verified")
-    newpasswd = st.text_input("New Password", type="password")
-    confirmpasswd = st.text_input("Confirm Password", type="password")
-    if newpasswd == "" or confirmpasswd == "":
+    newPassword = st.text_input("New Password", type="password")
+    confirmPassword = st.text_input("Confirm Password", type="password")
+    if newPassword == "" or confirmPassword == "":
         # print("\t \t \t Password not Entered (empty)")
         pass
-    elif newpasswd != confirmpasswd:
+    elif newPassword != confirmPassword:
         st.warning("Password doesn't match please enter again.")
         # print("\t \t \t Incorrect Password")
-    elif newpasswd == confirmpasswd:
-        updateNewPassword(state, email, LOGIN_JSON, newpasswd)
+    elif newPassword == confirmPassword:
+        updateNewPassword(state, email, LOGIN_JSON, newPassword)
         st.success("Successfully Updated Your Password")
         # print("\t \t \t Successfully Updated the Password")
         # print("\t \t \t ======DONE======")

@@ -81,7 +81,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                     incorrectPassword_warn.warning("Incorrect Password")
                     status = st.checkbox("Reset Password")
                     if status:
-                        # print("\t \t \t \t Reseting password...")
+                        # print("\t \t \t \t Resetting password...")
                         incorrectPassword_warn.empty()
                         if resetPassword(state, email, LOGIN_JSON):
                             return True, email, elements

@@ -87,7 +87,7 @@ def main():
     if access_granted:
         logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
 
-    success.main([], email, state)
+    success.main([], state)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
     # state.sync()
     if state.experimental_rerun:
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     # try:
     main()
     # except:
-    #    st.error("""Unexpected error Occured please try refreshing page "CTRL + R" of "F5"
+    #    st.error("""Unexpected error Occurred please try refreshing page "CTRL + R" of "F5"
     #    If problem still there please contact **support@quantml.org**
     #    """)
     # print("================ Statistics.py  [END]  ================")

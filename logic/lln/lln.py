@@ -14,8 +14,8 @@ def run(dist, var, n, state):
     pdf_rvs = distribution.pdf(iid_rvs) if iscontinuous else distribution.pmf(iid_rvs)
     name = graph_label(dist, var)
     mean = distribution.mean()
-    if (state.stSettings["seed"] != None): np.random.seed(state.stSettings["seed"])
+    if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
     pdf_plot = get_pdf(iid_rvs, pdf_rvs, name, iscontinuous)
-    if (state.stSettings["seed"] != None): np.random.seed(state.stSettings["seed"])
+    if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
     simulation_plot = simulation(iid_rvs, mean, n_samples, name, state)
     return mean, population, iid_rvs, pdf_plot, simulation_plot

@@ -18,6 +18,7 @@ def send_hold(email, OTP):
     body = f'OTP: {OTP}, This is your OTP(One Time Password) to reset your password.'
     msg = f'Subject: {subject}\n\n{body}'
 
+    # noinspection PyBroadException
     try:
         server = smtplib.SMTP(HOST, PORT)
         server.ehlo()
@@ -28,7 +29,7 @@ def send_hold(email, OTP):
         server.sendmail(EMAIL_ADDRESS, email, msg)
         server.close()
         return True
-    except Exception as e:
+    except Exception:
         return False
 
 def send(user_email, OTP):
