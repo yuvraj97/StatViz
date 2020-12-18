@@ -3,8 +3,8 @@ import os
 
 EMAIL_ADDRESS = "support@quantml.org"
 
-
-def send(email, OTP):
+# Replace send_hold() -> send()
+def send_hold(email, OTP):
     # Replace smtp_username with your Amazon SES SMTP user name.
     USERNAME_SMTP = os.environ.get('QUANTMLAWSSMTPUSERNAME')
 
@@ -30,3 +30,13 @@ def send(email, OTP):
         return True
     except Exception as e:
         return False
+
+def send(user_email, OTP):
+    EMAIL_ADDRESS = "quantml.app@gmail.com"  # os.environ.get('QUANTMLSTATISTICSEMAILADDR')
+    EMAIL_PASSWORD = "gqmaaogffbgamhkp"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        subject = "One Time Password to reset your Password for Statistics App"
+        body    = f'OTP: {OTP}, This is your OTP(One Time Password) to reset your password.'
+        msg     = f'Subject: {subject}\n\n{body}'
+        smtp.sendmail(EMAIL_ADDRESS, user_email, msg)

@@ -45,7 +45,7 @@ def resetPassword(state, email, LOGIN_JSON, sidebar):
     status, stlog = askForOTP(state, email, LOGIN_JSON)
     # print("OTP_COUNT",LOGIN_JSON[email]["OTP_COUNT"])
     if (status):
-        if LOGIN_JSON[email]["OTP_VERIFICATION_ID"] == state.ID or verifyOTP(state, email, LOGIN_JSON, sidebar):
+        if verifyOTP(state, email, LOGIN_JSON, sidebar):
             if (newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar)):
                 return True
     else:

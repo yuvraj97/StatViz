@@ -31,8 +31,6 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
     # print("\t Login...")
     elements = []
     with st.sidebar.beta_expander("Login", expanded=False) if (sidebar) else st.beta_expander("Login", expanded=False):
-        incorrectPassword_warn = st.empty()
-
         email = st.text_input('Enter your E-mail', value="name@example.com")
         email = email.lower()
 
@@ -79,6 +77,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                     return True, email, elements
                 else:
                     # print("\t \t \t password didn't Match")
+                    incorrectPassword_warn = st.empty()
                     incorrectPassword_warn.warning("Incorrect Password")
                     status = st.checkbox("Reset Password")
                     if status:

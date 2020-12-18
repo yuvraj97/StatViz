@@ -27,6 +27,7 @@ def write_JSON(json_file, path):
 
 def sendOTP(state, email):
     state.experimental_rerun = True
+    np.random.seed()
     OTP = np.random.randint(100001, 999999)
-    # send(email, OTP)
+    send(email, OTP)
     return OTP
