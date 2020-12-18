@@ -21,7 +21,7 @@ def alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON):
 
 
 def verifyEmail(email):
-    if ('@' in email and '.' in email):
+    if '@' in email and '.' in email:
         return True
     else:
         return False
@@ -31,52 +31,48 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
     # print("\t Login...")
     elements = []
     with st.sidebar.beta_expander("Login", expanded=False) if (sidebar) else st.beta_expander("Login", expanded=False):
-        email_txt = st.empty()
-        email_err = st.empty()
-        incorrectEmail_warn = st.empty()
-        passwd_txt = st.empty()
         incorrectPassword_warn = st.empty()
-        resetPassword_check = st.empty()
 
-        email = email_txt.text_input('Enter your E-mail', value="name@example.com")
+        email = st.text_input('Enter your E-mail', value="name@example.com")
         email = email.lower()
 
         if email == "name@example.com" or email.replace(' ', '') == "":
             # print("\t \t Email not set (empty)")
             # print("\t \t ======Failed======")
             pass
-        elif (not verifyEmail(email)):
+        elif not verifyEmail(email):
             # print("\t \t Invalid Email Address")
-            email_err.error(f'"**{email}**" is **not** a valid email address')
+            st.error(f'"**{email}**" is **not** a valid email address')
             return False, email, elements
 
         elif email not in LOGIN_JSON:
             # print(f"\t \t {email} is not in our data base")
             # element = stEmpty()
             # element.error('''**'''+ email + """**
-            #            is not registered as a **[patreon](https://www.patreon.com/quantml)**    
-            #            This app is under development, it's not finalized yet.    
+            #            is not registered as a **[patreon](https://www.patreon.com/quantml)**
+            #            This app is under development, it's not finalized yet.
             #            To get **early access** to this app, **Join us at [patreon](https://www.patreon.com/quantml)**
             #        """)
             msg = f"""
-                        **{email}** is not registered as a *developer*.    
-                        This app is under development so only *developer* can access it.   
-                        It will soon be publicly available.
+                       **{email}** is not registered as a **[patreon](https://www.patreon.com/quantml) !**    
+                       This app is under development, once it's concluded it will br available to everyone.       
+                       To get **early access** to this app, **Join us at [patreon](https://www.patreon.com/quantml)**
                     """
-            incorrectEmail_warn.warning(msg)
+            st.warning(msg)
             # print("\t \t ======Failed======")
         elif email in LOGIN_JSON:
             # print(f"\t \t {email} is a verified email address")
-            if (LOGIN_JSON[email]['pass'] == "None"):
+            if LOGIN_JSON[email]['pass'] == "None":
+                st.header("Create Password")
                 resetPassword(state, email, LOGIN_JSON, sidebar)
             else:
-                password = passwd_txt.text_input("Password", type="password")
+                password = st.text_input("Password", type="password")
                 # print(password)
-                if (password == ''):
+                if password == '':
                     # print("\t \t \t password field is (empty)")
                     # print("\t \t \t ======Failed======")
                     pass
-                elif (hashPasswd(password) == LOGIN_JSON[email]['pass']):
+                elif hashPasswd(password) == LOGIN_JSON[email]['pass']:
                     # print("\t \t \t password Matched")
                     # print("\t \t \t ======DONE======")
                     # print("")
@@ -84,11 +80,11 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                 else:
                     # print("\t \t \t password didn't Match")
                     incorrectPassword_warn.warning("Incorrect Password")
-                    status = resetPassword_check.checkbox("Reset Password")
-                    if (status):
+                    status = st.checkbox("Reset Password")
+                    if status:
                         # print("\t \t \t \t Reseting password...")
                         incorrectPassword_warn.empty()
-                        if (resetPassword(state, email, LOGIN_JSON, sidebar)):
+                        if resetPassword(state, email, LOGIN_JSON, sidebar):
                             return True, email, elements
         # print("")
     return False, email, elements

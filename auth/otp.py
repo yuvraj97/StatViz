@@ -1,16 +1,16 @@
 import os
 from datetime import datetime
 from auth.utils import write_JSON, sendOTP
-from auth.stInputs import stOTPHeaderInfo, stEnterOTP, stIncorrectOTPError, stUnknownOTPError
+import streamlit as st
 
 LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "login.json")
 CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
 
 
 def askForOTP(state, email, LOGIN_JSON):
-    if (LOGIN_JSON[email]["OTP_COUNT"] <= 3):
+    if LOGIN_JSON[email]["OTP_COUNT"] <= 3:
         return True, None
-    if (LOGIN_JSON[email]["OTP_COUNT"] == 4):
+    if LOGIN_JSON[email]["OTP_COUNT"] == 4:
         # print("\t \t OTP Limit Reached 3 !!!")
         LOGIN_JSON[email]["OTP_COUNT"] += 1
         time = datetime.now().replace(microsecond=0)
@@ -28,7 +28,7 @@ def askForOTP(state, email, LOGIN_JSON):
                  """
         # print("\t \t ======FAILED======")
         return False, stlog
-    if (LOGIN_JSON[email]["OTP_COUNT"] == 5):
+    if LOGIN_JSON[email]["OTP_COUNT"] == 5:
         # print("\t \t OTP Limit Reached 4 !!!")
         otp_exceed_time = datetime(
             LOGIN_JSON[email]["OTP_LIMIT_REACH_TIME"]["year"],
@@ -40,7 +40,7 @@ def askForOTP(state, email, LOGIN_JSON):
         )
         now = datetime.now().replace(microsecond=0)
         diff = now - otp_exceed_time
-        if (diff.seconds <= 1800):
+        if diff.seconds <= 1800:
             # print("\t \t \t OTP LIMIT TIMEOUT <=1800 !")
             stlog = f"""
                         You have exceeded the limit.    
@@ -61,19 +61,17 @@ def askForOTP(state, email, LOGIN_JSON):
 
 
 def verifyOTP(state, email, LOGIN_JSON, sidebar):
-    # print("\t Verifing OTP...")
-
-    otpHeader_info = stOTPHeaderInfo(
-        f"""An OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over *{email}* also check the **Spam folder**""",
-        sidebar)
-    enter_OTP_txt, enteredOTP = stEnterOTP(sidebar)
+    # print("\t Verifying OTP...")
+    otpHeader_info = st.empty()
+    otpHeader_info.info(f"""An OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over *{email}* also check the **Spam folder**""")
+    enteredOTP = st.text_input("Enter OTP")
     # print("OTP:", state.OTP)
-    import streamlit as st
-    st.write("OTP:" + str(state.OTP))
+
+    # st.write("OTP:" + str(state.OTP))
     # 2nd condition is used to stop sending 2 OTP
-    if (enteredOTP == "" or enteredOTP == state.INCORRECT_OTP):
+    if enteredOTP == "" or enteredOTP == state.INCORRECT_OTP:
         # print("\t \t OTP field is (empty)")
-        if (state.FIRSTOTPSENT == None):
+        if state.FIRSTOTPSENT is None:
             # print("\t \t \t First OTP sent")
             msg = f"""An OTP ({LOGIN_JSON[email]["OTP_COUNT"] + 1}/3) is sent over *{email}* also check the **Spam folder**"""
             otpHeader_info.info(msg)
@@ -82,19 +80,19 @@ def verifyOTP(state, email, LOGIN_JSON, sidebar):
             LOGIN_JSON[email]["OTP_COUNT"] += 1
             write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
             # print("\t \t \t ======Process======")
-        if (state.FIRST_INCORRECT_OTP == True):
+        if state.FIRST_INCORRECT_OTP:
             # print("\t \t \t Incorrect OTP (empty)")
             otpHeader_info.empty()
             incorrectOTPText = f"""
                         OTP is incorrect!    
                         Another OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over *{email}* also check the **Spam folder**.
                     """
-            element = stIncorrectOTPError(incorrectOTPText, sidebar)
+            st.error(incorrectOTPText)
             # print("\t \t \t ======FAILED======")
-    elif (state.OTP != enteredOTP):
+    elif state.OTP != enteredOTP:
         # print("\t \t OTP is incorrect")
         state.INCORRECT_OTP = enteredOTP
-        if state.FIRST_INCORRECT_OTP == None:
+        if state.FIRST_INCORRECT_OTP is None:
             # print("\t \t \t This is First Incorrect OTP")
             state.FIRST_INCORRECT_OTP = True
         otpHeader_info.empty()
@@ -102,15 +100,13 @@ def verifyOTP(state, email, LOGIN_JSON, sidebar):
                         OTP is incorrect!    
                         Another OTP ({LOGIN_JSON[email]["OTP_COUNT"] + 1}/3) is sent over *{email}* also check the **Spam folder**.
                     """
-        stIncorrectOTPError(incorrectOTPText, sidebar)
+        st.error(incorrectOTPText, sidebar)
         state.OTP = str(sendOTP(state, email))
         LOGIN_JSON[email]["OTP_COUNT"] += 1
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
         # print("\t \t ======FAILED======")
-    elif (state.OTP == enteredOTP):
+    elif state.OTP == enteredOTP:
         # print("\t \t OTP Verified Successfully")
-        otpHeader_info.empty()
-        enter_OTP_txt.empty()
         LOGIN_JSON[email]["OTP_COUNT"] = 0
         LOGIN_JSON[email]["OTP_VERIFICATION_ID"] = state.ID
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
@@ -119,7 +115,7 @@ def verifyOTP(state, email, LOGIN_JSON, sidebar):
         # print("\t \t ======DONE======")
         return True
     else:
-        element = stUnknownOTPError(sidebar)
+        st.error("Unknown Error Occurred!")
         # print("\t \t ======FAILED======")
     # print("")
 
