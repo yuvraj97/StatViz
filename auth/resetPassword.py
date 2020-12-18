@@ -16,18 +16,18 @@ def updateNewPassword(state, email, LOGIN_JSON, password):
     # print("")
 
 
-def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar):
+def newPasswordOTPConfirmed(state, email, LOGIN_JSON):
     # print("\t New Password")
     # print("\t \t OTP is verified")
     newpasswd = st.text_input("New Password", type="password")
     confirmpasswd = st.text_input("Confirm Password", type="password")
-    if (newpasswd == "" or confirmpasswd == ""):
+    if newpasswd == "" or confirmpasswd == "":
         # print("\t \t \t Password not Entered (empty)")
         pass
-    elif (newpasswd != confirmpasswd):
+    elif newpasswd != confirmpasswd:
         st.warning("Password doesn't match please enter again.")
         # print("\t \t \t Incorrect Password")
-    elif (newpasswd == confirmpasswd):
+    elif newpasswd == confirmpasswd:
         updateNewPassword(state, email, LOGIN_JSON, newpasswd)
         st.success("Successfully Updated Your Password")
         # print("\t \t \t Successfully Updated the Password")
@@ -39,14 +39,14 @@ def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar):
     return False
 
 
-def resetPassword(state, email, LOGIN_JSON, sidebar):
+def resetPassword(state, email, LOGIN_JSON):
     # print("\t Reset Password")
     # print("OTP_COUNT",LOGIN_JSON[email]["OTP_COUNT"])
     status, stlog = askForOTP(state, email, LOGIN_JSON)
     # print("OTP_COUNT",LOGIN_JSON[email]["OTP_COUNT"])
-    if (status):
-        if verifyOTP(state, email, LOGIN_JSON, sidebar):
-            if (newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar)):
+    if status:
+        if state.OTP_VERIFIED or verifyOTP(state, email, LOGIN_JSON):
+            if newPasswordOTPConfirmed(state, email, LOGIN_JSON):
                 return True
     else:
         st.warning(stlog)

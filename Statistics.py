@@ -38,10 +38,12 @@ def main():
 
     with st.sidebar.beta_expander("Settings", expanded=False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
-            if state.theme != "dark": set_cookie("theme", "dark")
+            if state.theme != "dark":
+                set_cookie("theme", "dark")
             state.theme = "dark"
         else:
-            if state.theme != "light": set_cookie("theme", "light")
+            if state.theme != "light":
+                set_cookie("theme", "light")
             state.theme = "light"
         state.stSettings = {
             "seed-checkbox": st.empty(),

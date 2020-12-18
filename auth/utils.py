@@ -1,7 +1,6 @@
 import json
 import numpy as np
 from hashlib import sha256
-import auth.forgotPasswd
 from auth.forgotPasswd import send
 
 

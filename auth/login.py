@@ -30,7 +30,7 @@ def verifyEmail(email):
 def initializeLogin(state, LOGIN_JSON, sidebar):
     # print("\t Login...")
     elements = []
-    with st.sidebar.beta_expander("Login", expanded=False) if (sidebar) else st.beta_expander("Login", expanded=False):
+    with st.sidebar.beta_expander("Login", expanded=False) if sidebar else st.beta_expander("Login", expanded=False):
         email = st.text_input('Enter your E-mail', value="name@example.com")
         email = email.lower()
 
@@ -62,7 +62,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
             # print(f"\t \t {email} is a verified email address")
             if LOGIN_JSON[email]['pass'] == "None":
                 st.header("Create Password")
-                resetPassword(state, email, LOGIN_JSON, sidebar)
+                resetPassword(state, email, LOGIN_JSON)
             else:
                 password = st.text_input("Password", type="password")
                 # print(password)
@@ -83,7 +83,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                     if status:
                         # print("\t \t \t \t Reseting password...")
                         incorrectPassword_warn.empty()
-                        if resetPassword(state, email, LOGIN_JSON, sidebar):
+                        if resetPassword(state, email, LOGIN_JSON):
                             return True, email, elements
         # print("")
     return False, email, elements
@@ -94,7 +94,7 @@ def onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     ID = state.ID
 
     prev_ID = LOGIN_JSON[email]["ID"]
-    if (prev_ID in CURRENTLY_LOGIN_JSON):
+    if prev_ID in CURRENTLY_LOGIN_JSON:
         del CURRENTLY_LOGIN_JSON[prev_ID]
     CURRENTLY_LOGIN_JSON[ID] = email
 
@@ -106,7 +106,7 @@ def onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
 
 def login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, sidebar):
     access_granted, email, elements = initializeLogin(state, LOGIN_JSON, sidebar)
-    if (access_granted):
+    if access_granted:
         onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
         write_JSON(CURRENTLY_LOGIN_JSON, CURRENTLY_LOGIN_JSON_PATH)
@@ -124,7 +124,7 @@ def logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
 
 def logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     status = st.sidebar.button("Logout")
-    if (status):
+    if status:
         logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
         write_JSON(CURRENTLY_LOGIN_JSON, CURRENTLY_LOGIN_JSON_PATH)
