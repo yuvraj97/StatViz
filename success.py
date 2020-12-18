@@ -1,3 +1,4 @@
+from gui.stats import stats
 from gui.lln import lln
 from gui.clt import clt
 from utils import chapters, chapters_acronyms, chapter2idx, getChapterIndexByURL, set_get_URL
@@ -24,14 +25,14 @@ def main(elements, state):
     # print("          * option: ",option)
     # print("          * url: ",url)
 
-    # if(option==chapters[0]):
-    #    stats.main(state)
-    #    set_get_URL(dist = "remove")
-    if option == chapters[0]:
-        set_title('Weak Law of Large Numbers | Visualization | Statistics - QuantML')
+    if(option==chapters[0]):
+        set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
+        stats.main(state)
+    if option == chapters[1]:
+        set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
         lln.main(state)
-    elif option == chapters[1]:
-        set_title('Central Limit Theorem | Visualization | Statistics - QuantML')
+    elif option == chapters[2]:
+        set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
         clt.main()
 
         # print("    ======== success.py  [END]  ========")

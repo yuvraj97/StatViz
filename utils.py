@@ -1,7 +1,7 @@
 import streamlit as st
 
 chapters = [
-    # "Introduction",
+    "Introduction",
     "Law of Large Number",
     "Central Limit Theorem (patreon)",
 ]
@@ -13,7 +13,7 @@ def chapter2idx(chapter):
 
 
 chapters_acronyms = [
-    # "Introduction",
+    "Introduction",
     "LLN",
     "CLT",
 ]
