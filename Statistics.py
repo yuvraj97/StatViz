@@ -34,7 +34,7 @@ def main():
     state.experimental_rerun = False
     state.theme = state.theme if state.theme is not None else SessionState.get_cookie("theme")
     state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
-    print("isMobile: ", state.isMobile)
+    # print("isMobile: ", state.isMobile)
 
     with st.sidebar.beta_expander("Settings", expanded=False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
@@ -78,11 +78,11 @@ def main():
     # print("          * email: ", email)
     if not access_granted:
         access_granted, email, elements = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
-        print("      - RETURNED FROM login()")
+        # print("      - RETURNED FROM login()")
         # print("          * access_granted: ", access_granted)
         # print("          * email: ", email)
         if access_granted:
-            print("if(access_granted): ")
+            # print("if(access_granted): ")
             state.experimental_rerun = True
     if access_granted:
         logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)

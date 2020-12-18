@@ -1,4 +1,5 @@
 __pycache__/
-data/login.json
 *.json
 .idea/
+data/currently-loggedin.json
+data/login.json
