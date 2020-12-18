@@ -33,13 +33,15 @@ setTimeout(()=>{
     // })
 
 
-    chapter = document.getElementById('quantml-chapter').innerHTML
-    if(chapter == "wlln"){
+    chapter = document.getElementById('quantml-chapter')
+    if(chapter == null){
+
+    } else if(chapter.innerHTML == "wlln"){
         // console.log("current chapter: Weak Law of Large Numbers")
         // document.querySelector('title').innerHTML = "Weak Law of Large Numbers | Statistics App - Quantml"
         meta_keywords.content = "statistics,weak law of large numbers,visualization,weak law of large numbers visualization,law of large numbers,law of large numbers visualization,statistics app,quantml"
         meta_description.content = "Visualize Weak Law of Large Numbers | Statistics. See how changing parameters, distribution affects convergence. app.quantml.org here you can learn concepts by interacting with them."
-    } else if (chapter == "clt"){
+    } else if (chapter.innerHTML == "clt"){
         // console.log("current chapter: Central Limit Theorem")
         // document.querySelector('title').innerHTML = "Central Limit Theorem | Statistics App - Quantml"
         meta_keywords.content = "statistics,central limit theorem,visualization,central limit theorem visualization,statistics app,quantml"
@@ -56,15 +58,12 @@ setTimeout(()=>{
 body   = document.querySelector("body")
 const observer = new MutationObserver(function(mutations){
     setTimeout(function(){
-        quantml_cookie_div   = document.getElementById("set-quantml-cookie")
-        if(quantml_cookie_div != null){
-            document.cookie = `${quantml_cookie_div.getAttribute("name")}=${quantml_cookie_div.getAttribute("value")}`
-            // quantml_cookie_div.remove()
-            console.log("Set Cookie2")
-        } else{
-            console.log("quantml_cookie not found2")    
-        }
-    }, 1000)
+        document.querySelectorAll("#set-quantml-cookie").forEach(function(element, index){
+            document.cookie = `${element.getAttribute("name")}=${element.getAttribute("value")}`
+            console.log("Set Cookie")
+            element.remove()
+        })
+    }, 0)
 })
 observer.observe(body, {
     childList:true,

@@ -214,3 +214,38 @@ def applyDarkTheme():
     </style>
     
     """, unsafe_allow_html=True)
+
+def mainStyle():
+    st.markdown("""
+        <style>
+        .css-1aumxhk {
+            padding: 0em 0em;
+            /*width: 100%;*/
+        }
+        .streamlit-expanderContent{
+            margin-bottom: 30px;
+        }
+        .css-hx4lkt{
+            padding: 2rem 1rem 3rem;
+        }
+        /*rgb(230, 234, 241)*/
+        .streamlit-expanderHeader{
+            border-block-color:rgb(210, 210, 210);
+        }
+        .streamlit-expanderHeader:hover{
+            border-block-color:#0073b1;
+        }
+        .streamlit-expanderContent{
+            border-block-color:rgb(210, 210, 210);
+        }
+        blockquote {
+            border-left: solid 4px;
+            margin: 10px 0 10px 0;
+            padding: 1rem 2rem 0.1rem 2rem;
+            background-color:#ECF1F6;
+            border-left-color: #467AAC;
+            border-radius: 10px;
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )

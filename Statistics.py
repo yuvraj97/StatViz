@@ -4,8 +4,8 @@ import SessionState
 import success
 from auth.utils import read_JSON
 from auth.login import alreadyLoggedIn, logout_button, login
-from themes import applyDarkTheme
-from js import set_cookie
+from themes import applyDarkTheme, mainStyle
+from js import set_cookie, get_ID
 
 
 def clear(elements):
@@ -17,7 +17,7 @@ def clear(elements):
 def initializeID(state, CURRENTLY_LOGIN_JSON):
     # print("  initializeID(state, CURRENTLY_LOGIN_JSON)")
     if state.ID is None:
-        state.ID = "123kjgg4"  # SessionState.get_ID()
+        state.ID = get_ID(CURRENTLY_LOGIN_JSON)
         state.url = st.experimental_get_query_params()
         # print("        * ID: ", state.ID)
         # print("        * url: ", str(state.url))
@@ -32,17 +32,17 @@ def main():
     CURRENTLY_LOGIN_JSON = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
     state = SessionState.get_state()
     state.experimental_rerun = False
-    state.theme = "light"
+    state.theme = state.theme if state.theme is not None else SessionState.get_cookie("theme")
     state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
     print("isMobile: ", state.isMobile)
 
     with st.sidebar.beta_expander("Settings", expanded=False):
-        if st.checkbox("Apply Dark Theme", True if SessionState.get_cookie('theme') == "dark" else False):
+        if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
+            if state.theme != "dark": set_cookie("theme", "dark")
             state.theme = "dark"
-            set_cookie("theme", "dark")
         else:
+            if state.theme != "light": set_cookie("theme", "light")
             state.theme = "light"
-            set_cookie("theme", "light")
         state.stSettings = {
             "seed-checkbox": st.empty(),
             "seed-number": st.empty(),
@@ -99,39 +99,7 @@ if __name__ == '__main__':
         layout='centered',
         initial_sidebar_state='expanded'
     )
-    st.markdown("""
-        <style>
-        .css-1aumxhk {
-            padding: 0em 0em;
-            /*width: 100%;*/
-        }
-        .streamlit-expanderContent{
-            margin-bottom: 30px;
-        }
-        .css-hx4lkt{
-            padding: 2rem 1rem 3rem;
-        }
-        /*rgb(230, 234, 241)*/
-        .streamlit-expanderHeader{
-            border-block-color:rgb(210, 210, 210);
-        }
-        .streamlit-expanderHeader:hover{
-            border-block-color:#0073b1;
-        }
-        .streamlit-expanderContent{
-            border-block-color:rgb(210, 210, 210);
-        }
-        blockquote {
-            border-left: solid 4px;
-            margin: 10px 0 10px 0;
-            padding: 1rem 2rem 0.1rem 2rem;
-            background-color:#ECF1F6;
-            border-left-color: #467AAC;
-            border-radius: 10px;
-        }
-        </style>
-        """, unsafe_allow_html=True
-                )
+    mainStyle()
     # print("================ Statistics.py [START] ================")
     st.sidebar.markdown(
         "<h1 style='font-family:Arial;text-align:center;'><a href='https://quantml.org'>QuantML</a></h1>",
