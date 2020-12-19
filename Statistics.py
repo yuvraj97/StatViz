@@ -4,9 +4,10 @@ import SessionState
 import success
 from auth.utils import read_JSON
 from auth.login import alreadyLoggedIn, logout_button, login
-from themes import applyDarkTheme, mainStyle
+from themes import applyDarkTheme, applyLightTheme , mainStyle
 from js import set_cookie, get_ID
-
+import logic.stats.stats
+import gui.stats.stats
 
 def clear(elements):
     # print("        - clear(elements)")
@@ -53,6 +54,8 @@ def main():
 
     if state.theme == "dark":
         applyDarkTheme()
+    else:
+        applyLightTheme()
 
     # state.ID_TAKEN
     # state.ID

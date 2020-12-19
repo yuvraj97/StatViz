@@ -22,9 +22,9 @@ def askForOTP(state, email, LOGIN_JSON):
         LOGIN_JSON[email]["OTP_LIMIT_REACH_TIME"]["second"] = time.second
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
         stlog = """
-                    You have exceeded the limit.    
-                    Now you need to wait for **30 minutes** to request for another OTP.    
-                    *(Rerun to update the time)*
+                    You have exceeded the limit.<br>
+                    Now you need to wait for <b>30 minutes</b> to request for another OTP.<br>    
+                    <i>(Rerun to update the time)</i>
                  """
         # print("\t \t ======FAILED======")
         return False, stlog
@@ -43,9 +43,9 @@ def askForOTP(state, email, LOGIN_JSON):
         if diff.seconds <= 1800:
             # print("\t \t \t OTP LIMIT TIMEOUT <=1800 !")
             stlog = f"""
-                        You have exceeded the limit.    
-                        You can request for another OTP after **{"{:.2f}".format((1800 - diff.seconds) / 60)} minutes**.    
-                        *(Rerun to update the time)*
+                        You have exceeded the limit.<br>    
+                        You can request for another OTP after <b>{"{:.2f}".format((1800 - diff.seconds) / 60)} minutes</b>.<br>
+                        <i>(Rerun to update the time)</i>
                     """
             # print("\t \t \t ======FAILED======")
             return False, stlog
@@ -85,10 +85,10 @@ def verifyOTP(state, email, LOGIN_JSON):
             # print("\t \t \t Incorrect OTP (empty)")
             otpHeader_info.empty()
             incorrectOTPText = f"""
-                        OTP is incorrect!    
-                        Another OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over *{email}* also check the **Spam folder**.
+                        OTP is incorrect!<br>
+                        Another OTP ({LOGIN_JSON[email]["OTP_COUNT"]}/3) is sent over <i>{email}</i> also check the <b>Spam folder</b>.
                     """
-            st.error(incorrectOTPText)
+            st.markdown(f'<blockquote class="error">{incorrectOTPText}</blockquote>', unsafe_allow_html=True)
             # print("\t \t \t ======FAILED======")
     elif state.OTP != enteredOTP:
         # print("\t \t OTP is incorrect")
@@ -98,10 +98,10 @@ def verifyOTP(state, email, LOGIN_JSON):
             state.FIRST_INCORRECT_OTP = True
         otpHeader_info.empty()
         incorrectOTPText = f"""
-                        OTP is incorrect!    
-                        Another OTP ({LOGIN_JSON[email]["OTP_COUNT"] + 1}/3) is sent over *{email}* also check the **Spam folder**.
+                        OTP is incorrect!<br>
+                        Another OTP ({LOGIN_JSON[email]["OTP_COUNT"] + 1}/3) is sent over <i>{email}</i> also check the <b>Spam folder</b>.
                     """
-        st.error(incorrectOTPText)
+        st.markdown(f'<blockquote class="error">{incorrectOTPText}</blockquote>', unsafe_allow_html=True)
         state.OTP = str(sendOTP(state, email))
         LOGIN_JSON[email]["OTP_COUNT"] += 1
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
@@ -118,7 +118,7 @@ def verifyOTP(state, email, LOGIN_JSON):
         # print("\t \t ======DONE======")
         return True
     else:
-        st.error("Unknown Error Occurred!")
+        st.markdown(f'<blockquote class="error">Unknown Error Occurred!</blockquote>', unsafe_allow_html=True)
         # print("\t \t ======FAILED======")
     # print("")
 

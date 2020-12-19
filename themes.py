@@ -187,10 +187,13 @@ def applyDarkTheme():
 
         /* stAlert */        
             .stAlert > div{
-                background-color: rgba(250, 202, 43, 0.1 );
+                /*background-color: rgba(250, 202, 43, 0.1 );*/
+                background-color: rgba(150, 206, 255, 0.05);
+                border-color: rgb(150, 206, 255, 0.5);
             }
             .stAlert *{
-                color:rgb(255, 200, 142);
+                /*color:rgb(255, 200, 142);*/
+                color:rgb(150, 206, 255);
             }
 
         /* st Button */
@@ -203,12 +206,102 @@ def applyDarkTheme():
                 color: rgb(255, 180, 100, 1);
             }
 
-        blockquote {
-            background-color:#1C1B1B;
-            border-left-color: rgb(207, 210, 214);
+        /* ================================================================ */
+        /* ================================================================ */
+
+        .l1 {    color: rgb(255, 150, 150);     }
+        .l2 {    color: rgb(150, 206, 255);     }
+        .l3 {    color: rgb(150, 255, 150);     }
+        .l4 {    color: rgb(255, 255, 200);     }
+
+        blockquote.info {
+            border-top-color: rgba(150, 206, 255, 0.5);
+            border-bottom-color: rgba(150, 206, 255, 0.5);
+            border-left-color: rgba(150, 206, 255, 0.5);
+            border-right-color: rgba(150, 206, 255, 0.5);
+            color: rgb(150, 206, 255);
+            background-color: rgba(150, 206, 255, 0.05);   
         }
+        blockquote.info > b {
+            color: rgb(150, 206, 255);            
+        }
+        
+        blockquote.warning {
+            border-top-color: rgba(255, 255, 200, 0.5);
+            border-bottom-color: rgba(255, 255, 200, 0.5);
+            border-left-color: rgba(255, 255, 200, 0.5);
+            border-right-color: rgba(255, 255, 200, 0.5);
+            color: rgb(255, 255, 200);
+            background-color: rgba(255, 255, 200, 0.05);   
+        }
+        blockquote.warning > b {
+            color: rgb(255, 255, 200);
+        }
+        
+        blockquote.success {
+            border-top-color: rgba(150, 255, 150, 0.5);
+            border-bottom-color: rgba(150, 255, 150, 0.5);
+            border-left-color: rgba(150, 255, 150, 0.5);
+            border-right-color: rgba(150, 255, 150, 0.5);
+            color: rgb(150, 255, 150);
+            background-color: rgba(150, 255, 150, 0.05);   
+        }
+        blockquote.success > b {
+            color: rgb(150, 255, 150);
+        }
+        
+        blockquote.error {
+            border-top-color: rgba(255, 150, 150, 0.5);
+            border-bottom-color: rgba(255, 150, 150, 0.5);
+            border-left-color: rgba(255, 150, 150, 0.5);
+            border-right-color: rgba(255, 150, 150, 0.5);
+            color: rgb(255, 150, 150);
+            background-color: rgba(255, 150, 150, 0.05);   
+        }
+        blockquote.error > b {
+            color: rgb(255, 150, 150);
+        }
+        
     </style>
     
+    """, unsafe_allow_html=True)
+
+def applyLightTheme():
+    st.markdown("""
+    <style>
+        blockquote.info {
+            border-top-color: rgba(0, 104, 201, 0.1);
+            border-bottom-color: rgba(0, 104, 201, 0.1);
+            border-left-color: rgba(0, 104, 201, 0.1);
+            border-right-color: rgba(0, 104, 201, 0.1);
+            color: rgb(30, 103, 119);
+            background-color: rgba(0, 104, 201, 0.1);   
+        }
+        blockquote.warning {
+            border-top-color: rgba(250, 202, 43, 0.8);
+            border-bottom-color: rgba(250, 202, 43, 0.8);
+            border-left-color: rgba(250, 202, 43, 0.8);
+            border-right-color: rgba(250, 202, 43, 0.8);
+            color: rgb(148, 124, 45);
+            background-color: rgba(250, 202, 43, 0.2);   
+        }
+        blockquote.success {
+            border-top-color: rgba(9, 171, 59, 0.2);
+            border-bottom-color: rgba(9, 171, 59, 0.2);
+            border-left-color: rgba(9, 171, 59, 0.2);
+            border-right-color: rgba(9, 171, 59, 0.2);
+            color: rgb(23, 108, 54);
+            background-color: rgba(9, 171, 59, 0.2);   
+        }
+        blockquote.error {
+            border-top-color: rgba(255, 43, 43, 0.2);
+            border-bottom-color: rgba(255, 43, 43, 0.2);
+            border-left-color: rgba(255, 43, 43, 0.2);
+            border-right-color: rgba(255, 43, 43, 0.2);
+            color: rgb(157, 41, 45);
+            background-color: rgba(255, 43, 43, 0.2);   
+        }
+    </style>
     """, unsafe_allow_html=True)
 
 def mainStyle():
@@ -234,13 +327,51 @@ def mainStyle():
         .streamlit-expanderContent{
             border-block-color:rgb(210, 210, 210);
         }
-        blockquote {
+        /*blockquote {
             border-left: solid 4px;
             margin: 10px 0 10px 0;
-            padding: 1rem 2rem 0.1rem 2rem;
+            padding: 1rem 2rem 1rem 2rem;
             background-color:#ECF1F6;
             border-left-color: #467AAC;
             border-radius: 10px;
+        }*/
+        blockquote.noborder {
+            border-left: unset;
+        }
+                
+        blockquote {
+            border: 1px solid;
+            opacity: 1;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            /*display: flex;*/
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+            transition-property: all;
+            box-shadow: none;
+            
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+            border-bottom-right-radius: 0.25rem;
+            
+            margin-top: 0px;
+            margin-bottom: 1rem;
+            margin-left: 0px;
+            margin-right: 0px;
+            
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            
+            height: auto;
+            pointer-events: auto;
+            
+            line-height: 1.6;
+            font-weight: normal;
+            font-family: "IBM Plex Sans", sans-serif;
+            font-size: 1rem;
         }
         </style>
         """, unsafe_allow_html=True

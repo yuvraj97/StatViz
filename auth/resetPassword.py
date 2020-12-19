@@ -25,11 +25,11 @@ def newPasswordOTPConfirmed(state, email, LOGIN_JSON):
         # print("\t \t \t Password not Entered (empty)")
         pass
     elif newPassword != confirmPassword:
-        st.warning("Password doesn't match please enter again.")
+        st.markdown(f'<blockquote class="warning">Password does not match, please try again.</blockquote>', unsafe_allow_html=True)
         # print("\t \t \t Incorrect Password")
     elif newPassword == confirmPassword:
         updateNewPassword(state, email, LOGIN_JSON, newPassword)
-        st.success("Successfully Updated Your Password")
+        st.markdown(f'<blockquote class="success">Successfully Updated Your Password</blockquote>', unsafe_allow_html=True)
         # print("\t \t \t Successfully Updated the Password")
         # print("\t \t \t ======DONE======")
         # print("")
@@ -49,6 +49,6 @@ def resetPassword(state, email, LOGIN_JSON):
             if newPasswordOTPConfirmed(state, email, LOGIN_JSON):
                 return True
     else:
-        st.warning(stlog)
+        st.markdown(f'<blockquote class="warning">{stlog}</blockquote>', unsafe_allow_html=True)
     # print("")
     return False

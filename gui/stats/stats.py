@@ -37,11 +37,11 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         Here the **truth** is that, currently the <b>room</b> is holding
         <span class="l1">$40\\%$</span> of <span class="l1">Red balls</span> and
         <span class="l2">$60\\%$</span> of <span class="l2">Blue balls</span>. <br>
-        <blockquote class="noborder">Note that we do <b>not</b> know this proportion and our intent is to find this proportion.</blockquote>
+        <blockquote class="error">Note that we do <b>not</b> know this proportion and our intent is to find this proportion.</blockquote>
         """, unsafe_allow_html=True)
 
     population_plot = plot_binary_data({
-        "title":"Population",
+        "title": "Population",
         "legend-1": "Red Balls",
         "legend-2": "Blue Balls",
         "count-1": int(n_population*true_p),
@@ -70,7 +70,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         st.write(population_sample)
 
     sample_plot = plot_binary_data({
-        "title":"Sample",
+        "title": "Sample",
         "legend-1": "Red Balls",
         "legend-2": "Blue Balls",
         "count-1": int(n_population * true_p),
@@ -107,39 +107,40 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         st.latex(" \\hat{q} = 1-\\hat{p} ")
         st.markdown(f"""In our sample we have ${redBalls[0]}$ <span class="l1">red balls</span> and 
         ${n_sample - redBalls[0]}$ <span class="l2">blue balls</span>, so for this sample
-        our estimate for the proportion of <span class="l1">red balls</span> is,
+        our estimate for the proportion of <span class="l1">red balls</span> is """ + """
+        $\\hat{p} = """ + f"""{redBalls[0]}/{n_sample}={redBalls[0] / n_sample}$
         """, unsafe_allow_html=True)
-        st.info("$\\hat{p} = " + f"{redBalls[0]}/{n_sample}={redBalls[0] / n_sample}$")
-    def hideit():
-        tex = []
-        for i in range(5):
-            t = "$\\widehat{p}$ = " + f"**{int(estimators[i] * n_sample)}/{n_sample} = " + "{:.4f}".format(
-                estimators[i]) + "**"
-            tex.append(t)
 
+    tex = []
+    for i in range(5):
+        t = "$\\widehat{p}$ = " + f"**{int(estimators[i] * n_sample)}/{n_sample} = " + "{:.4f}".format(
+            estimators[i]) + "**"
+        tex.append(t)
 
-        st.markdown("""Our population is much larger as compare to our sample so we perform this cycle multiple times and get multiple estimates, 
-        then we combine those estimate to create a final estimate.    
-        In our case we perform this cycle $""" + str(n_simulations) + """$ times.   
-        So that we have some confidence in our estimate, in this case we perform it
-        ### Observation     
-        We have data for $""" + str(n_simulations) + """$ experiments, lets see the data for first 3 experiments.      
-        #### Experiment 1: 
-        *   In first experiment out of $""" + str(n_sample) + """$,  $""" + str(int(estimators[0] * n_sample)) + """$ couples turn there head to right.    
-            So estimate for first experiment is """ + str(tex[0]) + """    
-        #### Experiment 2: 
-        *   In second experiment out of $""" + str(n_sample) + """$,  $""" + str(int(estimators[1] * n_sample)) + """$ couples turn there head to right.    
-            So estimate for first experiment is """ + str(tex[1]) + """    
-        #### Experiment 3: 
-        *   In first experiment out of $""" + str(n_sample) + """$,  $""" + str(int(estimators[2] * n_sample)) + """$ couples turn there head to right.    
-            So estimate for first experiment is """ + str(tex[2]) + """    
-        
+    st.markdown(f"""
+    This estimate is result of a single simulation, if we perform this simulation multiple times, i.e. collecting 
+    samples from same population multiple times, we can get a better picture of our estimator. <br>
+    By collecting multiple sample we can see how our estimator is distributed. <br>
+    Let's collect samples, <br>
+    We have {n_simulations} samples, let's see first $3$ samples, <br>
+    #### Experiment 1: 
+    *   In first experiment out of ${n_sample}$,  ${int(estimators[0] * n_sample)}$ balls are <span class="l1">red balls</span>.    
+        So estimate for first experiment is {tex[0]}    
+    #### Experiment 2: 
+    *   In second experiment out of ${n_sample}$,  ${int(estimators[1] * n_sample)}$ balls are <span class="l1">red balls</span>.    
+        So estimate for first experiment is {tex[1]}    
+    #### Experiment 3: 
+    *   In first experiment out of ${n_sample}$,  ${int(estimators[2] * n_sample)}$ balls are <span class="l1">red balls</span>.        
+        So estimate for first experiment is {tex[1]}    
+    
         .    
         .    
-        .""")
-        st.success("Here our estimate is $\\bf{\\widehat{p} = " + estimate + "}$")
+      
+    """, unsafe_allow_html=True)
 
-        st.plotly_chart(fig)
+    # st.success("Here our estimate is $\\bf{\\widehat{p} = " + estimate + "}$")
+
+    st.plotly_chart(fig)
 
 def main(state):
     # print("    ======== stats.py [START] ========")

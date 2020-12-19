@@ -40,7 +40,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
             pass
         elif not verifyEmail(email):
             # print("\t \t Invalid Email Address")
-            st.error(f'"**{email}**" is **not** a valid email address')
+            st.markdown(f'<blockquote class="error">"<b>{email}</b>" is <b>not</b> a valid email address</blockquote>', unsafe_allow_html=True)
             return False, email, elements
 
         elif email not in LOGIN_JSON:
@@ -52,11 +52,12 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
             #            To get **early access** to this app, **Join us at [patreon](https://www.patreon.com/quantml)**
             #        """)
             msg = f"""
-                       **{email}** is not registered as a **[patreon](https://www.patreon.com/quantml) !**    
-                       This app is under development, once it's concluded it will br available to everyone.       
-                       To get **early access** to this app, **Join us at [patreon](https://www.patreon.com/quantml)**
+                       <b>{email}</b> is not registered as a <b><a href="https://www.patreon.com/quantml">patreon</a></b><br>
+                       This app is under development, once it's concluded it will be available to everyone.<br>
+                       To get <b>early access</b> to this app, <b>Join us at <a href="https://www.patreon.com/quantml">patreon</a></b>
                     """
-            st.warning(msg)
+            st.markdown(f'<blockquote class="warning">{msg}</blockquote>', unsafe_allow_html=True)
+
             # print("\t \t ======Failed======")
         elif email in LOGIN_JSON:
             # print(f"\t \t {email} is a verified email address")
