@@ -57,7 +57,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         so using this probability we generate(synthetic) data.
         """, unsafe_allow_html=True)
 
-        population_sample, samples, fig, estimate, estimators = run(n_population, n_sample, true_p, n_simulations)
+        population_sample, samples, fig, estimate, estimators = run(n_population, n_sample, true_p, n_simulations, "Simulated Distribution", state.stSettings["seed"])
         population_sample = stPandas(population_sample, "Population")
 
         st.plotly_chart(population_plot)
@@ -113,8 +113,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
 
     tex = []
     for i in range(5):
-        t = "$\\widehat{p}$ = " + f"**{int(estimators[i] * n_sample)}/{n_sample} = " + "{:.4f}".format(
-            estimators[i]) + "**"
+        t = "$\\widehat{p} = " + f"{int(estimators[i] * n_sample)}/{n_sample} = " + "{:.4f}".format(estimators[i]) + "$"
         tex.append(t)
 
     st.markdown(f"""
@@ -131,12 +130,11 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         So estimate for first experiment is {tex[1]}    
     #### Experiment 3: 
     *   In first experiment out of ${n_sample}$,  ${int(estimators[2] * n_sample)}$ balls are <span class="l1">red balls</span>.        
-        So estimate for first experiment is {tex[1]}    
-    
-        .    
-        .    
-      
+        So estimate for first experiment is {tex[2]}
+        
+    Now if we plot a histogram of our estimators we can see how our estimator """ + """$(\\hat{p})$ is distributed.    
     """, unsafe_allow_html=True)
+
 
     # st.success("Here our estimate is $\\bf{\\widehat{p} = " + estimate + "}$")
 
@@ -152,9 +150,9 @@ def main(state):
         state.vars = []
 
     n_population = st.sidebar.number_input("Enter population size", min_value=100, max_value=400, value=200)
-    n_sample = st.sidebar.number_input("Enter sample size", min_value=10, max_value=100, value=50)
-    true_p = st.sidebar.slider("Proportion of Red balls (p)", min_value=0.0, max_value=1.0, value=0.35, step=0.05)
-    n_simulations = st.sidebar.number_input("Enter number of simulation", min_value=10, max_value=30, value=15)
+    n_sample = st.sidebar.number_input("Enter sample size", min_value=10, max_value=50, value=30)
+    true_p = st.sidebar.slider("Proportion of Red balls (p)", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
+    n_simulations = st.sidebar.number_input("Enter number of simulation", min_value=10, max_value=50, value=50)
 
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
         state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)

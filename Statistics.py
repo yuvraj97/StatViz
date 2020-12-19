@@ -37,7 +37,7 @@ def main():
     state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
     # print("isMobile: ", state.isMobile)
 
-    with st.sidebar.beta_expander("Settings", expanded=False):
+    with st.sidebar.beta_expander("Settings", expanded=True if state.theme is None else False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
             if state.theme != "dark":
                 set_cookie("theme", "dark")

@@ -2,7 +2,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 def plot_binary_data(info, seed):
-    if seed: np.random.seed(seed)
+    if seed is not None: np.random.seed(seed)
     count_1, count_2 = info["count-1"], info["count-2"]
     lim = max(count_1, count_2) * 2
     fig = go.Figure()
