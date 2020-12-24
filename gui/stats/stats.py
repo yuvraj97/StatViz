@@ -90,7 +90,6 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         st.write(stPandas(samples[0], "Sample"))
 
     redBalls = [sample.sum() for sample in samples]
-    estimate = "{:.4f}".format(estimate)
 
     with st.beta_expander("Statistics", expanded=True):
         st.markdown(f"""
@@ -134,7 +133,6 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         
     Now if we plot a histogram of our estimators we can see how our estimator """ + """$(\\hat{p})$ is distributed.    
     """, unsafe_allow_html=True)
-
 
     # st.success("Here our estimate is $\\bf{\\widehat{p} = " + estimate + "}$")
 

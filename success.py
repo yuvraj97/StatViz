@@ -21,7 +21,7 @@ def main(elements, state):
     # print("          * option: ",option)
     # print("          * url: ",url)
 
-    if(option==chapters[0]):
+    if option == chapters[0]:
         from gui.stats import stats
         set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
         stats.main(state)

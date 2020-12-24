@@ -1,4 +1,4 @@
-from typing import Dict, List, Union, Any, Tuple
+from typing import Dict, List, Union, Tuple
 
 import scipy
 import streamlit as st
@@ -207,7 +207,7 @@ def stDistribution(dist: str, default_values: Dict[str, Dict[str, int]] = None, 
                                      step=5 if default_values is None else default_values["sample"]["step"]
                                      )
     }
-    if(n_simulations):
+    if n_simulations:
         _n["simulations"] = st.sidebar.slider("Number of simulations(k)", 10, 100, 50, 10)
     st.sidebar.markdown("## Parameters")
     # print("              * n: ",n)
