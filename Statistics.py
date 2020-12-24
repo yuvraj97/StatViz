@@ -1,4 +1,6 @@
 import os
+from typing import Dict, Union
+
 import streamlit as st
 import SessionState
 import success
@@ -6,8 +8,6 @@ from auth.utils import read_JSON
 from auth.login import alreadyLoggedIn, logout_button, login
 from themes import applyDarkTheme, applyLightTheme , mainStyle
 from js import set_cookie, get_ID
-import logic.stats.stats
-import gui.stats.stats
 
 def clear(elements):
     # print("        - clear(elements)")
@@ -27,15 +27,14 @@ def initializeID(state, CURRENTLY_LOGIN_JSON):
 
 
 def main():
-    LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "login.json")
-    CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
-    LOGIN_JSON = read_JSON(LOGIN_JSON_PATH)
-    CURRENTLY_LOGIN_JSON = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
+    LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "data", "login.json")
+    CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
+    LOGIN_JSON: Dict[str, Dict[str, Union[str, int, Dict[str, int]]]] = read_JSON(LOGIN_JSON_PATH)
+    CURRENTLY_LOGIN_JSON: Dict[str, str] = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
     state = SessionState.get_state()
     state.experimental_rerun = False
     state.theme = state.theme if state.theme is not None else SessionState.get_cookie("theme")
     state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
-    # print("isMobile: ", state.isMobile)
 
     with st.sidebar.beta_expander("Settings", expanded=True if state.theme is None else False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):

@@ -13,8 +13,8 @@ def main(elements, state):
     # print("    ARGUMENTS: elements, email=" + email + ", state")
     clear(elements)
     # st.write(":floppy_disk:")
-    idx = getChapterIndexByURL(state.url)  # if state.TOTAL_RELOADS==1 else state.url)
-    option = st.selectbox("", chapters, index=idx)
+    idx: int = getChapterIndexByURL(state.url)  # if state.TOTAL_RELOADS==1 else state.url)
+    option: str = st.selectbox("", chapters, index=idx)
     set_get_URL(ch=chapters_acronyms[chapter2idx(option)])
 
     # print("          * idx: ",idx)

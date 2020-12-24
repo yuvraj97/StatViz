@@ -1,27 +1,29 @@
+from typing import List
 import streamlit as st
+from distribution import distributions_properties, distribution2idx
 
-chapters = [
+chapters: List[str] = [
     "Introduction",
     "Law of Large Number",
     "Central Limit Theorem (patreon)",
 ]
 
 
-def chapter2idx(chapter):
+def chapter2idx(chapter: str) -> int:
     # print("        - chapter2idx("+ chapter +")")
     return chapters.index(chapter)
 
 
-chapters_acronyms = [
+chapters_acronyms: List[str] = [
     "Introduction",
     "LLN",
     "CLT",
 ]
 
-chapters_acronyms_lowercase = [e.lower() for e in chapters_acronyms]
+chapters_acronyms_lowercase: List[str] = [e.lower() for e in chapters_acronyms]
 
 
-def getChapterByURL(url):
+def getChapterByURL(url: dict) -> str:
     # print("        - getChapterByURL("+ str(url) +")")
     if "ch" in url and url["ch"][0].lower() in chapters_acronyms_lowercase:
         chapter = url["ch"][0].lower()
@@ -31,7 +33,7 @@ def getChapterByURL(url):
     return chapter
 
 
-def getChapterIndexByURL(url):
+def getChapterIndexByURL(url: dict) -> int:
     # print("        - getChapterIndexByURL("+ str(url) +")")
     chapter_acronym = getChapterByURL(url)
     idx = chapters_acronyms_lowercase.index(chapter_acronym) if chapter_acronym is not None else 0
@@ -40,7 +42,7 @@ def getChapterIndexByURL(url):
     return idx
 
 
-def set_get_URL(ch=None, dist=None, url=None):
+def set_get_URL(ch: str = None, dist: str = None, url: dict = None) -> dict:
     # print("        - set_get_URL(url="+ str(url) + ", ch=" + str(ch) + ", dist=" + str(dist) +")")
     url = st.experimental_get_query_params() if url is None else url
     _ch, _dist = "", ""
@@ -60,9 +62,7 @@ def set_get_URL(ch=None, dist=None, url=None):
     # print("            * url: ", url)
     return url
 
-from distribution import distributions_properties, distribution2idx
-def urlIndex(url):
-    # print("        - urlIndex")
+def urlIndex(url: dict) -> int:
     if "dist" not in url:
         return 0
     dist_name = url["dist"][0]
@@ -71,6 +71,4 @@ def urlIndex(url):
         if distributions_properties[dist]["name"] == dist_name:
             idx = distribution2idx[dist]
             break
-    # print("            * dist_name: ", dist_name)
-    # print("            * idx: ", idx)
     return idx

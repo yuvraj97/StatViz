@@ -6,16 +6,19 @@ Created on Fri Oct 30 04:32:01 2020
 """
 
 import os
+from typing import Dict, Union, Tuple
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 from PIL import Image
+from plotly.graph_objs import Figure
+
 from logic.lln.simulation import plot_data
 from distribution import distributions_properties
 
-def get_parameters(dist, _vars):
-    # print("            - parameters(dist="+ dist + ", vars="+ str(vars) +")")
-    parameters = ""
+def get_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
+    parameters: str = ""
     i = 0
     for parameter in distributions_properties[dist]["stSlider"]:
         parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(_vars[parameter]) + """$
@@ -23,11 +26,19 @@ def get_parameters(dist, _vars):
         i += 1
     return parameters
 
-def stDisplay(dist, population, sample, _vars, n, mean, plots, state):
-    parameters = get_parameters(dist, _vars)
+def stDisplay(dist: str,
+              population: np.ndarray,
+              sample: np.ndarray,
+              _vars: Dict[str, Union[int, float]],
+              n: Dict[str, int],
+              mean: float,
+              plots: Tuple[Figure, Figure],
+              state
+              ) -> None:
+    parameters: str = get_parameters(dist, _vars)
+    pdf: Figure
+    simulation: Figure
     pdf, simulation = plots
-    # print("            - definitions(state, distribution=" + str(distribution) + ", parameters="+ str(parameters) +
-    # ", population=" + str(population) + ", sample=" + str(sample) + ")")
 
     total_population = str(n["population"])
     sample_size = str(n["samples"])

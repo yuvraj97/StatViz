@@ -1,8 +1,11 @@
+from typing import Dict, List, Union, Any, Tuple
+
+import scipy
 import streamlit as st
 from scipy.stats import bernoulli, geom, binom, poisson
 from scipy.stats import beta, expon, uniform, cauchy, norm, chi2
 
-idx2distribution = {
+idx2distribution: Dict[int, str] = {
     0: "gauss",
     1: "unif",
     2: "ber",
@@ -12,7 +15,7 @@ idx2distribution = {
     6: "beta",
     7: "exp"
 }
-distribution2idx = {
+distribution2idx: Dict[str, int] = {
     "gauss": 0,
     "unif": 1,
     "ber": 2,
@@ -23,12 +26,12 @@ distribution2idx = {
     "exp": 7
 }
 
-n = {
+n: Dict[str, int] = {
     "population": 400,
     "samples": 50,
 }
 
-distributions_properties = {
+distributions_properties: Dict[str, Union[Dict[str, Union[str, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[str, Union[str, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
     "gauss": {
         "name": "Normal distribution",
         "iscontinuous": True,
@@ -155,7 +158,7 @@ distributions_properties = {
     }
 }
 
-which_distribution = {
+which_distribution: Dict[str, str] = {
     "Gaussian(μ, σ)": "gauss",
     "Uniform(a, b)": "unif",
     "Bernoulli(p)": "ber",
@@ -166,7 +169,7 @@ which_distribution = {
     "Exp(λ)": "exp"
 }
 
-distribution2url = {
+distribution2url: Dict[str, str] = {
     "gauss": "Gaussian",
     "unif": "Uniform",
     "ber": "Bernoulli",
@@ -177,34 +180,31 @@ distribution2url = {
     "exp": "Exponential"
 }
 
-
-def clear(L):
+def clear(L: List) -> None:
     # print("        clear(L)")
     for e in L:
         e.empty()
 
-
 # noinspection PyTypeChecker
-def stGetParameters(dist):
+def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:
     # print("          - stGetParameters(dist="+ dist +")")
-    params = distributions_properties[dist]["stSlider"]
+    params: Union[str, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]] = distributions_properties[dist]["stSlider"]
     # print("              * params: ", params)
-    var = {}
+    var: Dict[str, Union[int, float]] = {}
     for k in params.keys(): var[k] = st.sidebar.slider(k, params[k]["min"], params[k]["max"], params[k]["value"],
                                                        params[k]["increment"])
     # print("              * var: ", var)
     return var
 
-
-def stDistribution(dist, default_vals=None, n_simulations=False):
+def stDistribution(dist: str, default_values: Dict[str, Dict[str, int]] = None, n_simulations: bool = False) -> Tuple[Dict[str, Union[int, float]], Dict[str, int]]:
     # print("          - stDistribution(dist="+ dist + ", state)")
-    _n = {
+    _n: Dict[str, int] = {
         "population": st.sidebar.number_input("Enter Population size", min_value=100, max_value=400, value=200, step=10),
         "samples": st.sidebar.slider("Sample Size",
-                                     min_value=10 if default_vals is None else default_vals["sample"]["min_value"],
-                                     max_value=100 if default_vals is None else default_vals["sample"]["max_value"],
-                                     value=50 if default_vals is None else default_vals["sample"]["value"],
-                                     step=5 if default_vals is None else default_vals["sample"]["step"]
+                                     min_value=10 if default_values is None else default_values["sample"]["min_value"],
+                                     max_value=100 if default_values is None else default_values["sample"]["max_value"],
+                                     value=50 if default_values is None else default_values["sample"]["value"],
+                                     step=5 if default_values is None else default_values["sample"]["step"]
                                      )
     }
     if(n_simulations):
@@ -213,8 +213,7 @@ def stDistribution(dist, default_vals=None, n_simulations=False):
     # print("              * n: ",n)
     return stGetParameters(dist), _n
 
-
-def get_distribution(dist, var):
+def get_distribution(dist: str, var: List[Union[int, float]]) -> Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete]:
     # print("          - get_distribution(dist="+ dist + ", var= " + str(var) +")")
     if dist == "gauss":
         return norm(*var)
@@ -233,8 +232,7 @@ def get_distribution(dist, var):
     elif dist == "exp":
         return expon(1 / var[0])
 
-
-def graph_label(dist, var):
+def graph_label(dist: str, var: List[Union[int, float]]) -> str:
     # print("          - graph_label(dist="+ dist + ", var= " + str(var) +")")
     if dist == "gauss":
         return f'N(μ={var[0]}, σ={var[1]})'

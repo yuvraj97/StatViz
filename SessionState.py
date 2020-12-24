@@ -80,22 +80,22 @@ def get_state(hash_funcs=None):
     return session._custom_session_state
 
 
-def get_ID():
+def get_ID() -> str:
     session_info = _get_session()
     return session_info.ws.get_cookie("quantml-ID")
 
 
-def get_cookie(name):
+def get_cookie(name: str) -> str:
     session_info = _get_session()
     return session_info.ws.get_cookie(name)
 
 
-def set_cookie(name, value):
+def set_cookie(name: str, value: str) -> None:
     session_info = _get_session()
     session_info.ws.set_cookie(name, value)
 
 
-def set_title(title):
+def set_title(title: str) -> None:
     from streamlit.proto import ForwardMsg_pb2
     msg = ForwardMsg_pb2.ForwardMsg()
     msg.page_config_changed.title = title

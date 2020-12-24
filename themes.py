@@ -381,12 +381,11 @@ def mainStyle():
             font-size: 1rem;
         }
         .quant-bb{
-        	display: inline-block;
+            display: inline-block;
             padding-left: 10px;
             padding-right: 10px;
             border-radius: 6px;
             margin-top: 3px;
         }
         </style>
-        """, unsafe_allow_html=True
-    )
+        """, unsafe_allow_html=True)

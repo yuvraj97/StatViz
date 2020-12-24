@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
-
+from plotly.graph_objs import Figure
 
 def simulation_mpl(distribution, n_samples, name=""):
     fig = plt.figure()
@@ -34,11 +34,8 @@ def simulation_mpl(distribution, n_samples, name=""):
     ax.legend(**legend_args, fontsize=12)
     return fig
 
-
-def continuous_chart(fig, iid_rvs, pdf_rvs):
-    # print("              - continuous_chart(fig, iid_rvs, pdf_rvs)")
+def continuous_chart(fig: Figure, iid_rvs:  np.ndarray, pdf_rvs: np.ndarray) -> None:
     std = np.std(iid_rvs)
-    # print("                  * std: " + str(std))
     pdf_lower, pdf_upper = pdf_rvs - std / 2, pdf_rvs + std / 2
     fig.add_trace(go.Scatter(x=iid_rvs, y=pdf_rvs,
                              mode='lines',
@@ -58,9 +55,7 @@ def continuous_chart(fig, iid_rvs, pdf_rvs):
     fig.update_layout(xaxis_title='<b>iid</b> Random Variables(x)',
                       yaxis_title='Simulated PDF(x)')
 
-
-def discrete_chart(fig, iid_rvs, pdf_rvs):
-    # print("              - discrete_chart(fig, iid_rvs, pdf_rvs)")
+def discrete_chart(fig: Figure, iid_rvs:  np.ndarray, pdf_rvs: np.ndarray) -> None:
     n_samples = len(iid_rvs)
     x = [0] * (3 * n_samples - 1)
     y = [0] * (3 * n_samples - 1)
@@ -87,9 +82,7 @@ def discrete_chart(fig, iid_rvs, pdf_rvs):
     fig.update_layout(xaxis_title='<b>iid</b> Random Variables(x)',
                       yaxis_title='Simulated PMF(x)')
 
-
-def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
-    # print("            - get_pdf(iid_rvs, pdf_rvs, name="+ name + ", iscontinuous=" + str(iscontinuous) +")")
+def get_pdf(iid_rvs:  np.ndarray, pdf_rvs: np.ndarray, name: str, iscontinuous: bool = True) -> Figure:
     idx = np.argsort(iid_rvs)
     fig = go.Figure()
 
@@ -106,29 +99,20 @@ def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
 
     return fig
 
-def plot_data(data, title, width):
+def plot_data(data: np.ndarray, title: str, width: int) -> Figure:
     margin = 10000
-    # print("max:", max(data),"min:", min(data))
     data = np.array(data * margin, dtype=int)
-    # print("data,", data)
     _min, _max = int(np.min(data)), int(np.max(data))
-    # print("_max:", _max, "_min:", _min, " : ", int(width*(_max-_min)//len(data)))
     width = int(width*(_max-_min+2)//len(data))
     counts, bins = np.histogram(data, bins=range(_min-1, _max+width, width))
-    # print("prev bins,",bins)
     bins = 0.5 * (bins[:-1] + bins[1:]) / margin
     fig = px.bar(x=bins, y=counts, labels={'x': 'Height', 'y': '# occurrence'})
-    # print("bins:", bins)
-    # print("counts:", counts)
     fig.update_layout(title=title,
                       xaxis_title='Random Variable',
                       yaxis_title='# occurrence of certain random variable')
     return fig
 
-
-def simulation(iid_rvs, mean, n_samples, name, state):
-    # print("            - simulation(iid_rvs, n_samples=" + str(n_samples) + ", name=" + name)
-    # print("                  * mean: " + str(mean))
+def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, state) -> Figure:
     ns = np.linspace(1, n_samples, n_samples, dtype=int)
 
     # sample mean for each n
