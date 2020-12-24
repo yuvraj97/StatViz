@@ -1,6 +1,10 @@
-import streamlit as st
+from typing import Union
 
-import gui.lln.display as stDisplay
+import streamlit as st
+from numpy.core._multiarray_umath import ndarray
+from plotly.graph_objs import Figure
+
+from gui.lln.display import stDisplay
 import logic.lln.lln as lln
 from distribution import distributions_properties, which_distribution, stDistribution
 from utils import set_get_URL, urlIndex
@@ -29,4 +33,4 @@ def main(state):
 
     # print("      Loading...")
     # st.plotly_chart(simulation, use_container_width=True)#, filename='latex', include_mathjax='cdn')
-    stDisplay.run(dist, population, sample, var, n, mean, pdf, simulation, state)
+    stDisplay(dist, population, sample, var, n, mean, (pdf, simulation), state)

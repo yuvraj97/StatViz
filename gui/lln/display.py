@@ -13,8 +13,18 @@ from PIL import Image
 from logic.lln.simulation import plot_data
 from distribution import distributions_properties
 
+def get_parameters(dist, _vars):
+    # print("            - parameters(dist="+ dist + ", vars="+ str(vars) +")")
+    parameters = ""
+    i = 0
+    for parameter in distributions_properties[dist]["stSlider"]:
+        parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(_vars[parameter]) + """$
+"""
+        i += 1
+    return parameters
 
-def stDisplay(dist, parameters, population, sample, n, mean, plots, state):
+def stDisplay(dist, population, sample, _vars, n, mean, plots, state):
+    parameters = get_parameters(dist, _vars)
     pdf, simulation = plots
     # print("            - definitions(state, distribution=" + str(distribution) + ", parameters="+ str(parameters) +
     # ", population=" + str(population) + ", sample=" + str(sample) + ")")
@@ -101,19 +111,3 @@ def stDisplay(dist, parameters, population, sample, n, mean, plots, state):
     st.markdown("""
     
     """)
-
-
-def get_parameters(dist, _vars):
-    # print("            - parameters(dist="+ dist + ", vars="+ str(vars) +")")
-    parameters = ""
-    i = 0
-    for parameter in distributions_properties[dist]["stSlider"]:
-        parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(_vars[parameter]) + """$
-"""
-        i += 1
-    return parameters
-
-
-def run(dist, population, sample, _vars, n, mean, pdf, simulation, state):
-    # print("          - definitions(dist=" + str(dist) + ", population="+ str(population) + ", sample=" + str(sample) + ")")
-    stDisplay(dist, get_parameters(dist, _vars), population, sample, n, mean, (pdf, simulation), state)
