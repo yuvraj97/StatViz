@@ -1,10 +1,6 @@
-from gui.stats import stats
-from gui.lln import lln
-from gui.clt import clt
 from utils import chapters, chapters_acronyms, chapter2idx, getChapterIndexByURL, set_get_URL
 import streamlit as st
 from SessionState import set_title
-
 
 def clear(elements):
     # print("      clear(elements)")
@@ -26,13 +22,16 @@ def main(elements, state):
     # print("          * url: ",url)
 
     if(option==chapters[0]):
+        from gui.stats import stats
         set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
         stats.main(state)
     if option == chapters[1]:
+        from gui.lln import lln
         set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
         lln.main(state)
     elif option == chapters[2]:
+        from gui.clt import clt
         set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
-        clt.main()
+        clt.main(state)
 
         # print("    ======== success.py  [END]  ========")

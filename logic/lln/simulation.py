@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import plotly.graph_objects as go
+import plotly.express as px
 
 
 def simulation_mpl(distribution, n_samples, name=""):
@@ -41,6 +42,7 @@ def continuous_chart(fig, iid_rvs, pdf_rvs):
     pdf_lower, pdf_upper = pdf_rvs - std / 2, pdf_rvs + std / 2
     fig.add_trace(go.Scatter(x=iid_rvs, y=pdf_rvs,
                              mode='lines',
+                             hovertemplate='Random Variable(x): %{x}<br>PDF(x)=%{y}',
                              name="pdf",
                              line=dict(color='royalblue', width=4), ))
     fig.add_trace(go.Scatter(
@@ -54,7 +56,7 @@ def continuous_chart(fig, iid_rvs, pdf_rvs):
     ))
     fig.update_yaxes(range=[pdf_lower.min() - 0.4, pdf_upper.max() + 0.4])
     fig.update_layout(xaxis_title='<b>iid</b> Random Variables(x)',
-                      yaxis_title='PDF(x)')
+                      yaxis_title='Simulated PDF(x)')
 
 
 def discrete_chart(fig, iid_rvs, pdf_rvs):
@@ -80,9 +82,10 @@ def discrete_chart(fig, iid_rvs, pdf_rvs):
     fig.add_trace(go.Scatter(x=iid_rvs, y=pdf_rvs,
                              mode='markers',
                              name='PMF(x)',
+                             hovertemplate='Random Variable(x): %{x}<br>PMF(x)=%{y}',
                              line=dict(color='purple')))
     fig.update_layout(xaxis_title='<b>iid</b> Random Variables(x)',
-                      yaxis_title='PMF(x)')
+                      yaxis_title='Simulated PMF(x)')
 
 
 def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
@@ -101,6 +104,25 @@ def get_pdf(iid_rvs, pdf_rvs, name, iscontinuous=True):
     # Edit the layout
     fig.update_layout(title=name)
 
+    return fig
+
+def plot_data(data, title, width):
+    margin = 10000
+    # print("max:", max(data),"min:", min(data))
+    data = np.array(data * margin, dtype=int)
+    # print("data,", data)
+    _min, _max = int(np.min(data)), int(np.max(data))
+    # print("_max:", _max, "_min:", _min, " : ", int(width*(_max-_min)//len(data)))
+    width = int(width*(_max-_min+2)//len(data))
+    counts, bins = np.histogram(data, bins=range(_min-1, _max+width, width))
+    # print("prev bins,",bins)
+    bins = 0.5 * (bins[:-1] + bins[1:]) / margin
+    fig = px.bar(x=bins, y=counts, labels={'x': 'Height', 'y': '# occurrence'})
+    # print("bins:", bins)
+    # print("counts:", counts)
+    fig.update_layout(title=title,
+                      xaxis_title='Random Variable',
+                      yaxis_title='# occurrence of certain random variable')
     return fig
 
 

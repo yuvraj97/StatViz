@@ -104,6 +104,7 @@ if __name__ == '__main__':
         layout='centered',
         initial_sidebar_state='expanded'
     )
+    error = st.empty()
     mainStyle()
     # print("================ Statistics.py [START] ================")
     st.sidebar.markdown(
@@ -113,7 +114,10 @@ if __name__ == '__main__':
     # try:
     main()
     # except:
-    #    st.error("""Unexpected error Occurred please try refreshing page "CTRL + R" of "F5"
-    #    If problem still there please contact **support@quantml.org**
-    #    """)
+    #    error.markdown("""
+    #    <blockquote class="error">
+    #    Unexpected error Occurred please try refreshing page.
+    #    <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
+    #    </blockquote>
+    #    """, unsafe_allow_html=True)
     # print("================ Statistics.py  [END]  ================")

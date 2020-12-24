@@ -196,12 +196,19 @@ def stGetParameters(dist):
     return var
 
 
-def stDistribution(dist):
+def stDistribution(dist, default_vals=None, n_simulations=False):
     # print("          - stDistribution(dist="+ dist + ", state)")
     _n = {
         "population": st.sidebar.number_input("Enter Population size", min_value=100, max_value=400, value=200, step=10),
-        "samples": st.sidebar.slider("Sample Size", min_value=10, max_value=100, value=50, step=5)
+        "samples": st.sidebar.slider("Sample Size",
+                                     min_value=10 if default_vals is None else default_vals["sample"]["min_value"],
+                                     max_value=100 if default_vals is None else default_vals["sample"]["max_value"],
+                                     value=50 if default_vals is None else default_vals["sample"]["value"],
+                                     step=5 if default_vals is None else default_vals["sample"]["step"]
+                                     )
     }
+    if(n_simulations):
+        _n["simulations"] = st.sidebar.slider("Number of simulations(k)", 10, 100, 50, 10)
     st.sidebar.markdown("## Parameters")
     # print("              * n: ",n)
     return stGetParameters(dist), _n
@@ -211,7 +218,7 @@ def get_distribution(dist, var):
     # print("          - get_distribution(dist="+ dist + ", var= " + str(var) +")")
     if dist == "gauss":
         return norm(*var)
-    elif dist == "unify":
+    elif dist == "unif":
         return uniform(*var)
     elif dist == "ber":
         return bernoulli(*var)

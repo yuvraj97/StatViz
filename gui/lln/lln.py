@@ -3,8 +3,7 @@ import streamlit as st
 import gui.lln.display as stDisplay
 import logic.lln.lln as lln
 from distribution import distributions_properties, which_distribution, stDistribution
-from logic.lln.utils import urlIndex
-from utils import set_get_URL
+from utils import set_get_URL, urlIndex
 
 
 def main(state):

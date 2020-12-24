@@ -261,7 +261,10 @@ def applyDarkTheme():
         blockquote.error > b {
             color: rgb(255, 150, 150);
         }
-        
+        .quant-bb{
+            background-color: rgb(0, 0, 0, 0.07);
+            border: 1px rgb(194, 199, 204) solid;
+        }        
     </style>
     
     """, unsafe_allow_html=True)
@@ -300,6 +303,10 @@ def applyLightTheme():
             border-right-color: rgba(255, 43, 43, 0.2);
             color: rgb(157, 41, 45);
             background-color: rgba(255, 43, 43, 0.2);   
+        }
+        .quant-bb{
+            background-color: #f6f8fa;
+            border: 1px rgb(160, 160, 160) solid;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -372,6 +379,13 @@ def mainStyle():
             font-weight: normal;
             font-family: "IBM Plex Sans", sans-serif;
             font-size: 1rem;
+        }
+        .quant-bb{
+        	display: inline-block;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 6px;
+            margin-top: 3px;
         }
         </style>
         """, unsafe_allow_html=True
