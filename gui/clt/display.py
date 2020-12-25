@@ -60,18 +60,21 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         _vars = [_vars[k] for k in _vars.keys()]
         distribution: Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete] = get_distribution(dist, _vars)
         population: Union[np.ndarray, int, float, complex] = distribution.rvs(size=n_population)
-        st.plotly_chart(plot_histogram(population, {
-            "title": {
-                "main": "Population",
-                "x": "Random Variable",
-                "y": "# occurrence of certain random variable"
+        fig, (counts, bins) = plot_histogram(population,
+            description={
+                "title": {
+                    "main": "Population",
+                    "x": "Random Variable",
+                    "y": "# occurrence of certain random variable"
+                },
+                "label": {
+                    "main": None,
+                    "x": "Height",
+                    "y": "# occurrence"
+                }
             },
-            "label": {
-                "main": None,
-                "x": "Height",
-                "y": "# occurrence"
-            }
-        }, len(np.unique(population)) // 4))
+            num_bins=len(np.unique(population)) // 4)
+        st.plotly_chart(fig, use_container_width=True)
 
         population_pd: pd.DataFrame = pd.DataFrame(data=population.reshape((1, len(population))), index=['Random draws'])
         population_pd.columns += 1
@@ -124,7 +127,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         sample size $(n)$, here we set $n={n_sample}$, let's see the shape of our Sampling distribution.
         """)
 
-        fig = plot_histogram(
+        fig, (counts, bins) = plot_histogram(
             sample_means,
             description={
                 "title": {
@@ -140,9 +143,15 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
             },
             num_bins=len(np.unique(sample_means)) // 2,
             convert_into_probability_plot=True,
-            isMobile=state.isMobile,)
+            isMobile=state.isMobile)
 
-        mean, std = np.mean(sample_means), np.std(sample_means)
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("""
+        Our Sampling distribution seems to have a bell curve, Now let's overlay a Normal distribution with same mean
+        and variance as of our Sampling distribution.""")
+
+        mean, std = distribution.mean(), distribution.std()
         iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
         line_plot(x=iid_rvs,
                   y=norm.pdf(iid_rvs, mean, std),
@@ -150,7 +159,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
                       "title": {
                           "main": f"Sampling Distribution (of sample mean)/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
                           "x": f"Sample mean/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
-                          "y": "Probability of Sample mean/<br>PDF Normal Distribution"
+                          "y": "Probability of Sample mean/<br>PDF of Normal Distribution"
                       },
                       "label": {
                           "main": "Normal distribution"
@@ -159,4 +168,34 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
                       "color": "green"
                   },
                   fig=fig)
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("""
+    [As we discussed](https://read.quantml.org/stats/clt/#its-about-CDF)""")
+    st.info("""**Central Limit Theorem** is **not** a statement about the convergence of PDF or PMF.
+    It's a statement about the convergence of **CDF**.""")
+    st.markdown("Now let's see that do the **CDF** of our Sampling distribution approaches to the CDF of a Normal Distribution")
+
+    fig = line_plot(x=iid_rvs,
+                    y=norm.cdf(iid_rvs, mean, std),
+                    description={
+                          "label": {
+                              "main": "Normal distribution CDF"
+                          },
+                          "hovertemplate": "Random draw(x): %{x}<br>CDF(x=%{x}): %{y}",
+                          "color": "green"
+                    },
+                    mode="lines")
+    fig = line_plot(x=bins,
+                    y=np.cumsum(counts)/np.sum(counts),
+                    description={
+                        "label": {
+                            "main": "Sampling Distribution CDF"
+                        },
+                        "hovertemplate": "Sample Average(x) ~ %{x}<br>CDF(x ~ %{x}): %{y}",
+                        "color": "royalblue"
+                    },
+                    mode="markers",
+                    fig=fig)
+
+    st.plotly_chart(fig, use_container_width=True)

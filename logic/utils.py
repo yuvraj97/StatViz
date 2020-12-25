@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict, Union, Tuple
 
 import numpy as np
 from plotly.graph_objs import Figure
@@ -9,7 +9,7 @@ def plot_histogram(data: np.ndarray,
                    num_bins: int = -1,
                    convert_into_probability_plot: bool = False,
                    fig: Figure = None,
-                   isMobile: bool = False,) -> Figure:
+                   isMobile: bool = False,) -> Tuple[Figure, Tuple[np.ndarray, np.ndarray]]:
     """
     description = {
         "title": {
@@ -26,6 +26,8 @@ def plot_histogram(data: np.ndarray,
     """
     if num_bins == -1:
         num_bins = len(np.unique(data))//4
+    bins: np.ndarray
+    counts: np.ndarray
     bins = np.linspace(min(data), max(data), num_bins)
     counts, bins_ = np.histogram(data, bins=bins)
     bins = 0.5 * (bins_[:-1] + bins_[1:])
@@ -35,7 +37,7 @@ def plot_histogram(data: np.ndarray,
         hovertemplate = description["label"]["x"] + ' (x) ~ %{x}<br>Probability(x ~ %{x}): %{y}'
     else:
         hovertemplate = description["label"]["x"] + ' (x) ~ %{x}<br>' + description["label"]["y"] + '(x ~ %{x}): %{y}'
-    if fig is None: fig = go.Figure()
+    if fig is None: fig: Figure = go.Figure()
     fig.add_trace(go.Bar(x=bins,
                          y=counts,
                          name=description["label"]["main"],
@@ -46,12 +48,13 @@ def plot_histogram(data: np.ndarray,
                       xaxis_title=description["title"]["x"],
                       yaxis_title=description["title"]["y"])
     # fig.update_layout(showlegend=False if isMobile else True)
-    return fig
+    return fig, (counts, bins)
 
 def line_plot(x: np.ndarray,
               y: np.ndarray,
               description: dict,
               fig: Figure = None,
+              mode="lines",
               isMobile: bool = False) -> Figure:
     """
     description={
@@ -62,8 +65,6 @@ def line_plot(x: np.ndarray,
         },
         "label": {
             "main": "Legend",
-            "x": "x-axis label",
-            "y": "y-axis label"
         },
         "hovertemplate": "x-label (x): %{x}<br>y-label(x=%{x}): %{y}",
         "color": "green"
@@ -72,7 +73,7 @@ def line_plot(x: np.ndarray,
     if fig is None:
         fig = go.Figure()
     fig.add_trace(go.Scatter(x=x, y=y,
-                             mode='lines',
+                             mode=mode,
                              name=description["label"]["main"],
                              hovertemplate=description["hovertemplate"],
                              line=dict(color=description["color"])))

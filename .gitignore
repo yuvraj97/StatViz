@@ -3,3 +3,4 @@ __pycache__/
 .idea/
 data/currently-loggedin.json
 data/login.json
+debug.log

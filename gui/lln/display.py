@@ -53,7 +53,7 @@ def stDisplay(dist: str,
         Using the knowledge of truth we generate a (synthetic) population of $""" + total_population + """$ observations.   
         """)
 
-        st.plotly_chart(plot_histogram(population, {
+        fig, (counts, bins) = plot_histogram(population, {
             "title":{
                 "main": "Population",
                 "x": "Random Variable",
@@ -63,7 +63,8 @@ def stDisplay(dist: str,
                 "x": "Height",
                 "y": "# occurrence"
             }
-        }, len(np.unique(population))//4))
+        }, len(np.unique(population))//4)
+        st.plotly_chart(fig, use_container_width=True)
 
         population = population.reshape((1, len(population)))
         population = pd.DataFrame(data=population, index=['Random draws'])
@@ -83,7 +84,7 @@ def stDisplay(dist: str,
         Now we have our $""" + total_population + """$ **observations**, we took a **sample** of $""" + sample_size + """$ observations.
         """)
 
-        st.plotly_chart(plot_histogram(sample, {
+        fig, (counts, bins) = plot_histogram(sample, {
             "title":{
                 "main": "Sample",
                 "x": "Random Variable",
@@ -93,7 +94,8 @@ def stDisplay(dist: str,
                 "x": "Height",
                 "y": "# occurrence"
             }
-        }, len(np.unique(sample))//2))
+        }, len(np.unique(sample))//2)
+        st.plotly_chart(fig, use_container_width=True)
 
         sample = sample.reshape((1, len(sample)))
         sample = pd.DataFrame(data=sample, index=['Sample r.v.'])
