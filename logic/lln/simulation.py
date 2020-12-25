@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import plotly.graph_objects as go
-import plotly.express as px
 from plotly.graph_objs import Figure
 
 def simulation_mpl(distribution, n_samples, name=""):
@@ -97,19 +96,6 @@ def get_pdf(iid_rvs:  np.ndarray, pdf_rvs: np.ndarray, name: str, iscontinuous: 
     # Edit the layout
     fig.update_layout(title=name)
 
-    return fig
-
-def plot_data(data: np.ndarray, title: str, width: int) -> Figure:
-    margin = 10000
-    data = np.array(data * margin, dtype=int)
-    _min, _max = int(np.min(data)), int(np.max(data))
-    width = int(width*(_max-_min+2)//len(data))
-    counts, bins = np.histogram(data, bins=range(_min-1, _max+width, width))
-    bins = 0.5 * (bins[:-1] + bins[1:]) / margin
-    fig = px.bar(x=bins, y=counts, labels={'x': 'Height', 'y': '# occurrence'})
-    fig.update_layout(title=title,
-                      xaxis_title='Random Variable',
-                      yaxis_title='# occurrence of certain random variable')
     return fig
 
 def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, state) -> Figure:
