@@ -14,17 +14,9 @@ import streamlit as st
 from PIL import Image
 from plotly.graph_objs import Figure
 
-from logic.lln.simulation import plot_data
+from logic.utils import plot_histogram
 from distribution import distributions_properties
-
-def get_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
-    parameters: str = ""
-    i = 0
-    for parameter in distributions_properties[dist]["stSlider"]:
-        parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(_vars[parameter]) + """$
-"""
-        i += 1
-    return parameters
+from gui.utils import get_parameters
 
 def stDisplay(dist: str,
               population: np.ndarray,
@@ -61,7 +53,17 @@ def stDisplay(dist: str,
         Using the knowledge of truth we generate a (synthetic) population of $""" + total_population + """$ observations.   
         """)
 
-        st.plotly_chart(plot_data(population, "Population", 3))
+        st.plotly_chart(plot_histogram(population, {
+            "title":{
+                "main": "Population",
+                "x": "Random Variable",
+                "y": "# occurrence of certain random variable"
+            },
+            "label": {
+                "x": "Height",
+                "y": "# occurrence"
+            }
+        }, len(np.unique(population))//4))
 
         population = population.reshape((1, len(population)))
         population = pd.DataFrame(data=population, index=['Random draws'])
@@ -81,7 +83,17 @@ def stDisplay(dist: str,
         Now we have our $""" + total_population + """$ **observations**, we took a **sample** of $""" + sample_size + """$ observations.
         """)
 
-        st.plotly_chart(plot_data(sample, "Sample", 1))
+        st.plotly_chart(plot_histogram(sample, {
+            "title":{
+                "main": "Sample",
+                "x": "Random Variable",
+                "y": "# occurrence of certain random variable"
+            },
+            "label":{
+                "x": "Height",
+                "y": "# occurrence"
+            }
+        }, len(np.unique(sample))//2))
 
         sample = sample.reshape((1, len(sample)))
         sample = pd.DataFrame(data=sample, index=['Sample r.v.'])

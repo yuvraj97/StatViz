@@ -1,6 +1,7 @@
-from utils import chapters, chapters_acronyms, chapter2idx, getChapterIndexByURL, set_get_URL
+from utils import chapters, chapters_acronyms, chapter2idx, getChapterIndexByURL, set_get_URL, urlIndex
 import streamlit as st
 from SessionState import set_title
+from distribution import which_distribution
 
 def clear(elements):
     # print("      clear(elements)")
@@ -21,6 +22,11 @@ def main(elements, state):
     # print("          * option: ",option)
     # print("          * url: ",url)
 
+    if(option != chapters[0]):
+        distribution: str = st.sidebar.selectbox("Select Distribution", list(which_distribution.keys()), index=urlIndex(state.url))
+    else:
+        distribution = ""
+
     if option == chapters[0]:
         from gui.stats import stats
         set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
@@ -28,10 +34,10 @@ def main(elements, state):
     if option == chapters[1]:
         from gui.lln import lln
         set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
-        lln.main(state)
+        lln.main(distribution, state)
     elif option == chapters[2]:
         from gui.clt import clt
         set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
-        clt.main(state)
+        clt.main(distribution, state)
 
         # print("    ======== success.py  [END]  ========")

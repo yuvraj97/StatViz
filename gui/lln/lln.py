@@ -1,17 +1,15 @@
 from typing import Union, Dict
-import streamlit as st
 import numpy as np
 from plotly.graph_objs import Figure
 
 from gui.lln.display import stDisplay
 import logic.lln.lln as lln
 from distribution import distributions_properties, which_distribution, stDistribution
-from utils import set_get_URL, urlIndex
+from utils import set_get_URL
 
 
-def main(state):
-    option: str = st.sidebar.selectbox("Select Distribution", list(which_distribution.keys()), index=urlIndex(state.url))
-    dist: str = which_distribution[option]
+def main(distribution, state):
+    dist: str = which_distribution[distribution]
 
     set_get_URL(dist=distributions_properties[dist]["name"])
 
