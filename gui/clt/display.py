@@ -1,0 +1,162 @@
+import os
+from PIL import Image
+from typing import Dict, Union
+import streamlit as st
+import scipy.stats
+from scipy.stats import norm
+import numpy as np
+import pandas as pd
+from gui.utils import get_parameters
+from distribution import distributions_properties, get_distribution, graph_label
+from logic.utils import plot_histogram, line_plot
+
+def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int], state):
+
+    n_population = n["population"]
+    n_sample = n["samples"]
+    n_simulations = n["simulations"]
+
+    with st.beta_expander("Scenario", expanded=True):
+        st.markdown(f"""
+        Assume that there are ${n_population}$ students in your school and you want to know,
+        what is the average height of ${n_sample}$ randomly selected students?
+        and how is that average height is distributed (or say the distribution of that average height)?<br>
+        """, unsafe_allow_html=True)
+        # distributions_properties[dist]["name"]
+
+    with st.beta_expander("How CLT can help us", expanded=True):
+        st.markdown("Central Limit Theorem says that,")
+        st.info(f"""
+        As $n\\to \\infty$ then **CDF** ([cumulative distribution function](https://en.wikipedia.org/wiki/Cumulative_distribution_function))
+        of the Sampling distribution (say $Z_n$) converges to the **CDF** of Standard Normal distribution (say $Z$).
+        """)
+        st.markdown(f"""
+        But we wont need $\\infty$ sample size $(n)$, $n\\geq 30$ will suffice.<br>
+        So no matter what the distribution is, as long as it had a finite mean and a finite variance
+        (unlike <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">cauchy distribution</a>),
+        distribution of sample mean will converge to the <b>Normal Distribution</b>.
+        """, unsafe_allow_html=True)
+    st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)")
+
+    image_path = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "dogma.png")
+    image = Image.open(image_path)
+    st.image(image, use_column_width=True)
+
+    parameters: str = get_parameters(dist, _vars)
+
+    with st.beta_expander("Truth", expanded=True):
+        st.markdown("""Let's, first define the **Truth**, in this case the truth is,""")
+        st.markdown(f"""
+        - Data is drawn from a **{distributions_properties[dist]["name"]}**,
+        {distributions_properties[dist]["latex"]}     
+{parameters}
+        """)
+
+    with st.beta_expander("Probability", expanded=True):
+        st.markdown(f"""
+        Now we have defined that students height is distributed according to {distributions_properties[dist]["name"]}.   
+        So let's create a population of ${n_population}$ students.
+        """)
+        _vars = [_vars[k] for k in _vars.keys()]
+        distribution: Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete] = get_distribution(dist, _vars)
+        population: Union[np.ndarray, int, float, complex] = distribution.rvs(size=n_population)
+        st.plotly_chart(plot_histogram(population, {
+            "title": {
+                "main": "Population",
+                "x": "Random Variable",
+                "y": "# occurrence of certain random variable"
+            },
+            "label": {
+                "main": None,
+                "x": "Height",
+                "y": "# occurrence"
+            }
+        }, len(np.unique(population)) // 4))
+
+        population_pd: pd.DataFrame = pd.DataFrame(data=population.reshape((1, len(population))), index=['Random draws'])
+        population_pd.columns += 1
+        st.write(population_pd)
+
+        del population_pd
+
+        st.markdown(f"""
+        These observations are *realization* of a **random process**,
+        We call these observations as **Random variables**,
+        in this case we have drawn these **random variables** from a
+        **{distributions_properties[dist]["name"]}**, {distributions_properties[dist]["latex"]}.    
+        """)
+
+    sample_means = np.zeros(n_simulations)
+    samples = []
+    for k in range(n_simulations):
+        sample = np.random.choice(population, n_sample)
+        samples.append(sample)
+        sample_means[k]=np.mean(sample)
+
+    with st.beta_expander("Observation", expanded=True):
+        st.markdown(f"""
+        Now lets take ${n_simulations}$ samples from our population of ${n_population}$ students, and each sample
+        consists of ${n_sample}$ observations of random student's height.    
+        Let's see first $3$ samples.
+        """)
+
+        for i in range(3):
+            population_pd: pd.DataFrame = pd.DataFrame(data=samples[i].reshape((1, n_sample)),
+                                                       index=[f"Sample {i+1}"])
+            population_pd.columns += 1
+            st.write(population_pd)
+
+            del population_pd
+        if st.checkbox("Show all samples", False):
+            for i in range(3,n_simulations):
+                population_pd: pd.DataFrame = pd.DataFrame(data=samples[i].reshape((1, n_sample)),
+                                                           index=[f"Sample {i + 1}"])
+                population_pd.columns += 1
+                st.write(population_pd)
+
+                del population_pd
+        del samples
+
+    with st.beta_expander("Statistics", expanded=True):
+        st.markdown(f"""
+        Now we have {n_simulations} samples.   
+        According to **CLT** distribution of sample mean $\\overline X_n$ converges to Normal distribution for larger
+        sample size $(n)$, here we set $n={n_sample}$, let's see the shape of our Sampling distribution.
+        """)
+
+        fig = plot_histogram(
+            sample_means,
+            description={
+                "title": {
+                    "main": "Sampling Distribution",
+                    "x": "Sample mean",
+                    "y": "# occurrence of sample mean"
+                },
+                "label": {
+                    "main": "Sampling Distribution",
+                    "x": "Sample mean",
+                    "y": "# occurrence of sample mean<br>falling into particular bin"
+                }
+            },
+            num_bins=len(np.unique(sample_means)) // 2,
+            convert_into_probability_plot=True,
+            isMobile=state.isMobile,)
+
+        mean, std = np.mean(sample_means), np.std(sample_means)
+        iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
+        line_plot(x=iid_rvs,
+                  y=norm.pdf(iid_rvs, mean, std),
+                  description={
+                      "title": {
+                          "main": f"Sampling Distribution (of sample mean)/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                          "x": f"Sample mean/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                          "y": "Probability of Sample mean/<br>PDF Normal Distribution"
+                      },
+                      "label": {
+                          "main": "Normal distribution"
+                      },
+                      "hovertemplate": "Random draw(x): %{x}<br>PDF(x=%{x}): %{y}",
+                      "color": "green"
+                  },
+                  fig=fig)
+        st.plotly_chart(fig)
