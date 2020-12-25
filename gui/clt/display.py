@@ -127,8 +127,15 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         sample size $(n)$, here we set $n={n_sample}$, let's see the shape of our Sampling distribution.
         """)
 
+        col = st.beta_columns([1, 30])
+        with col[0]:
+            use_centered_dist = st.checkbox(" ", False)
+        with col[1]:
+            st.markdown(
+                "Use Sampling distribution of $\\sqrt{n}(\\overline{X}_n - \\mu)$ instead of $\\overline{X}_n$")
+
         fig, (counts, bins) = plot_histogram(
-            sample_means,
+            sample_means if not use_centered_dist else np.sqrt(n_sample) * (sample_means - distribution.mean()),
             description={
                 "title": {
                     "main": "Sampling Distribution",
@@ -151,13 +158,16 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         Our Sampling distribution seems to have a bell curve, Now let's overlay a Normal distribution with same mean
         and variance as of our Sampling distribution.""")
 
-        mean, std = distribution.mean(), distribution.std()
+        if use_centered_dist:
+            mean, std = 0, distribution.std()
+        else:
+            mean, std = distribution.mean(), distribution.std()
         iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
         line_plot(x=iid_rvs,
                   y=norm.pdf(iid_rvs, mean, std),
                   description={
                       "title": {
-                          "main": f"Sampling Distribution (of sample mean)/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                          "main": f"Sampling Distribution/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
                           "x": f"Sample mean/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
                           "y": "Probability of Sample mean/<br>PDF of Normal Distribution"
                       },
