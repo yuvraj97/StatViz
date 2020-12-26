@@ -7,7 +7,7 @@ from scipy.stats import norm
 import numpy as np
 import pandas as pd
 from gui.utils import get_parameters
-from distribution import distributions_properties, get_distribution, graph_label
+from distribution import distributions_properties, get_distribution  # graph_label
 from logic.utils import plot_histogram, line_plot
 
 def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int], state):
@@ -59,6 +59,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         """)
         _vars = [_vars[k] for k in _vars.keys()]
         distribution: Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete] = get_distribution(dist, _vars)
+        if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
         population: Union[np.ndarray, int, float, complex] = distribution.rvs(size=n_population)
         fig, (counts, bins) = plot_histogram(population,
             description={
@@ -127,12 +128,17 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         sample size $(n)$, here we set $n={n_sample}$, let's see the shape of our Sampling distribution.
         """)
 
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+        true_estimated = st.radio("For Normal distribution", ("Use Estimated mean & variance", "Use True mean & variance"))
+        use_estimated = True if true_estimated == "Use Estimated mean & variance" else False
+
         col = st.beta_columns([1, 30])
         with col[0]:
             use_centered_dist = st.checkbox(" ", False)
         with col[1]:
             st.markdown(
                 "Use Sampling distribution of $\\sqrt{n}(\\overline{X}_n - \\mu)$ instead of $\\overline{X}_n$")
+
 
         fig, (counts, bins) = plot_histogram(
             sample_means if not use_centered_dist else np.sqrt(n_sample) * (sample_means - distribution.mean()),
@@ -159,9 +165,12 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         and variance as of our Sampling distribution.""")
 
         if use_centered_dist:
-            mean, std = 0, distribution.std()
+            # st.info(f"True std: {distribution.std()}, **Estimated std**: {np.sqrt(n_sample) * np.std(sample_means)}")
+            mean = 0 if not use_estimated else np.mean(np.sqrt(n_sample) * (sample_means - distribution.mean()))
+            std = distribution.std() if not use_estimated else np.sqrt(n_sample) * np.std(sample_means)
         else:
-            mean, std = distribution.mean(), distribution.std()
+            mean = distribution.mean() if not use_estimated else np.mean(sample_means)
+            std  = distribution.std()/np.sqrt(n_sample) if not use_estimated else np.std(sample_means)
         iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
         line_plot(x=iid_rvs,
                   y=norm.pdf(iid_rvs, mean, std),
