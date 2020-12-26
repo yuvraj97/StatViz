@@ -113,8 +113,7 @@ def applyDarkTheme():
                 background: rgb(45, 45, 45) !important;
             }
             .g-xtitle > text, .g-ytitle > text, .g-gtitle > text{
-                fill: aliceblue !important;
-    
+                fill: rgb(231, 232, 235, 0.85) !important;
             }
             g.xtick > text, g.ytick > text {
                 fill: rgb(231, 232, 235) !important; 
@@ -252,8 +251,8 @@ def applyDarkTheme():
             border-bottom-color: rgba(150, 255, 150, 0.5);
             border-left-color: rgba(150, 255, 150, 0.5);
             border-right-color: rgba(150, 255, 150, 0.5);
-            color: rgb(150, 255, 150);
-            background-color: rgba(150, 255, 150, 0.05);   
+            color: rgb(150, 255, 150, 0.8);
+            background-color: rgba(150, 255, 150, 0.02);   
         }
         blockquote.success > b {
             color: rgb(150, 255, 150);

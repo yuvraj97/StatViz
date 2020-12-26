@@ -15,7 +15,7 @@ def clear(elements):
         element.empty()
 
 
-def initializeID(state, CURRENTLY_LOGIN_JSON):
+def initializeID(CURRENTLY_LOGIN_JSON):
     # print("  initializeID(state, CURRENTLY_LOGIN_JSON)")
     if state.ID is None:
         state.ID = get_ID(CURRENTLY_LOGIN_JSON)
@@ -31,7 +31,6 @@ def main():
     CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
     LOGIN_JSON: Dict[str, Dict[str, Union[str, int, Dict[str, int]]]] = read_JSON(LOGIN_JSON_PATH)
     CURRENTLY_LOGIN_JSON: Dict[str, str] = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
-    state = SessionState.get_state()
     state.experimental_rerun = False
     state.theme = state.theme if state.theme is not None else SessionState.get_cookie("theme")
     state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
@@ -65,7 +64,7 @@ def main():
     # state.FIRST_INCORRECT_OTP
     # state.INCORRECT_OTP
 
-    initializeID(state, CURRENTLY_LOGIN_JSON)
+    initializeID(CURRENTLY_LOGIN_JSON)
 
     if not state.SET_TOTAL_RELOADS:
         # print("  Initialized state.TOTAL_RELOADS = 0")
@@ -107,16 +106,23 @@ if __name__ == '__main__':
     mainStyle()
     # print("================ Statistics.py [START] ================")
     st.sidebar.markdown(
-        "<h1 style='font-family:Arial;text-align:center;'><a href='https://quantml.org'>QuantML</a></h1>",
+        "<h1 style='font-family:Arial;text-align:center;'><a href='https://quantml.org'>QuantML</a></h1><br>",
         unsafe_allow_html=True)
-    st.sidebar.markdown("")
-    # try:
-    main()
-    # except:
-    #    error.markdown("""
-    #    <blockquote class="error">
-    #    Unexpected error Occurred please try refreshing page.
-    #    <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
-    #    </blockquote>
-    #    """, unsafe_allow_html=True)
+
+    state = SessionState.get_state()
+    if state.experimental_rerun_main is None:
+        state.experimental_rerun_main = True
+    try:
+        main()
+        state.experimental_rerun_main = True
+    except Exception:
+        if state.experimental_rerun_main:
+            state.experimental_rerun_main = False
+            st.experimental_rerun()
+        error.markdown("""
+        <blockquote class="error">
+        Unexpected error occurred please try refreshing page.
+        <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
+        </blockquote>
+        """, unsafe_allow_html=True)
     # print("================ Statistics.py  [END]  ================")

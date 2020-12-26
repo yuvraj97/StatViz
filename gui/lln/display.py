@@ -60,6 +60,7 @@ def stDisplay(dist: str,
                 "y": "# occurrence of certain random variable"
             },
             "label": {
+                "main": None,
                 "x": "Height",
                 "y": "# occurrence"
             }
@@ -91,6 +92,7 @@ def stDisplay(dist: str,
                 "y": "# occurrence of certain random variable"
             },
             "label":{
+                "main": None,
                 "x": "Height",
                 "y": "# occurrence"
             }

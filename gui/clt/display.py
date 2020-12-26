@@ -167,7 +167,6 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         and variance as of our Sampling distribution.""")
 
         if use_centered_dist:
-            # st.info(f"True std: {distribution.std()}, **Estimated std**: {np.sqrt(n_sample) * np.std(sample_means)}")
             mean = 0 if not use_estimated else np.mean(np.sqrt(n_sample) * (sample_means - distribution.mean()))
             std = distribution.std() if not use_estimated else np.sqrt(n_sample) * np.std(sample_means)
         else:
@@ -214,6 +213,11 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
     fig = line_plot(x=bins,
                     y=np.cumsum(counts) / np.sum(counts),
                     description={
+                        "title":{
+                            "main": f"CDF:<br>Sampling Distribution/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                            "x": f"Sample mean/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                            "y": "<b>CDF</b> of Sample mean/<br><b>CDF</b> of Normal Distribution"
+                        },
                         "label": {
                             "main": "Sampling Distribution CDF"
                         },
@@ -223,5 +227,16 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
                     fig=fig,
                     mode="markers",
                     isMobile=state.isMobile)
-
     st.plotly_chart(fig, use_container_width=True)
+    st.markdown("""
+    Indeed! Here we can witness the true beauty of **Central Limit Theorem**.    
+    No matter the underling distribution(with finite mean and variance) according to the **Central Limit Theorem**
+    (as **sample size** $\\to\\infty$) Sampling distribution will converge to Normal distribution,
+    and as you can see we don't need $\\infty$ observations **sample size** $\\geq30$ will suffice.""")
+
+    st.markdown("""
+    <blockquote class="success">
+        If you spot any error them please tell me in our discussion form.<br>
+        Also please share your experience am eager to know if it really help you to understand/visualize
+        <b>Central Limit Theorem</b>
+    </blockquote>""", unsafe_allow_html=True)
