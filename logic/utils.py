@@ -1,8 +1,7 @@
 from typing import Dict, Union, Tuple
-
 import numpy as np
-from plotly.graph_objs import Figure
 import plotly.graph_objects as go
+from plotly.graph_objs import Figure
 
 def plot_histogram(data: np.ndarray,
                    description: Dict[str, Union[str, Dict[str, str]]],

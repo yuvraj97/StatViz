@@ -7,6 +7,7 @@ from distribution import distributions_properties, which_distribution, stDistrib
 from gui.lln.display import stDisplay
 from utils import set_get_URL
 
+
 def main(distribution: str, state):
     dist: str = which_distribution[distribution]
 
@@ -18,10 +19,10 @@ def main(distribution: str, state):
 
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
         state.stSettings["seed"]: int = state.stSettings["seed-number"].number_input("Enter Seed",
-                                                                                min_value=0,
-                                                                                max_value=10000,
-                                                                                value=0,
-                                                                                step=1)
+                                                                                     min_value=0,
+                                                                                     max_value=10000,
+                                                                                     value=0,
+                                                                                     step=1)
 
     mean: float
     population: np.ndarray

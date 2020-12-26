@@ -55,7 +55,7 @@ def main():
 
     access_granted, email = alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON)
     if not access_granted:
-        access_granted, email, elements = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
+        access_granted, email = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
         if access_granted:
             state.experimental_rerun = True
     if access_granted:
