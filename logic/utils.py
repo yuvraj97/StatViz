@@ -47,7 +47,7 @@ def plot_histogram(data: np.ndarray,
     fig.update_layout(title=description["title"]["main"],
                       xaxis_title=description["title"]["x"],
                       yaxis_title=description["title"]["y"])
-    # fig.update_layout(showlegend=False if isMobile else True)
+    fig.update_layout(showlegend=False if isMobile else True)
     return fig, (counts, bins)
 
 def line_plot(x: np.ndarray,

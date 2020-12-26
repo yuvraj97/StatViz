@@ -10,8 +10,8 @@ from gui.utils import get_parameters
 from distribution import distributions_properties, get_distribution  # graph_label
 from logic.utils import plot_histogram, line_plot
 
-def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int], state):
 
+def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int], state):
     n_population = n["population"]
     n_sample = n["samples"]
     n_simulations = n["simulations"]
@@ -62,22 +62,24 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
         population: Union[np.ndarray, int, float, complex] = distribution.rvs(size=n_population)
         fig, (counts, bins) = plot_histogram(population,
-            description={
-                "title": {
-                    "main": "Population",
-                    "x": "Random Variable",
-                    "y": "# occurrence of certain random variable"
-                },
-                "label": {
-                    "main": None,
-                    "x": "Height",
-                    "y": "# occurrence"
-                }
-            },
-            num_bins=len(np.unique(population)) // 4)
+                                             description={
+                                                 "title": {
+                                                     "main": "Population",
+                                                     "x": "Random Variable",
+                                                     "y": "# occurrence of certain random variable"
+                                                 },
+                                                 "label": {
+                                                     "main": None,
+                                                     "x": "Height",
+                                                     "y": "# occurrence"
+                                                 }
+                                             },
+                                             num_bins=len(np.unique(population)) // 4,
+                                             isMobile=state.isMobile)
         st.plotly_chart(fig, use_container_width=True)
 
-        population_pd: pd.DataFrame = pd.DataFrame(data=population.reshape((1, len(population))), index=['Random draws'])
+        population_pd: pd.DataFrame = pd.DataFrame(data=population.reshape((1, len(population))),
+                                                   index=['Random draws'])
         population_pd.columns += 1
         st.write(population_pd)
 
@@ -95,7 +97,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
     for k in range(n_simulations):
         sample = np.random.choice(population, n_sample)
         samples.append(sample)
-        sample_means[k]=np.mean(sample)
+        sample_means[k] = np.mean(sample)
 
     with st.beta_expander("Observation", expanded=True):
         st.markdown(f"""
@@ -106,13 +108,13 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
 
         for i in range(3):
             population_pd: pd.DataFrame = pd.DataFrame(data=samples[i].reshape((1, n_sample)),
-                                                       index=[f"Sample {i+1}"])
+                                                       index=[f"Sample {i + 1}"])
             population_pd.columns += 1
             st.write(population_pd)
 
             del population_pd
         if st.checkbox("Show all samples", False):
-            for i in range(3,n_simulations):
+            for i in range(3, n_simulations):
                 population_pd: pd.DataFrame = pd.DataFrame(data=samples[i].reshape((1, n_sample)),
                                                            index=[f"Sample {i + 1}"])
                 population_pd.columns += 1
@@ -129,7 +131,8 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         """)
 
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-        true_estimated = st.radio("For Normal distribution", ("Use Estimated mean & variance", "Use True mean & variance"))
+        true_estimated = st.radio("For Normal distribution",
+                                  ("Use Estimated mean & variance", "Use True mean & variance"))
         use_estimated = True if true_estimated == "Use Estimated mean & variance" else False
 
         col = st.beta_columns([1, 30])
@@ -138,7 +141,6 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         with col[1]:
             st.markdown(
                 "Use Sampling distribution of $\\sqrt{n}(\\overline{X}_n - \\mu)$ instead of $\\overline{X}_n$")
-
 
         fig, (counts, bins) = plot_histogram(
             sample_means if not use_centered_dist else np.sqrt(n_sample) * (sample_means - distribution.mean()),
@@ -170,7 +172,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
             std = distribution.std() if not use_estimated else np.sqrt(n_sample) * np.std(sample_means)
         else:
             mean = distribution.mean() if not use_estimated else np.mean(sample_means)
-            std  = distribution.std()/np.sqrt(n_sample) if not use_estimated else np.std(sample_means)
+            std = distribution.std() / np.sqrt(n_sample) if not use_estimated else np.std(sample_means)
         iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
         line_plot(x=iid_rvs,
                   y=norm.pdf(iid_rvs, mean, std),
@@ -186,27 +188,31 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
                       "hovertemplate": "Random draw(x): %{x}<br>PDF(x=%{x}): %{y}",
                       "color": "green"
                   },
-                  fig=fig)
+                  fig=fig,
+                  mode="lines",
+                  isMobile=state.isMobile)
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
     [As we discussed](https://read.quantml.org/stats/clt/#its-about-CDF)""")
     st.info("""**Central Limit Theorem** is **not** a statement about the convergence of PDF or PMF.
     It's a statement about the convergence of **CDF**.""")
-    st.markdown("Now let's see that do the **CDF** of our Sampling distribution approaches to the CDF of a Normal Distribution")
+    st.markdown(
+        "Now let's see that do the **CDF** of our Sampling distribution approaches to the CDF of a Normal Distribution")
 
     fig = line_plot(x=iid_rvs,
                     y=norm.cdf(iid_rvs, mean, std),
                     description={
-                          "label": {
-                              "main": "Normal distribution CDF"
-                          },
-                          "hovertemplate": "Random draw(x): %{x}<br>CDF(x=%{x}): %{y}",
-                          "color": "green"
+                        "label": {
+                            "main": "Normal distribution CDF"
+                        },
+                        "hovertemplate": "Random draw(x): %{x}<br>CDF(x=%{x}): %{y}",
+                        "color": "green"
                     },
-                    mode="lines")
+                    mode="lines",
+                    isMobile=state.isMobile)
     fig = line_plot(x=bins,
-                    y=np.cumsum(counts)/np.sum(counts),
+                    y=np.cumsum(counts) / np.sum(counts),
                     description={
                         "label": {
                             "main": "Sampling Distribution CDF"
@@ -214,7 +220,8 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
                         "hovertemplate": "Sample Average(x) ~ %{x}<br>CDF(x ~ %{x}): %{y}",
                         "color": "royalblue"
                     },
+                    fig=fig,
                     mode="markers",
-                    fig=fig)
+                    isMobile=state.isMobile)
 
     st.plotly_chart(fig, use_container_width=True)
