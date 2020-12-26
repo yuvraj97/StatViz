@@ -2,13 +2,12 @@ from typing import Union, Dict
 import numpy as np
 from plotly.graph_objs import Figure
 
-from gui.lln.display import stDisplay
 import logic.lln.lln as lln
 from distribution import distributions_properties, which_distribution, stDistribution
+from gui.lln.display import stDisplay
 from utils import set_get_URL
 
-
-def main(distribution, state):
+def main(distribution: str, state):
     dist: str = which_distribution[distribution]
 
     set_get_URL(dist=distributions_properties[dist]["name"])
@@ -18,7 +17,11 @@ def main(distribution, state):
     var, n = stDistribution(dist)
 
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
-        state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)
+        state.stSettings["seed"]: int = state.stSettings["seed-number"].number_input("Enter Seed",
+                                                                                min_value=0,
+                                                                                max_value=10000,
+                                                                                value=0,
+                                                                                step=1)
 
     mean: float
     population: np.ndarray
