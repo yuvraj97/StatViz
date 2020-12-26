@@ -6,11 +6,14 @@ EMAIL_ADDRESS = "support@quantml.org"
 # Replace send_hold() -> send()
 def send_hold(email, OTP):
     # Replace smtp_username with your Amazon SES SMTP user name.
+    # noinspection SpellCheckingInspection
     USERNAME_SMTP = os.environ.get('QUANTMLAWSSMTPUSERNAME')
 
     # Replace smtp_password with your Amazon SES SMTP password.
+    # noinspection SpellCheckingInspection
     PASSWORD_SMTP = os.environ.get('QUANTMLAWSSMTPPASSWORD')
 
+    # noinspection SpellCheckingInspection
     HOST = "email-smtp.us-east-2.amazonaws.com"
     PORT = 587
 
@@ -33,7 +36,9 @@ def send_hold(email, OTP):
         return False
 
 def send(user_email, OTP):
+    # noinspection SpellCheckingInspection,PyShadowingNames
     EMAIL_ADDRESS = "quantml.app@gmail.com"  # os.environ.get('QUANTMLSTATISTICSEMAILADDR')
+    # noinspection SpellCheckingInspection
     EMAIL_PASSWORD = "gqmaaogffbgamhkp"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
