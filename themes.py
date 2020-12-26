@@ -205,6 +205,15 @@ def applyDarkTheme():
                 border-color: rgb(255, 180, 100, 0.5);
                 color: rgb(255, 180, 100, 1);
             }
+        
+        /* st Radio */
+            .stRadio > div > label {
+                background-color: transparent;
+            }
+            .stRadio > div > label > div:hover {
+                color: rgba(255, 180, 100, 1);
+            }
+            
 
         /* ================================================================ */
         /* ================================================================ */
@@ -264,7 +273,7 @@ def applyDarkTheme():
         .quant-bb{
             background-color: rgb(0, 0, 0, 0.07);
             border: 1px rgb(194, 199, 204) solid;
-        }        
+        }
     </style>
     
     """, unsafe_allow_html=True)
