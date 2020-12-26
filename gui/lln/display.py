@@ -1,22 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Oct 30 04:32:01 2020
-
-@author: OS
-"""
-
 import os
 from typing import Dict, Union, Tuple
-
 import numpy as np
 import pandas as pd
 import streamlit as st
 from PIL import Image
 from plotly.graph_objs import Figure
 
-from logic.utils import plot_histogram
 from distribution import distributions_properties
 from gui.utils import get_parameters
+from logic.utils import plot_histogram
+
 
 def stDisplay(dist: str,
               population: np.ndarray,
@@ -25,8 +18,7 @@ def stDisplay(dist: str,
               n: Dict[str, int],
               mean: float,
               plots: Tuple[Figure, Figure],
-              state
-              ) -> None:
+              state) -> None:
     parameters: str = get_parameters(dist, _vars)
     pdf: Figure
     simulation: Figure
@@ -53,8 +45,9 @@ def stDisplay(dist: str,
         Using the knowledge of truth we generate a (synthetic) population of $""" + total_population + """$ observations.   
         """)
 
+        # noinspection PyUnusedLocal
         fig, (counts, bins) = plot_histogram(population, {
-            "title":{
+            "title": {
                 "main": "Population",
                 "x": "Random Variable",
                 "y": "# occurrence of certain random variable"
@@ -85,13 +78,14 @@ def stDisplay(dist: str,
         Now we have our $""" + total_population + """$ **observations**, we took a **sample** of $""" + sample_size + """$ observations.
         """)
 
+        # noinspection PyUnusedLocal
         fig, (counts, bins) = plot_histogram(sample, {
-            "title":{
+            "title": {
                 "main": "Sample",
                 "x": "Random Variable",
                 "y": "# occurrence of certain random variable"
             },
-            "label":{
+            "label": {
                 "main": None,
                 "x": "Height",
                 "y": "# occurrence"
