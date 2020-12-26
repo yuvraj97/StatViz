@@ -22,6 +22,4 @@ def main(distribution, state):
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
         state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)
 
-    # mean, population, sample, pdf, simulation = clt.run(dist, var, n, state)
-
     stDisplay(dist, var, n, state)

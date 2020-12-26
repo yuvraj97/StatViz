@@ -1,20 +1,20 @@
 import os
 from PIL import Image
-from typing import Dict, Union
+from typing import Dict, Union, List
 import streamlit as st
 import scipy.stats
 from scipy.stats import norm
 import numpy as np
 import pandas as pd
 from gui.utils import get_parameters
-from distribution import distributions_properties, get_distribution  # graph_label
+from distribution import distributions_properties, get_distribution
 from logic.utils import plot_histogram, line_plot
 
 
 def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int], state):
-    n_population = n["population"]
-    n_sample = n["samples"]
-    n_simulations = n["simulations"]
+    n_population: int = n["population"]
+    n_sample: int = n["samples"]
+    n_simulations: int = n["simulations"]
 
     with st.beta_expander("Scenario", expanded=True):
         st.markdown(f"""
@@ -22,7 +22,6 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         what is the average height of ${n_sample}$ randomly selected students?
         and how is that average height is distributed (or say the distribution of that average height)?<br>
         """, unsafe_allow_html=True)
-        # distributions_properties[dist]["name"]
 
     with st.beta_expander("How CLT can help us", expanded=True):
         st.markdown("Central Limit Theorem says that,")
@@ -61,6 +60,8 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         distribution: Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete] = get_distribution(dist, _vars)
         if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
         population: Union[np.ndarray, int, float, complex] = distribution.rvs(size=n_population)
+
+        # noinspection PyUnusedLocal
         fig, (counts, bins) = plot_histogram(population,
                                              description={
                                                  "title": {
@@ -92,8 +93,8 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         **{distributions_properties[dist]["name"]}**, {distributions_properties[dist]["latex"]}.    
         """)
 
-    sample_means = np.zeros(n_simulations)
-    samples = []
+    sample_means: np.ndarray = np.zeros(n_simulations)
+    samples: List[np.ndarray] = []
     for k in range(n_simulations):
         sample = np.random.choice(population, n_sample)
         samples.append(sample)
@@ -137,7 +138,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
 
         col = st.beta_columns([1, 30])
         with col[0]:
-            use_centered_dist = st.checkbox(" ", False)
+            use_centered_dist: bool = st.checkbox(" ", False)
         with col[1]:
             st.markdown(
                 "Use Sampling distribution of $\\sqrt{n}(\\overline{X}_n - \\mu)$ instead of $\\overline{X}_n$")
@@ -213,7 +214,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
     fig = line_plot(x=bins,
                     y=np.cumsum(counts) / np.sum(counts),
                     description={
-                        "title":{
+                        "title": {
                             "main": f"CDF:<br>Sampling Distribution/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
                             "x": f"Sample mean/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
                             "y": "<b>CDF</b> of Sample mean/<br><b>CDF</b> of Normal Distribution"
