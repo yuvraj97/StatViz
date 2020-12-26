@@ -1,18 +1,21 @@
 import os
+import numpy as np
 import pandas as pd
 import streamlit as st
 from PIL import Image
+from plotly.graph_objs import Figure
+
 from logic.stats.simulation import plot_binary_data
 from logic.stats.stats import run
 from utils import set_get_URL
 
-def stPandas(npArray, label="Random Draws"):
+def stPandas(npArray: np.ndarray, label: str = "Random Draws") -> pd.DataFrame:
     npArray = npArray.reshape((1, len(npArray)))
     npArray = pd.DataFrame(data=npArray, index=[label])
     npArray.columns += 1
     return npArray
 
-def stDisplay(n_population, n_sample, true_p, n_simulations, state):
+def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, state):
     with st.beta_expander("Scenario", expanded=True):
         st.markdown("""
         Say we have a <b>room</b> full of <span class="l1">Red balls</span> and <span class="l2">Blue balls</span>. <br>
@@ -25,7 +28,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
 
     st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)")
 
-    image_path = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "dogma.png")
+    image_path: str = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "dogma.png")
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
@@ -40,7 +43,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         <blockquote class="error">Note that we do <b>not</b> know this proportion and our intent is to find this proportion.</blockquote>
         """, unsafe_allow_html=True)
 
-    population_plot = plot_binary_data({
+    population_plot: Figure = plot_binary_data({
         "title": "Population",
         "legend-1": "Red Balls",
         "legend-2": "Blue Balls",
@@ -49,6 +52,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         "description-1": "Red Ball",
         "description-2": "Blue Ball"
     }, state.stSettings["seed"])
+
     with st.beta_expander("Probability", expanded=True):
         st.markdown(f"""
         Now let's create a <b>Population</b>(<i>"All the balls in the room"</i>), 
@@ -57,8 +61,13 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         so using this probability we generate(synthetic) data.
         """, unsafe_allow_html=True)
 
+        population_sample: np.ndarray
+        samples: list
+        fig: Figure
+        estimate: float
+        estimators: np.ndarray
         population_sample, samples, fig, estimate, estimators = run(n_population, n_sample, true_p, n_simulations, "Simulated Distribution", state.stSettings["seed"])
-        population_sample = stPandas(population_sample, "Population")
+        population_sample: pd.DataFrame = stPandas(population_sample, "Population")
 
         st.plotly_chart(population_plot)
 
@@ -78,6 +87,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         "description-1": "Red Ball",
         "description-2": "Blue Ball"
     }, state.stSettings["seed"])
+
     with st.beta_expander("Observation", expanded=True):
         st.markdown(f"""
         As we can see the room is full of ${n_population}$ balls, and we can't count all of them 
@@ -89,7 +99,7 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         st.plotly_chart(sample_plot)
         st.write(stPandas(samples[0], "Sample"))
 
-    redBalls = [sample.sum() for sample in samples]
+    redBalls: list = [sample.sum() for sample in samples]
 
     with st.beta_expander("Statistics", expanded=True):
         st.markdown(f"""
@@ -102,15 +112,17 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         <span class="l1">$\\hat{p}$</span>: our estimate for proportion of <span class="l1">Red balls</span> denoted by $1$. <br>
         <span class="l2">$\\hat{q}$</span>: our estimate for proportion of <span class="l2">Blue balls</span> denoted by $0$. <br>
         """, unsafe_allow_html=True)
+
         st.latex("\\hat{p} = \\frac{1}{" + str(n_sample) + "}\\sum_{i=0}^{" + str(n_sample) + "}X_i ")
         st.latex(" \\hat{q} = 1-\\hat{p} ")
+
         st.markdown(f"""In our sample we have ${redBalls[0]}$ <span class="l1">red balls</span> and 
         ${n_sample - redBalls[0]}$ <span class="l2">blue balls</span>, so for this sample
         our estimate for the proportion of <span class="l1">red balls</span> is """ + """
         $\\hat{p} = """ + f"""{redBalls[0]}/{n_sample}={redBalls[0] / n_sample}$
         """, unsafe_allow_html=True)
 
-    tex = []
+    tex: list = []
     for i in range(5):
         t = "$\\widehat{p} = " + f"{int(estimators[i] * n_sample)}/{n_sample} = " + "{:.4f}".format(estimators[i]) + "$"
         tex.append(t)
@@ -139,26 +151,26 @@ def main(state):
 
     set_get_URL(dist="remove")
 
-    n_population = st.sidebar.number_input("Enter population size",
+    n_population: int = st.sidebar.number_input("Enter population size",
                                            min_value=100,
                                            max_value=400,
                                            value=200)
-    n_sample = st.sidebar.number_input("Enter sample size",
+    n_sample: int = st.sidebar.number_input("Enter sample size",
                                        min_value=10,
                                        max_value=50,
                                        value=30)
-    true_p = st.sidebar.slider("Proportion of Red balls (p)",
+    true_p: float = st.sidebar.slider("Proportion of Red balls (p)",
                                min_value=0.0,
                                max_value=1.0,
                                value=0.5,
                                step=0.05)
-    n_simulations = st.sidebar.number_input("Enter number of simulation",
+    n_simulations: int = st.sidebar.number_input("Enter number of simulation",
                                             min_value=10,
                                             max_value=50,
                                             value=50)
 
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
-        state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed",
+        state.stSettings["seed"]: int = state.stSettings["seed-number"].number_input("Enter Seed",
                                                                                 min_value=0,
                                                                                 max_value=10000,
                                                                                 value=0,
