@@ -18,9 +18,6 @@ def plot_binary_data(info, seed):
                              name=info["legend-2"],
                              hovertemplate=info["description-2"],
                              line=dict(color='blue')))
-    # fig.update_layout(title=name,
-    #                   xaxis_title='Sample Size',
-    #                   yaxis_title='<b>iid</b> Random Variable')
     fig.update_layout(
         title=info["title"],
         xaxis=dict(

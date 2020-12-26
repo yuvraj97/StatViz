@@ -5,14 +5,11 @@ from distribution import distributions_properties, distribution2idx
 chapters: List[str] = [
     "Introduction",
     "Law of Large Number",
-    "Central Limit Theorem (patreon)",
+    "Central Limit Theorem",
 ]
 
-
 def chapter2idx(chapter: str) -> int:
-    # print("        - chapter2idx("+ chapter +")")
     return chapters.index(chapter)
-
 
 chapters_acronyms: List[str] = [
     "Introduction",
@@ -22,28 +19,19 @@ chapters_acronyms: List[str] = [
 
 chapters_acronyms_lowercase: List[str] = [e.lower() for e in chapters_acronyms]
 
-
 def getChapterByURL(url: dict) -> str:
-    # print("        - getChapterByURL("+ str(url) +")")
     if "ch" in url and url["ch"][0].lower() in chapters_acronyms_lowercase:
         chapter = url["ch"][0].lower()
     else:
         chapter = None
-    # print("            * chapter: ", chapter)
     return chapter
 
-
 def getChapterIndexByURL(url: dict) -> int:
-    # print("        - getChapterIndexByURL("+ str(url) +")")
     chapter_acronym = getChapterByURL(url)
     idx = chapters_acronyms_lowercase.index(chapter_acronym) if chapter_acronym is not None else 0
-    # print("            * chapter_acronym: ", chapter_acronym)
-    # print("            * idx: ", idx)
     return idx
 
-
 def set_get_URL(ch: str = None, dist: str = None, url: dict = None) -> dict:
-    # print("        - set_get_URL(url="+ str(url) + ", ch=" + str(ch) + ", dist=" + str(dist) +")")
     url = st.experimental_get_query_params() if url is None else url
     _ch, _dist = "", ""
     add_dist = False
@@ -57,9 +45,6 @@ def set_get_URL(ch: str = None, dist: str = None, url: dict = None) -> dict:
     else:
         st.experimental_set_query_params(ch=_ch)
     url = st.experimental_get_query_params()
-    # print("            * ch: ", ch)
-    # print("            * dist: ", dist)
-    # print("            * url: ", url)
     return url
 
 def urlIndex(url: dict) -> int:
