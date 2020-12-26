@@ -1,3 +1,4 @@
+# noinspection PyProtectedMember
 from streamlit.hashing import _CodeHasher
 from streamlit.report_thread import get_report_ctx
 from streamlit.server.server import Server
@@ -62,6 +63,7 @@ class _SessionState:
 
 def _get_session():
     session_id = get_report_ctx().session_id
+    # noinspection PyProtectedMember
     session_info = Server.get_current()._get_session_info(session_id)
 
     if session_info is None:
@@ -77,23 +79,17 @@ def get_state(hash_funcs=None):
     if not hasattr(session, "_custom_session_state"):
         session._custom_session_state = _SessionState(session, hash_funcs)
 
+    # noinspection PyProtectedMember
     return session._custom_session_state
-
-
-def get_ID() -> str:
-    session_info = _get_session()
-    return session_info.ws.get_cookie("quantml-ID")
 
 
 def get_cookie(name: str) -> str:
     session_info = _get_session()
     return session_info.ws.get_cookie(name)
 
-
 def set_cookie(name: str, value: str) -> None:
     session_info = _get_session()
     session_info.ws.set_cookie(name, value)
-
 
 def set_title(title: str) -> None:
     from streamlit.proto import ForwardMsg_pb2

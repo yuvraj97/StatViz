@@ -1,30 +1,19 @@
 import os
 from typing import Dict, Union
-
 import streamlit as st
 import SessionState
 import success
-from auth.utils import read_JSON
 from auth.login import alreadyLoggedIn, logout_button, login
-from themes import applyDarkTheme, applyLightTheme , mainStyle
+from auth.utils import read_JSON
 from js import set_cookie, get_ID
-
-def clear(elements):
-    # print("        - clear(elements)")
-    for element in elements:
-        element.empty()
+from themes import applyDarkTheme, applyLightTheme, mainStyle
 
 
 def initializeID(CURRENTLY_LOGIN_JSON):
-    # print("  initializeID(state, CURRENTLY_LOGIN_JSON)")
     if state.ID is None:
         state.ID = get_ID(CURRENTLY_LOGIN_JSON)
         state.url = st.experimental_get_query_params()
-        # print("        * ID: ", state.ID)
-        # print("        * url: ", str(state.url))
         return
-    # print("  ID already initialized!")
-
 
 def main():
     LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "data", "login.json")
@@ -57,8 +46,6 @@ def main():
 
     # state.ID_TAKEN
     # state.ID
-    # state.SET_TOTAL_RELOADS
-    # state.TOTAL_RELOADS
     # state.OTP
     # state.FIRSTOTPSENT
     # state.FIRST_INCORRECT_OTP
@@ -66,35 +53,19 @@ def main():
 
     initializeID(CURRENTLY_LOGIN_JSON)
 
-    if not state.SET_TOTAL_RELOADS:
-        # print("  Initialized state.TOTAL_RELOADS = 0")
-        state.SET_TOTAL_RELOADS = True
-        state.TOTAL_RELOADS = 0
-    state.TOTAL_RELOADS += 1
-
-    # print(f"=====================START [{state.TOTAL_RELOADS}]=====================")
     access_granted, email = alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON)
-    # print("      - RETURNED FROM alreadyLoggedIn()")
-    # print("          * access_granted: ", access_granted)
-    # print("          * email: ", email)
     if not access_granted:
         access_granted, email, elements = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
-        # print("      - RETURNED FROM login()")
-        # print("          * access_granted: ", access_granted)
-        # print("          * email: ", email)
         if access_granted:
-            # print("if(access_granted): ")
             state.experimental_rerun = True
     if access_granted:
         logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
 
-    success.main([], state)
+    success.main(state)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
     # state.sync()
     if state.experimental_rerun:
         st.experimental_rerun()
-    # print(f"======================END [{state.TOTAL_RELOADS}]======================")
-
 
 if __name__ == '__main__':
     st.set_page_config(
