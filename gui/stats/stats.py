@@ -1,9 +1,9 @@
 import os
-from PIL import Image
-import streamlit as st
 import pandas as pd
-from logic.stats.stats import run
+import streamlit as st
+from PIL import Image
 from logic.stats.simulation import plot_binary_data
+from logic.stats.stats import run
 from utils import set_get_URL
 
 def stPandas(npArray, label="Random Draws"):
@@ -133,27 +133,35 @@ def stDisplay(n_population, n_sample, true_p, n_simulations, state):
         
     Now if we plot a histogram of our estimators we can see how our estimator """ + """$(\\hat{p})$ is distributed.    
     """, unsafe_allow_html=True)
-
-    # st.success("Here our estimate is $\\bf{\\widehat{p} = " + estimate + "}$")
-
     st.plotly_chart(fig)
 
 def main(state):
-    # print("    ======== stats.py [START] ========")
 
     set_get_URL(dist="remove")
-    if state.stats_init is None:
-        # print("        stats.main state initializing ...")
-        state.stats_init = True
-        state.vars = []
 
-    n_population = st.sidebar.number_input("Enter population size", min_value=100, max_value=400, value=200)
-    n_sample = st.sidebar.number_input("Enter sample size", min_value=10, max_value=50, value=30)
-    true_p = st.sidebar.slider("Proportion of Red balls (p)", min_value=0.0, max_value=1.0, value=0.5, step=0.05)
-    n_simulations = st.sidebar.number_input("Enter number of simulation", min_value=10, max_value=50, value=50)
+    n_population = st.sidebar.number_input("Enter population size",
+                                           min_value=100,
+                                           max_value=400,
+                                           value=200)
+    n_sample = st.sidebar.number_input("Enter sample size",
+                                       min_value=10,
+                                       max_value=50,
+                                       value=30)
+    true_p = st.sidebar.slider("Proportion of Red balls (p)",
+                               min_value=0.0,
+                               max_value=1.0,
+                               value=0.5,
+                               step=0.05)
+    n_simulations = st.sidebar.number_input("Enter number of simulation",
+                                            min_value=10,
+                                            max_value=50,
+                                            value=50)
 
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
-        state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)
+        state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed",
+                                                                                min_value=0,
+                                                                                max_value=10000,
+                                                                                value=0,
+                                                                                step=1)
 
     stDisplay(n_population, n_sample, true_p, n_simulations, state)
-    # print("    ======== stats.py  [END]  ========")
