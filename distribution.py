@@ -1,5 +1,4 @@
 from typing import Dict, List, Union, Tuple
-
 import scipy
 import streamlit as st
 from scipy.stats import bernoulli, geom, binom, poisson
@@ -181,40 +180,41 @@ distribution2url: Dict[str, str] = {
 }
 
 def clear(L: List) -> None:
-    # print("        clear(L)")
     for e in L:
         e.empty()
 
 # noinspection PyTypeChecker
 def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:
-    # print("          - stGetParameters(dist="+ dist +")")
     params: Union[str, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]] = distributions_properties[dist]["stSlider"]
-    # print("              * params: ", params)
     var: Dict[str, Union[int, float]] = {}
-    for k in params.keys(): var[k] = st.sidebar.slider(k, params[k]["min"], params[k]["max"], params[k]["value"],
+    for k in params.keys(): var[k] = st.sidebar.slider(k,
+                                                       params[k]["min"],
+                                                       params[k]["max"],
+                                                       params[k]["value"],
                                                        params[k]["increment"])
-    # print("              * var: ", var)
     return var
 
-def stDistribution(dist: str, default_values: Dict[str, Dict[str, int]] = None, n_simulations: bool = False) -> Tuple[Dict[str, Union[int, float]], Dict[str, int]]:
-    # print("          - stDistribution(dist="+ dist + ", state)")
+def stDistribution(dist: str,
+                   default_values: Dict[str, Dict[str, int]] = None,
+                   n_simulations: bool = False) -> Tuple[Dict[str, Union[int, float]], Dict[str, int]]:
     _n: Dict[str, int] = {
-        "population": st.sidebar.number_input("Enter Population size", min_value=100, max_value=400, value=200, step=10),
+        "population": st.sidebar.number_input("Enter Population size",
+                                              min_value=100,
+                                              max_value=400,
+                                              value=200,
+                                              step=10),
         "samples": st.sidebar.slider("Sample Size",
                                      min_value=10 if default_values is None else default_values["sample"]["min_value"],
                                      max_value=100 if default_values is None else default_values["sample"]["max_value"],
                                      value=50 if default_values is None else default_values["sample"]["value"],
-                                     step=5 if default_values is None else default_values["sample"]["step"]
-                                     )
+                                     step=5 if default_values is None else default_values["sample"]["step"])
     }
     if n_simulations:
         _n["simulations"] = st.sidebar.slider("Number of simulations(k)", 10, 100, 50, 10)
     st.sidebar.markdown("## Parameters")
-    # print("              * n: ",n)
     return stGetParameters(dist), _n
 
 def get_distribution(dist: str, var: List[Union[int, float]]) -> Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete]:
-    # print("          - get_distribution(dist="+ dist + ", var= " + str(var) +")")
     if dist == "gauss":
         return norm(*var)
     elif dist == "unif":
@@ -233,7 +233,6 @@ def get_distribution(dist: str, var: List[Union[int, float]]) -> Union[scipy.sta
         return expon(1 / var[0])
 
 def graph_label(dist: str, var: List[Union[int, float]]) -> str:
-    # print("          - graph_label(dist="+ dist + ", var= " + str(var) +")")
     if dist == "gauss":
         return f'N(μ={var[0]}, σ={var[1]})'
     elif dist == "unif":
