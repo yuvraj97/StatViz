@@ -47,7 +47,7 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
         "title": "Population",
         "legend-1": "Red Balls",
         "legend-2": "Blue Balls",
-        "count-1": int(n_population*true_p),
+        "count-1": int(n_population * true_p),
         "count-2": n_population - int(n_population * true_p),
         "description-1": "Red Ball",
         "description-2": "Blue Ball"
@@ -66,7 +66,13 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
         fig: Figure
         estimate: float
         estimators: np.ndarray
-        population_sample, samples, fig, estimate, estimators = run(n_population, n_sample, true_p, n_simulations, "Simulated Distribution", state.stSettings["seed"])
+        population_sample, samples, fig, estimate, estimators = run(n_population,
+                                                                    n_sample,
+                                                                    true_p,
+                                                                    n_simulations,
+                                                                    "Simulated Distribution",
+                                                                    state.stSettings["seed"])
+
         population_sample: pd.DataFrame = stPandas(population_sample, "Population")
 
         st.plotly_chart(population_plot)
@@ -147,33 +153,33 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
     """, unsafe_allow_html=True)
     st.plotly_chart(fig)
 
-def main(state):
 
+def main(state):
     set_get_URL(dist="remove")
 
     n_population: int = st.sidebar.number_input("Enter population size",
-                                           min_value=100,
-                                           max_value=400,
-                                           value=200)
+                                                min_value=100,
+                                                max_value=400,
+                                                value=200)
     n_sample: int = st.sidebar.number_input("Enter sample size",
-                                       min_value=10,
-                                       max_value=50,
-                                       value=30)
-    true_p: float = st.sidebar.slider("Proportion of Red balls (p)",
-                               min_value=0.0,
-                               max_value=1.0,
-                               value=0.5,
-                               step=0.05)
-    n_simulations: int = st.sidebar.number_input("Enter number of simulation",
                                             min_value=10,
                                             max_value=50,
-                                            value=50)
+                                            value=30)
+    true_p: float = st.sidebar.slider("Proportion of Red balls (p)",
+                                      min_value=0.0,
+                                      max_value=1.0,
+                                      value=0.5,
+                                      step=0.05)
+    n_simulations: int = st.sidebar.number_input("Enter number of simulation",
+                                                 min_value=10,
+                                                 max_value=50,
+                                                 value=50)
 
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
         state.stSettings["seed"]: int = state.stSettings["seed-number"].number_input("Enter Seed",
-                                                                                min_value=0,
-                                                                                max_value=10000,
-                                                                                value=0,
-                                                                                step=1)
+                                                                                     min_value=0,
+                                                                                     max_value=10000,
+                                                                                     value=0,
+                                                                                     step=1)
 
     stDisplay(n_population, n_sample, true_p, n_simulations, state)
