@@ -1,7 +1,6 @@
 import numpy as np
 import plotly.express as px
 
-
 def get_plot(data, title):
     counts, bins = np.histogram(np.array(data * 100, dtype=int), bins=range(0, 101, 2))
     bins = 0.5 * (bins[:-1] + bins[1:]) / 100
@@ -11,9 +10,7 @@ def get_plot(data, title):
                       yaxis_title='# occurrence of certain (p) in our simulation')
     return fig
 
-
 def get_sample_with_true_p(population, p):
-    # print("        - get_sample_with_true_p(population="+ str(population) + ", p="+ str(p) +")")
     a = np.zeros(population, dtype=np.int8)
     _1_s = int(population * p)
     for i in range(0, _1_s):
@@ -21,11 +18,8 @@ def get_sample_with_true_p(population, p):
     np.random.shuffle(a)
     return a
 
-
 def run(n_population, n_sample, true_p, n_simulations, title, seed):
     if seed is not None: np.random.seed(seed)
-    # print("        - run(n_population=" + str(n_population) + ", n_sample=" + str(n_sample) + ", true_p="
-    # + str(true_p) + ", n_simulations=" + str(n_simulations) + ")")
     population_sample = get_sample_with_true_p(n_population, true_p)
     estimators = np.empty(n_simulations)
     samples = []
@@ -34,5 +28,4 @@ def run(n_population, n_sample, true_p, n_simulations, title, seed):
         sample = np.random.choice(population_sample, n_sample)
         estimators[i] = sample.sum() / n_sample
         samples.append(sample)
-
     return population_sample, samples, get_plot(estimators, title), sum(estimators) / n_simulations, estimators
