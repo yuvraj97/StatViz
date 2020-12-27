@@ -153,6 +153,13 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
     """, unsafe_allow_html=True)
     st.plotly_chart(fig)
 
+    st.markdown("""
+    <blockquote class="success">
+        If you spot any error them please tell me in our discussion form.<br>
+        Also please share your experience am eager to know if this help you understand,
+        <b>what is Statistics?</b>
+    </blockquote>""", unsafe_allow_html=True)
+
 
 def main(state):
     set_get_URL(dist="remove")

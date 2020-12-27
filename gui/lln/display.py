@@ -132,3 +132,10 @@ def stDisplay(dist: str,
     st.markdown("""
     
     """)
+
+    st.markdown("""
+    <blockquote class="success">
+        If you spot any error them please tell me in our discussion form.<br>
+        Also please share your experience am eager to know if it really help you to understand/visualize
+        <b>Weak Law of large Numbers</b>.
+    </blockquote>""", unsafe_allow_html=True)

@@ -239,5 +239,5 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
     <blockquote class="success">
         If you spot any error them please tell me in our discussion form.<br>
         Also please share your experience am eager to know if it really help you to understand/visualize
-        <b>Central Limit Theorem</b>
+        <b>Central Limit Theorem</b>.
     </blockquote>""", unsafe_allow_html=True)
