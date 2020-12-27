@@ -190,9 +190,11 @@ def applyDarkTheme():
                 background-color: rgba(150, 206, 255, 0.05);
                 border-color: rgb(150, 206, 255, 0.5);
             }
-            .stAlert *{
+            .stAlert > div > div > div > div {
                 /*color:rgb(255, 200, 142);*/
                 color:rgb(150, 206, 255);
+                /*filter: brightness(4);
+                font-weight: 400;*/
             }
 
         /* st Button */

@@ -40,7 +40,7 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
         Here the **truth** is that, currently the <b>room</b> is holding
         <span class="l1">$40\\%$</span> of <span class="l1">Red balls</span> and
         <span class="l2">$60\\%$</span> of <span class="l2">Blue balls</span>. <br>
-        <blockquote class="error">Note that we do <b>not</b> know this proportion and our intent is to find this proportion.</blockquote>
+        <blockquote class="warning">Note that we do <b>not</b> know this proportion and our intent is to find this proportion.</blockquote>
         """, unsafe_allow_html=True)
 
     population_plot: Figure = plot_binary_data({
