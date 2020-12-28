@@ -8,6 +8,17 @@ def main(state):
         ) <b>every week</b>.
     </blockquote>
     """, unsafe_allow_html=True)
+
+    if not state.isLoggedIn:
+        st.markdown("""
+            <blockquote class="warning">
+            This app is under development so currently <a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">patreons</a>
+            that opt for Statistics App, are able to access all upcoming visualizations.<br>
+            Once this Statistics App is concluded plan is to make all visualizations of this Statistics App to be available
+            to everyone.<br>
+        </blockquote>
+        """, unsafe_allow_html=True)
+
     st.markdown("""
     ## Concepts that are planned to be covered:    
     
@@ -44,7 +55,7 @@ def main(state):
     - Asymptotic Normality of MLE
     - Method of Moments
     - Bayesian Statistics
-    - Jeffreys Prior(unlikely)
+    - Jeffreys Prior
     - Bayesian Confidence Interval
     - Multinomial Bayesian Estimation,
     - GLM: Link Functions and the Canonical Link Function
