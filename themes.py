@@ -61,9 +61,10 @@ def applyDarkTheme():
         
         /* Sidebar styling */
             .css-1aumxhk{
-                background-color: rgb(45, 45, 45);
+                background-color: rgb(42, 42, 42);
                 background-image: none;
                 color: rgb(231, 232, 235);
+                /*border-right: 1px solid rgb(25, 25, 25);*/
             }
 
         /*close sidebar X */
@@ -190,7 +191,8 @@ def applyDarkTheme():
                 background-color: rgba(150, 206, 255, 0.05);
                 border-color: rgb(150, 206, 255, 0.5);
             }
-            .stAlert > div > div > div > div {
+            /* .stAlert > div > div > div > div */
+            .stAlert * {
                 /*color:rgb(255, 200, 142);*/
                 color:rgb(150, 206, 255);
                 /*filter: brightness(4);
