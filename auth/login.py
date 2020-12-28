@@ -31,9 +31,9 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
             return False, email
         elif email not in LOGIN_JSON:
             msg = f"""
-                       <b>{email}</b> is not registered as a <b><a href="https://www.patreon.com/quantml">patreon</a></b><br>
+                       <b>{email}</b> is not registered as a <b><a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">patreon</a></b><br>
                        This app is under development, once it's concluded it will be available to everyone.<br>
-                       To get <b>early access</b> to this app, <b>Join us at <a href="https://www.patreon.com/quantml">patreon</a></b>
+                       To get <b>early access</b> to this app, <b>Join us at <a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">patreon</a></b>
                     """
             st.markdown(f'<blockquote class="warning">{msg}</blockquote>', unsafe_allow_html=True)
         elif email in LOGIN_JSON:

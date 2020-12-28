@@ -32,7 +32,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         st.markdown(f"""
         But we wont need $\\infty$ sample size $(n)$, $n\\geq 30$ will suffice.<br>
         So no matter what the distribution is, as long as it had a finite mean and a finite variance
-        (unlike <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">cauchy distribution</a>),
+        (unlike <a rel='noreferrer' target='_blank' href="https://en.wikipedia.org/wiki/Cauchy_distribution">cauchy distribution</a>),
         distribution of sample mean will converge to the <b>Normal Distribution</b>.
         """, unsafe_allow_html=True)
     st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)")

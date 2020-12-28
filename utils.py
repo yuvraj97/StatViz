@@ -17,7 +17,8 @@ chapters_acronyms: List[str] = [
     "Introduction",
     "Weak-Law-of-Large-Numbers",
     "Central-Limit-Theorem",
-    "Gaussian-Distribution"
+    "Gaussian-Distribution",
+    "Coming-Soon"
 ]
 
 chapters_acronyms_lowercase: List[str] = [e.lower() for e in chapters_acronyms]
