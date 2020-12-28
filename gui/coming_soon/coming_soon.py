@@ -9,8 +9,7 @@ def main(state):
     </blockquote>
     """, unsafe_allow_html=True)
     st.markdown("""
-    ## Concepts I plan to cover    
-    (incomplete list)
+    ## Concepts that are planned to be covered:    
     
     - Confidence Intervals
     - Hypothesis Testing
@@ -30,13 +29,14 @@ def main(state):
     - Kolmogorov-Lilliefors test
     - Quantile-Quantile Plots
     - Linear/Ridge Regression
-    - [Don't know what future holds]
+    - [etc.]
     
     These are the concepts for which I am confident that I can simulate/visualize these concepts.     
         
-    ## Below are the concepts I wise to include/visualize     
-    But am not much confident that I can make visualization that will aid you much in understanding the concept.     
-    (but am also confident as time passes items from below list will move into the list above)     
+    ## Below are the concepts I wish to include/visualize     
+    For following concepts am not much confident that I can make visualization that will 
+    aid you much in understanding the concept.     
+    (But am also considerate enough that in future following concepts can be included.)     
     
     - Covariance Matrices
     - Multivariate Statistics
@@ -48,7 +48,7 @@ def main(state):
     - Bayesian Confidence Interval
     - Multinomial Bayesian Estimation,
     - GLM: Link Functions and the Canonical Link Function
-    - [Don't know what future holds]
+    - [etc.]
     """)
 
     if(state.isLoggedIn):
@@ -70,7 +70,7 @@ def main(state):
                                       f"Feature Request from {state.email}",
                                       f"Feature Request from {state.email}\n\n" + feature_request)
                 if response == {}:
-                    st.balloons()
+                    # st.balloons()
                     st.markdown("""
                     <blockquote class="success">
                         Feature Request sent successfully.
