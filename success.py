@@ -36,4 +36,4 @@ def main(state):
     elif option == chapters[4]:
         from gui.coming_soon import coming_soon
         set_title('Coming Soon | Visualization | Fundamentals of Statistics - QuantML')
-        coming_soon.main()
+        coming_soon.main(state)

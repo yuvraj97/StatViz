@@ -13,7 +13,8 @@ def applyDarkTheme():
             .row-widget.stSelectbox *,
             .row-widget.stTextInput *,
             .stNumberInput *,
-            .row-widget.stCheckbox * {
+            .row-widget.stCheckbox * ,
+            .stTextArea *{
                 color: rgb(231, 232, 235);
             }
 
@@ -144,6 +145,7 @@ def applyDarkTheme():
             .row-widget.stTextInput > div > div > input {
                 background-color: rgb(25, 25, 25);
                 border-color: rgb(25, 25, 25);
+                caret-color: rgb(231, 232, 235);
                 color: rgb(231, 232, 235);
             }
 
@@ -216,7 +218,20 @@ def applyDarkTheme():
             .stRadio > div > label > div:hover {
                 color: rgba(255, 180, 100, 1);
             }
-            
+        
+        /* st TextArea */
+        .stTextArea > div {
+            border-color: rgb(25, 25, 25);
+        }
+        /*.stTextArea > div:focus,
+        .stTextArea > div:hover {
+            border-color: rgb(0, 115, 177);
+        }*/
+        
+        .stTextArea > div > textarea {
+            caret-color: rgb(231, 232, 235);
+            background-color:rgb(25, 25, 25);
+        }
 
         /* ================================================================ */
         /* ================================================================ */

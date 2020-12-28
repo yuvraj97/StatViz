@@ -59,9 +59,12 @@ def main():
     if not access_granted:
         access_granted, email = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
         if access_granted:
+            st.balloons()
             state.experimental_rerun = True
     if access_granted:
         logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
+        state.isLoggedIn = True
+        state.email = email
 
     success.main(state)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
