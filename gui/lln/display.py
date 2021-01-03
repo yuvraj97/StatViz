@@ -108,7 +108,7 @@ def stDisplay(dist: str,
 
         st.info("""
         Sample mean $(\\overline{X}_n)$ tends to the the **true mean** as
-        **Our sample size $\\to \\infty$
+        Our sample size $\\to \\infty$
         """)
 
         st.latex("\\overline{X}_n:=\\frac{1}{n}\\sum _{i=1}^ n X_ i \\xrightarrow [n\\to \\infty ]{\\text{ a.s.}} \\mu")
@@ -135,7 +135,7 @@ def stDisplay(dist: str,
 
     st.markdown("""
     <blockquote class="success">
-        If you spot any error them please tell me in our discussion form.<br>
-        Also please share your experience am eager to know if it really help you to understand/visualize
+        If you spot any error then please tell me in our discussion form.<br>
+        Also please share your experience, I'm eager to know if it really help you to understand/visualize
         <b>Weak Law of large Numbers</b>.
     </blockquote>""", unsafe_allow_html=True)

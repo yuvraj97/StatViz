@@ -19,7 +19,7 @@ def main(state):
     Hope you enjoyed the app so far, now our next step is to eliminate <b>most</b> of our doubts regarding the 
     beauty of <b>Gaussian Distribution</b>.<br>
 
-    When it came to Gaussian Distribution, what is the first thing came into mind
+    When it came to Gaussian Distribution, what is the first thing that came into mind
     <a rel='noreferrer' target='_blank' href="https://read.quantml.org/stats/clt/.">Central Limit Theorem</a>
     right.<br>
     

@@ -20,7 +20,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         st.markdown(f"""
         Assume that there are ${n_population}$ students in your school and you want to know,
         what is the average height of ${n_sample}$ randomly selected students?
-        and how is that average height is distributed (or say the distribution of that average height)?<br>
+        And how is that average height distributed (or say the distribution of that average height)?<br>
         """, unsafe_allow_html=True)
 
     with st.beta_expander("How CLT can help us", expanded=True):
@@ -198,7 +198,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
     st.info("""**Central Limit Theorem** is **not** a statement about the convergence of PDF or PMF.
     It's a statement about the convergence of **CDF**.""")
     st.markdown(
-        "Now let's see that do the **CDF** of our Sampling distribution approaches to the CDF of a Normal Distribution")
+        "Now let's see does the **CDF** of our Sampling distribution approaches to the CDF of a Normal Distribution")
 
     fig = line_plot(x=iid_rvs,
                     y=norm.cdf(iid_rvs, mean, std),
@@ -231,13 +231,13 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
     st.plotly_chart(fig, use_container_width=True)
     st.markdown("""
     Indeed! Here we can witness the true beauty of **Central Limit Theorem**.    
-    No matter the underling distribution(with finite mean and variance) according to the **Central Limit Theorem**
+    No matter the underlying distribution(with finite mean and variance) according to the **Central Limit Theorem**
     (as **sample size** $\\to\\infty$) Sampling distribution will converge to Normal distribution,
     and as you can see we don't need $\\infty$ observations **sample size** $\\geq30$ will suffice.""")
 
     st.markdown("""
     <blockquote class="success">
-        If you spot any error them please tell me in our discussion form.<br>
-        Also please share your experience am eager to know if it really help you to understand/visualize
+        If you spot any error then please tell me in our discussion form.<br>
+        Also please share your experience, I'm eager to know if it really help you to understand/visualize
         <b>Central Limit Theorem</b>.
     </blockquote>""", unsafe_allow_html=True)
