@@ -148,6 +148,14 @@ def applyDarkTheme():
                 caret-color: rgb(231, 232, 235);
                 color: rgb(231, 232, 235);
             }
+            
+            .row-widget.stSelectbox > div ,
+            .stNumberInput > div > div,
+            .row-widget.stTextInput > div {
+                background-color: rgb(25, 25, 25);
+                border-color: rgb(25, 25, 25);
+            }
+
 
         /* stTextInput text color  */
             .row-widget.stTextInput > div > div > input:hover,
@@ -184,7 +192,7 @@ def applyDarkTheme():
 
         /* stCheckbox */
             .row-widget.stCheckbox > label{
-                background-color: rgb(45, 45, 45);
+                background-color: unset;
             }
 
         /* stAlert */        

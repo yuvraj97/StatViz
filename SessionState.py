@@ -1,4 +1,6 @@
 # noinspection PyProtectedMember
+from typing import Union
+
 from streamlit.hashing import _CodeHasher
 from streamlit.report_thread import get_report_ctx
 from streamlit.server.server import Server
@@ -83,9 +85,13 @@ def get_state(hash_funcs=None):
     return session._custom_session_state
 
 
-def get_cookie(name: str) -> str:
+def get_cookie(name: str) -> Union[str, None]:
     session_info = _get_session()
-    return session_info.ws.get_cookie(name)
+    ws = session_info.ws
+    if ws is None:
+        # print(f"Failed to get {name} Cookie")
+        return ""
+    return ws.get_cookie(name)
 
 def set_cookie(name: str, value: str) -> None:
     session_info = _get_session()

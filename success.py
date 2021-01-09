@@ -19,14 +19,17 @@ def main(state):
 
     if option == chapters[0]:
         from gui.stats import stats
+        st.markdown(f"""<div id="quantml-chapter">intro</div>""", unsafe_allow_html=True)
         set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
         stats.main(state)
     if option == chapters[1]:
         from gui.lln import lln
+        st.markdown(f"""<div id="quantml-chapter">wlln</div>""", unsafe_allow_html=True)
         set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
         lln.main(distribution, state)
     elif option == chapters[2]:
         from gui.clt import clt
+        st.markdown(f"""<div id="quantml-chapter">clt</div>""", unsafe_allow_html=True)
         set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
         clt.main(distribution, state)
     elif option == chapters[3]:

@@ -6,7 +6,7 @@ from SessionState import get_cookie
 
 
 def set_cookie(name: str, value: str) -> None:
-    print("set_cookie:: ", name, " : ", value)
+    # print("set_cookie:: ", name, " : ", value)
     st.markdown(f"""<div id="set-quantml-cookie" name="{name}" value="{value}"></div>""",
                 unsafe_allow_html=True)
 
