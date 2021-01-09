@@ -3,8 +3,8 @@ import streamlit as st
 from datetime import datetime
 from auth.utils import write_JSON, sendOTP
 
-LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "login.json")
-CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
+LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-login.json")
+CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-currently-loggedin.json")
 
 def askForOTP(state, email, LOGIN_JSON):
     if LOGIN_JSON[email]["OTP_COUNT"] <= 3:

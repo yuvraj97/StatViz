@@ -3,8 +3,8 @@ import streamlit as st
 from auth.resetPassword import resetPassword
 from auth.utils import hashPasswd, write_JSON
 
-LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "login.json")
-CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
+LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-login.json")
+CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-currently-loggedin.json")
 
 def alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON):
     ID = state.ID
@@ -32,7 +32,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
         elif email not in LOGIN_JSON:
             from auth.patreonAPI import get_patreon_data
             users = get_patreon_data()
-            if email in users:
+            if email in users and users[email] >= 1000:
                 st.markdown("""
                 <blockquote class="success">
                     It's your first Login.<br>
@@ -53,6 +53,14 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                     "ID": "None"
                 }
                 resetPassword(state, email, LOGIN_JSON)
+            elif email in users and users[email] < 1000:
+                msg = f"""
+                   <b>{email}</b>'s current pledge is <b>${"{:.2f}".format(users[email]/100.0)}</b>.<br>
+                    To gain <b>early</b> access to this app your pledge should be greater than or equals to <b>$10</b>.<br>
+                    So <a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">upgrade your pledge</a>
+                    and gain <b>early</b> access to this app 😄.
+                """
+                st.markdown(f'<blockquote class="info">{msg}</blockquote>', unsafe_allow_html=True)
             else:
                 msg = f"""
                                        <b>{email}</b> is not registered as a <b><a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">patreon</a></b><br>

@@ -16,8 +16,8 @@ def initializeID(CURRENTLY_LOGIN_JSON):
         return
 
 def main():
-    LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "data", "login.json")
-    CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
+    LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-login.json")
+    CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-currently-loggedin.json")
     LOGIN_JSON: Dict[str, Dict[str, Union[str, int, Dict[str, int]]]] = read_JSON(LOGIN_JSON_PATH)
     CURRENTLY_LOGIN_JSON: Dict[str, str] = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
     state.experimental_rerun = False

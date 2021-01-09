@@ -3,8 +3,8 @@ import streamlit as st
 from auth.otp import askForOTP, verifyOTP
 from auth.utils import write_JSON, hashPasswd
 
-LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "login.json")
-CURRENTLY_LOGIN_JSON_PATH = os.path.join(os.getcwd(), "data", "currently-loggedin.json")
+LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-login.json")
+CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-currently-loggedin.json")
 
 def updateNewPassword(state, email, LOGIN_JSON, password):
     LOGIN_JSON[email]['pass'] = hashPasswd(password)
