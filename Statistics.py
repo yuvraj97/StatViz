@@ -26,12 +26,12 @@ def main():
 
     with st.sidebar.beta_expander("Settings", expanded=True if state.theme is None else False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
-            if state.theme != "dark": # Theme Changed to dark
+            if state.theme != "dark":  # Theme Changed to dark
                 state.experimental_rerun = True
                 set_cookie("theme", "dark")
             state.theme = "dark"
         else:
-            if state.theme != "light": # Theme Changed to light
+            if state.theme != "light":  # Theme Changed to light
                 state.experimental_rerun = True
                 set_cookie("theme", "light")
             state.theme = "light"
@@ -88,6 +88,8 @@ if __name__ == '__main__':
     state = SessionState.get_state()
     if state.experimental_rerun_main is None:
         state.experimental_rerun_main = True
+
+    # noinspection PyBroadException
     try:
         main()
         state.experimental_rerun_main = True
@@ -97,7 +99,7 @@ if __name__ == '__main__':
             st.experimental_rerun()
         error.markdown("""
         <blockquote class="error">
-        Unexpected error occurred please try refreshing page.
+        Unexpected error occurred please <b>try refreshing page</b>.
         <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
         </blockquote>
         """, unsafe_allow_html=True)

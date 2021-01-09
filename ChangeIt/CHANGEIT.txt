@@ -1,55 +1,29 @@
-###################### streamlit.server.routes -> StaticFileHandler() ######################
+#f63366 -> #0073b1
+# Affected Files: 
+	1. C:/Python38/Lib/site-packages/streamlit/static/static/css/main.134c989d.chunk.css
+	2. C:/Python38/Lib/site-packages/streamlit/static/static/js/main.8e5e11c8.chunk.js
+	3. C:/Python38/Lib/site-packages/streamlit/static/assets/streamlit.css
 
-class StaticFileHandler(tornado.web.StaticFileHandler):
-    def set_extra_headers(self, path):
-        """Disable cache for HTML files.
+rgba(246, 51, 102, 0.5) -> rgb(0, 115, 177, 0.5)
+# Affected Files: 
+	1. C:/Python38/Lib/site-packages/streamlit/static/static/css/main.134c989d.chunk.css
 
-        Other assets like JS and CSS are suffixed with their hash, so they can
-        be cached indefinitely.
-        """
-        is_index_url = len(path) == 0
-
-        if is_index_url or path.endswith(".html"):
-            self.set_header("Cache-Control", "no-cache")
-        else:
-            self.set_header("Cache-Control", "public")
-        
-        # ========================== Custom ==========================
-        
-        quantml_cookie = self.get_cookie("quantml-ID")
-        #print("GET: ",quantml_cookie)
-        if(quantml_cookie == None):
-            from uuid import uuid4
-            self.quantml_token = str(uuid4())
-            self.set_cookie("quantml-ID", self.quantml_token)
-        else:
-            self.quantml_token = quantml_cookie
-        
-        #self.set_cookie("quantml-ID", "oooo")
-		# ===================== Custom END ===========================
-
-
-
-
-# streamlit.css
-	#f63366 -> #0073b1
-	rgba(246, 51, 102, 0.5) -> rgb(0, 115, 177, 0.5)
-# main.*****.chunk.css
-	rgba(246,51,102,.5) -> rgb(0, 115, 177, 0.5)
-# main.*****.chunk.js
-	rgba(246,51,102,0.5) -> rgb(0, 115, 177, 0.5)
 	
-	
-# static/index.html
+
 <script src="./static/js/quantml-init.js"></script>
 <script src="./static/js/quantml.js"></script>
+# Affected Files: 
+	1. C:/Python38/Lib/site-packages/streamlit/static/index.html
 
-# [ADD] static/static/js/quantml-init.js
-# [ADD] static/static/js/quantml.js
-# [CHANGE] static/favicon.png
+# [ADD] C:/Python38/Lib/site-packages/streamlit/static/static/js/quantml-init.js
+# [ADD] C:/Python38/Lib/site-packages/streamlit/static/static/js/quantml.js
+# [CHANGE] C:/Python38/Lib/site-packages/streamlit/static/favicon.png
 
 
 # [Comment lines] report_thread.py
+# Affected Files: 
+	1. C:/Python38/Lib/site-packages/streamlit/report_thread.py
+
         # if msg.HasField("page_config_changed") and not self._set_page_config_allowed:
         #     raise StreamlitAPIException(
         #         "`set_page_config()` can only be called once per app, "
