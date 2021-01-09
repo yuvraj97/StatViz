@@ -23,8 +23,7 @@ def main():
     state.experimental_rerun = False
     theme = SessionState.get_cookie("theme")
     if theme == "":
-        state.experimental_rerun = True
-        theme = None
+        return "first-load-failed"
     state.theme = state.theme if state.theme is not None else theme
     state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
 
@@ -73,6 +72,8 @@ def main():
     success.main(state)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
     # state.sync()
+    if state.experimental_rerun:
+        st.experimental_rerun()
 
 if __name__ == '__main__':
     st.set_page_config(
@@ -88,24 +89,28 @@ if __name__ == '__main__':
         unsafe_allow_html=True)
 
     state = SessionState.get_state()
-    state.totalReruns = state.totalReruns if state.totalReruns is not None else 0
-
-    err_msg = """
-    <blockquote class="error">
-    Unexpected error occurred please <b>try refreshing page</b>.
-    <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
-    </blockquote>
-    """
+    if state.experimental_rerun_main is None:
+        state.experimental_rerun_main = True
 
     # noinspection PyBroadException
     # try:
-    main()
-    if state.experimental_rerun:
-        state.totalReruns += 1
-        # print(f"Rerun {state.totalReruns}")
-        if state.totalReruns < 4:
-            st.experimental_rerun()
-        else:
-            error.markdown(err_msg, unsafe_allow_html=True)
+    status = main()
+    if status == "first-load-failed":
+        st.info('''
+        Please refresh the page.    
+        Use **"F5"** or **Ctrl + R**    
+        (A refresh is require to initialize the app. This bug will be fixed in near future)
+        ''')
+
+    #     state.experimental_rerun_main = True
     # except Exception:
-    #     error.markdown(err_msg, unsafe_allow_html=True)
+    #     if state.experimental_rerun_main:
+    #         state.experimental_rerun_main = False
+    #         st.experimental_rerun()
+    #     error.markdown("""
+    #     <blockquote class="error">
+    #     Unexpected error occurred please <b>try refreshing page</b>.
+    #     <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
+    #     </blockquote>
+    #     """, unsafe_allow_html=True)
+    # # print("================ Statistics.py  [END]  ================")
