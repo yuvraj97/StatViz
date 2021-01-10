@@ -164,6 +164,9 @@ def applyDarkTheme():
             }
 
         /* stSelectbox */
+            .row-widget.stSelectbox > div {
+                border-radius: 10px;
+            }
             .row-widget.stSelectbox > div > div:hover,
             .row-widget.stSelectbox > div > div:focus {
                 border-color: rgb(255, 180, 100, 0.5);
@@ -228,15 +231,17 @@ def applyDarkTheme():
             }
         
         /* st TextArea */
-        .stTextArea > div {
+        .stTextArea > div,
+         .stTextArea > div > div {
             border-color: rgb(25, 25, 25);
+            background-color: rgb(25, 25, 25);
         }
         /*.stTextArea > div:focus,
         .stTextArea > div:hover {
             border-color: rgb(0, 115, 177);
         }*/
         
-        .stTextArea > div > textarea {
+        .stTextArea > div > div > textarea {
             caret-color: rgb(231, 232, 235);
             background-color:rgb(25, 25, 25);
         }
