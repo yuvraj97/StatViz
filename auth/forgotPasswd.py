@@ -39,7 +39,7 @@ def send(user_email, OTP):
     # noinspection SpellCheckingInspection,PyShadowingNames
     EMAIL_ADDRESS = "quantml.app@gmail.com"  # os.environ.get('QUANTMLSTATISTICSEMAILADDR')
     # noinspection SpellCheckingInspection
-    EMAIL_PASSWORD = "gqmaaogffbgamhkp"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
+    EMAIL_PASSWORD = "xmqlztccyguwvhax"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         subject = "One Time Password to reset your Password for Statistics App"

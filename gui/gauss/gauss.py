@@ -20,7 +20,7 @@ def main(state):
     beauty of <b>Gaussian Distribution</b>.<br>
 
     When it came to Gaussian Distribution, what is the first thing that came into mind
-    <a rel='noreferrer' target='_blank' href="https://read.quantml.org/stats/clt/.">Central Limit Theorem</a>
+    <a rel='noreferrer' target='_blank' href="https://read.quantml.org/statistics/central-limit-theorem/.">Central Limit Theorem</a>
     right.<br>
     
     In this section we will see some simulations and see how they results in a

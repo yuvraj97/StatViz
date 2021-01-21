@@ -63,7 +63,7 @@ def send_email_hold(email, subject, msg):
 # noinspection SpellCheckingInspection
 def send_email(user_email, subject, msg):
     EMAIL_ADDRESS = "quantml.app@gmail.com"  # os.environ.get('QUANTMLSTATISTICSEMAILADDR')
-    EMAIL_PASSWORD = "gqmaaogffbgamhkp"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
+    EMAIL_PASSWORD = "xmqlztccyguwvhax"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
     if user_email is None: user_email = EMAIL_ADDRESS
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)

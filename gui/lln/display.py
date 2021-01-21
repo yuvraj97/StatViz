@@ -31,7 +31,7 @@ def stDisplay(dist: str,
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
-    st.markdown('[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)')
+    st.markdown('[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/statistics/introduction/#dogma)')
     truth = """- Data is drawn from a **""" + distributions_properties[dist]["name"] + "**, " + \
             distributions_properties[dist]["latex"] + """    
 """ + parameters

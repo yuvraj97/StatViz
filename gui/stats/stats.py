@@ -26,7 +26,7 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
         and hope that proportion we just estimated is somewhat near the <b>True proportion</b>(for the whole room). <br>
         """, unsafe_allow_html=True)
 
-    st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)")
+    st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/statistics/introduction/#dogma)")
 
     image_path: str = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "dogma.png")
     image = Image.open(image_path)

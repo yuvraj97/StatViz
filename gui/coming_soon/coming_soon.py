@@ -4,7 +4,7 @@ def main(state):
     st.markdown("""
     <blockquote class="info">
         You should expect new concept <b>visualization</b> (and chapter for our
-        <a rel='noreferrer' target='_blank' href="https://read.quantml.org/stats/">Statistics Guide</a>
+        <a rel='noreferrer' target='_blank' href="https://read.quantml.org/statistics/">Statistics Guide</a>
         ) <b>every week</b>.
     </blockquote>
     """, unsafe_allow_html=True)

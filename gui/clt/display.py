@@ -35,7 +35,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         (unlike <a rel='noreferrer' target='_blank' href="https://en.wikipedia.org/wiki/Cauchy_distribution">cauchy distribution</a>),
         distribution of sample mean will converge to the <b>Normal Distribution</b>.
         """, unsafe_allow_html=True)
-    st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/stats/#dogma)")
+    st.markdown("[Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/statistics/introduction/#dogma)")
 
     image_path = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "dogma.png")
     image = Image.open(image_path)
@@ -194,7 +194,7 @@ def stDisplay(dist: str, _vars: Dict[str, Union[int, float]], n: Dict[str, int],
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("""
-    [As we discussed](https://read.quantml.org/stats/clt/#its-about-CDF)""")
+    [As we discussed](https://read.quantml.org/statistics/central-limit-theorem/#its-about-CDF)""")
     st.info("""**Central Limit Theorem** is **not** a statement about the convergence of PDF or PMF.
     It's a statement about the convergence of **CDF**.""")
     st.markdown(
