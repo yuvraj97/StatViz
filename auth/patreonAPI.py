@@ -1,6 +1,7 @@
 import patreon
 def get_patreon_data():
     # print("fetching patreon API", flush=True)
+    # noinspection SpellCheckingInspection
     access_token = 'eCzADomkBdoFuXDee-6s8D259MVegJqoMuqxm8W2AWE'
     api_client = patreon.API(access_token)
     campaign_response = api_client.fetch_campaign()

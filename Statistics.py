@@ -84,9 +84,7 @@ if __name__ == '__main__':
     error = st.empty()
     mainStyle()
     # print("================ Statistics.py [START] ================")
-    st.sidebar.markdown(
-        "<h1 style='font-family:Arial;text-align:center;'><a rel='noreferrer' target='_blank' href='https://quantml.org'>QuantML</a></h1><br>",
-        unsafe_allow_html=True)
+    st.sidebar.markdown("<h1 style='font-family:Arial;text-align:center;'><a rel='noreferrer' target='_blank' href='https://quantml.org'>QuantML</a></h1><br>", unsafe_allow_html=True)
 
     state = SessionState.get_state()
     if state.experimental_rerun_main is None:

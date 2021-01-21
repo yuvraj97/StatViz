@@ -1,4 +1,6 @@
 import streamlit as st
+
+# noinspection SpellCheckingInspection
 def applyDarkTheme():
     st.markdown("""
     <style>
@@ -309,6 +311,7 @@ def applyDarkTheme():
     
     """, unsafe_allow_html=True)
 
+# noinspection SpellCheckingInspection
 def applyLightTheme():
     st.markdown("""
     <style>
@@ -351,6 +354,7 @@ def applyLightTheme():
     </style>
     """, unsafe_allow_html=True)
 
+# noinspection SpellCheckingInspection
 def mainStyle():
     st.markdown("""
         <style>

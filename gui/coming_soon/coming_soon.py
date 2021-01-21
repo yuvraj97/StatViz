@@ -62,7 +62,7 @@ def main(state):
     - [etc.]
     """)
 
-    if(state.isLoggedIn):
+    if state.isLoggedIn:
         st.markdown("""
         <blockquote class="info">
         If there is something you want to have visualization for in the realm of <b>Statistics</b>
