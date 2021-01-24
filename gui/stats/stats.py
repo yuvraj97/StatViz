@@ -8,12 +8,7 @@ from plotly.graph_objs import Figure
 from logic.stats.simulation import plot_binary_data
 from logic.stats.stats import run
 from utils import set_get_URL
-
-def stPandas(npArray: np.ndarray, label: str = "Random Draws") -> pd.DataFrame:
-    npArray = npArray.reshape((1, len(npArray)))
-    npArray = pd.DataFrame(data=npArray, index=[label])
-    npArray.columns += 1
-    return npArray
+from gui.utils import stPandas
 
 def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, state):
     with st.beta_expander("Scenario", expanded=True):

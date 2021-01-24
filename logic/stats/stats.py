@@ -38,4 +38,4 @@ def run(n_population: int,
         sample = np.random.choice(population_sample, n_sample)
         estimators[i] = sample.sum() / n_sample
         samples.append(sample)
-    return population_sample, samples, get_plot(estimators, title), sum(estimators) / n_simulations, estimators
+    return population_sample, samples, get_plot(estimators, title), estimators.sum() / n_simulations, estimators

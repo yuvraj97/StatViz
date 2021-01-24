@@ -27,11 +27,11 @@ def plot_histogram(data: np.ndarray,
         num_bins = len(np.unique(data))//4
     bins: np.ndarray
     counts: np.ndarray
-    bins = np.linspace(min(data), max(data), num_bins)
+    bins = np.linspace(data.min(), data.max(), num_bins)
     counts, bins_ = np.histogram(data, bins=bins)
     bins = 0.5 * (bins_[:-1] + bins_[1:])
     if convert_into_probability_plot:
-        counts  = counts/sum(counts)
+        counts  = counts/counts.sum()
         description["title"]["y"] = f"Probability of {description['title']['x']}<br>Falling into particular bin"
         hovertemplate = description["label"]["x"] + ' (x) ~ %{x}<br>Probability(x ~ %{x}): %{y}'
     else:
