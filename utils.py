@@ -35,19 +35,17 @@ def getChapterIndexByURL(url: dict) -> int:
     idx = chapters_acronyms_lowercase.index(chapter_acronym) if chapter_acronym is not None else 0
     return idx
 
-def set_get_URL(ch: str = None, dist: str = None, url: dict = None) -> dict:
+def set_get_URL(ch: str = None, dist: str = None, url: dict = None, parameters: dict = {}) -> dict:
     url = st.experimental_get_query_params() if url is None else url
-    _ch, _dist = "", ""
-    add_dist = False
-    if dist is not None or "dist" in url: add_dist = True
-    if "ch" in url: _ch = url["ch"][0]
-    if "dist" in url: _dist = url["dist"][0]
-    if ch is not None: _ch = ch
-    if dist is not None: _dist = dist
-    if add_dist and dist != "remove":
-        st.experimental_set_query_params(ch=_ch, dist=_dist)
-    else:
-        st.experimental_set_query_params(ch=_ch)
+    d: dict = {}
+    if "ch" in url: d["ch"] = url["ch"][0]
+    if "dist" in url: d["dist"] = url["dist"][0]
+    if ch is not None: d["ch"] = ch
+    if dist is not None: d["dist"] = dist
+    if dist == "remove" and "dist" in d: del d["dist"]
+    for k in parameters.keys():
+        d[k] = parameters[k]
+    st.experimental_set_query_params(**d)
     url = st.experimental_get_query_params()
     return url
 
