@@ -68,8 +68,9 @@ def main():
         logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         state.isLoggedIn = True
         state.email = email
+        success.main(state, True)
+    else: success.main(state, False)
 
-    success.main(state)
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
     # state.sync()
     if state.experimental_rerun:

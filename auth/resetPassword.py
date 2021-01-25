@@ -11,9 +11,9 @@ def updateNewPassword(state, email, LOGIN_JSON, password):
     write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)
     state.experimental_rerun = True
 
-def newPasswordOTPConfirmed(state, email, LOGIN_JSON):
-    newPassword = st.text_input("New Password", type="password")
-    confirmPassword = st.text_input("Confirm Password", type="password")
+def newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar):
+    newPassword = st.text_input("New Password", type="password", key=f"New Password {sidebar}")
+    confirmPassword = st.text_input("Confirm Password", type="password", key=f"Confirm Password {sidebar}")
     if newPassword == "" or confirmPassword == "":
         pass
     elif newPassword != confirmPassword:
@@ -24,11 +24,11 @@ def newPasswordOTPConfirmed(state, email, LOGIN_JSON):
         return True
     return False
 
-def resetPassword(state, email, LOGIN_JSON):
+def resetPassword(state, email, LOGIN_JSON, sidebar):
     status, stlog = askForOTP(state, email, LOGIN_JSON)
     if status:
         if state.OTP_VERIFIED or verifyOTP(state, email, LOGIN_JSON):
-            if newPasswordOTPConfirmed(state, email, LOGIN_JSON):
+            if newPasswordOTPConfirmed(state, email, LOGIN_JSON, sidebar):
                 return True
     else:
         st.markdown(f'<blockquote class="warning">{stlog}</blockquote>', unsafe_allow_html=True)

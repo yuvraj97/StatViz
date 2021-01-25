@@ -19,9 +19,9 @@ def verifyEmail(email):
     else:
         return False
 
-def initializeLogin(state, LOGIN_JSON, sidebar):
-    with st.sidebar.beta_expander("Login", expanded=False) if sidebar else st.beta_expander("Login", expanded=False):
-        email = st.text_input('Enter your E-mail', value="name@example.com")
+def initializeLogin(state, LOGIN_JSON, sidebar, login_heading):
+    with st.sidebar.beta_expander(login_heading, expanded=False) if sidebar else st.beta_expander(login_heading, expanded=True):
+        email = st.text_input('Enter your E-mail', value="name@example.com", key=f"Enter your E-mail {sidebar}")
         email = email.lower()
 
         if email == "name@example.com" or email.replace(' ', '') == "":
@@ -52,7 +52,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                     },
                     "ID": "None"
                 }
-                resetPassword(state, email, LOGIN_JSON)
+                resetPassword(state, email, LOGIN_JSON, sidebar)
             elif email in users and users[email] < 1000:
                 msg = f"""
                    <b>{email}</b>'s current pledge is <b>${"{:.2f}".format(users[email]/100.0)}</b>.<br>
@@ -74,9 +74,9 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                 <blockquote class="success>
                     It's your first Login so let's Create a Password.
                 </blockquote>""", unsafe_allow_html=True)
-                resetPassword(state, email, LOGIN_JSON)
+                resetPassword(state, email, LOGIN_JSON, sidebar)
             else:
-                password = st.text_input("Password", type="password")
+                password = st.text_input("Password", type="password", key=f"Password {sidebar}")
                 if password == '':
                     pass
                 elif hashPasswd(password) == LOGIN_JSON[email]['pass']:
@@ -84,10 +84,10 @@ def initializeLogin(state, LOGIN_JSON, sidebar):
                 else:
                     incorrectPassword_warn = st.empty()
                     incorrectPassword_warn.warning("Incorrect Password")
-                    status = st.checkbox("Reset Password")
+                    status = st.checkbox("Reset Password", key=f"Reset Password {sidebar}")
                     if status:
                         incorrectPassword_warn.empty()
-                        if resetPassword(state, email, LOGIN_JSON):
+                        if resetPassword(state, email, LOGIN_JSON, sidebar):
                             return True, email
     return False, email
 
@@ -100,8 +100,8 @@ def onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     LOGIN_JSON[email]["login"] = "true"
     LOGIN_JSON[email]["ID"] = ID
 
-def login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, sidebar):
-    access_granted, email = initializeLogin(state, LOGIN_JSON, sidebar)
+def login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, sidebar, login_heading="Login"):
+    access_granted, email = initializeLogin(state, LOGIN_JSON, sidebar, login_heading)
     if access_granted:
         onLoginUpdateJSON(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)

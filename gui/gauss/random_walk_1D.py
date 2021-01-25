@@ -1,5 +1,6 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 from gui.utils import stPandas
 from logic.utils import plot_histogram
 
@@ -60,6 +61,12 @@ def run(state):
         position after certain number of bounces.
         """)
         st.write(stPandas(state.gauss["Random walk 1D"]["random_walks"][0], label="Position"))
+    if st.checkbox("Show the simulated data"):
+        index = ["1st Random walk", "2nd Random walk", "3rd Random walk"]
+        index.extend([f"{i+4}th Random walk" for i in range(n_sim - 3)])
+        df = pd.DataFrame(data=state.gauss["Random walk 1D"]["random_walks"][:n_sim, :n_bounces], index=index)
+        df.columns += 1
+        st.write(df)
     bins, counts = np.unique(state.gauss["Random walk 1D"]["random_walks"][:n_sim, n_bounces - 1], return_counts=True)
     fig, (counts, bins) = plot_histogram(
         state.gauss["Random walk 1D"]["random_walks"][:n_sim, n_bounces - 1],
