@@ -8,7 +8,11 @@ def plot_histogram(data: np.ndarray,
                    num_bins: int = -1,
                    convert_into_probability_plot: bool = False,
                    fig: Figure = None,
-                   isMobile: bool = False,) -> Tuple[Figure, Tuple[np.ndarray, np.ndarray]]:
+                   isMobile: bool = False,
+                   tilde_equals: str = '~',
+                   bins: np.ndarray = None,
+                   counts: np.ndarray = None,
+                   centralize_bins: bool = True) -> Tuple[Figure, Tuple[np.ndarray, np.ndarray]]:
     """
     description = {
         "title": {
@@ -19,23 +23,23 @@ def plot_histogram(data: np.ndarray,
         "label": {
             "main": "Legend",
             "x": "x-axis label",
-            "y": "y-axis label"
+            "y": "y-axis label",
+            "force": False
         }
     }
     """
-    if num_bins == -1:
+    if num_bins == -1 and bins is None:
         num_bins = len(np.unique(data))//4
-    bins: np.ndarray
-    counts: np.ndarray
-    bins = np.linspace(data.min(), data.max(), num_bins)
-    counts, bins_ = np.histogram(data, bins=bins)
-    bins = 0.5 * (bins_[:-1] + bins_[1:])
+    # bins: np.ndarray
+    if bins is None: bins = np.linspace(data.min(), data.max(), num_bins)
+    if counts is None: counts, bins_ = np.histogram(data, bins=bins)
+    if centralize_bins: bins = 0.5 * (bins_[:-1] + bins_[1:])
     if convert_into_probability_plot:
         counts  = counts/counts.sum()
-        description["title"]["y"] = f"Probability of {description['title']['x']}<br>Falling into particular bin"
-        hovertemplate = description["label"]["x"] + ' (x) ~ %{x}<br>Probability(x ~ %{x}): %{y}'
+        description["title"]["y"] = description['title']['y'] if description['title']['force'] else f"Probability of {description['title']['x']}<br>Falling into particular bin"
+        hovertemplate = description["label"]["x"] + ' (x) ' + tilde_equals + ' %{x}<br>Probability(x ' + tilde_equals + ' %{x}): %{y}'
     else:
-        hovertemplate = description["label"]["x"] + ' (x) ~ %{x}<br>' + description["label"]["y"] + '(x ~ %{x}): %{y}'
+        hovertemplate = description["label"]["x"] + ' (x) ' + tilde_equals + ' %{x}<br>' + description["label"]["y"] + '(x ' + tilde_equals + ' %{x}): %{y}'
     if fig is None: fig: Figure = go.Figure()
     fig.add_trace(go.Bar(x=bins,
                          y=counts,

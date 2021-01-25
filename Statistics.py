@@ -39,9 +39,9 @@ def main():
                 set_cookie("theme", "light")
             state.theme = "light"
         state.stSettings = {
-            "seed-checkbox": st.empty(),
-            "seed-number": st.empty(),
-            "seed": None
+            "seed-checkbox": st.empty() if state.stSettings is None else state.stSettings["seed-checkbox"],
+            "seed-number": st.empty() if state.stSettings is None else state.stSettings["seed-number"],
+            "seed": None if state.stSettings is None else state.stSettings["seed"]
         }
 
     if state.theme == "dark":
