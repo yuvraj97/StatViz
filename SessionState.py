@@ -93,9 +93,9 @@ def get_cookie(name: str) -> Union[str, None]:
         return ""
     return ws.get_cookie(name)
 
-def set_cookie(name: str, value: str) -> None:
-    session_info = _get_session()
-    session_info.ws.set_cookie(name, value)
+# def set_cookie(name: str, value: str) -> None:
+#     session_info = _get_session()
+#     session_info.ws.set_cookie(name, value)
 
 def set_title(title: str) -> None:
     from streamlit.proto import ForwardMsg_pb2

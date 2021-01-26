@@ -31,12 +31,14 @@ def plot_histogram(data: np.ndarray,
     if num_bins == -1 and bins is None:
         num_bins = len(np.unique(data))//4
     # bins: np.ndarray
-    if bins is None: bins = np.linspace(data.min(), data.max(), num_bins)
-    if counts is None: counts, bins_ = np.histogram(data, bins=bins)
-    if centralize_bins: bins = 0.5 * (bins_[:-1] + bins_[1:])
+    if bins is None:
+        # noinspection PyArgumentList
+        bins = np.linspace(data.min(), data.max(), num_bins)
+    if counts is None: counts, bins = np.histogram(data, bins=bins)
+    if centralize_bins: bins = 0.5 * (bins[:-1] + bins[1:])
     if convert_into_probability_plot:
         counts  = counts/counts.sum()
-        description["title"]["y"] = description['title']['y'] if description['title']['force'] else f"Probability of {description['title']['x']}<br>Falling into particular bin"
+        description["title"]["y"] = description['title']['y'] if "force" in description['title'] and description['title']['force'] else f"Probability of {description['title']['x']}<br>Falling into particular bin"
         hovertemplate = description["label"]["x"] + ' (x) ' + tilde_equals + ' %{x}<br>Probability(x ' + tilde_equals + ' %{x}): %{y}'
     else:
         hovertemplate = description["label"]["x"] + ' (x) ' + tilde_equals + ' %{x}<br>' + description["label"]["y"] + '(x ' + tilde_equals + ' %{x}): %{y}'

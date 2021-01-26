@@ -40,15 +40,12 @@ def main(state, isAuthenticated):
         if concluded:
             if isAuthenticated:
                 from gui.gauss import gauss
-                print("from gui.gauss import gauss")
                 gauss.main(state)
             else:
                 from gui.gauss import gauss_unauthorized
-                print("from gui.gauss import gauss_unauthorized")
                 gauss_unauthorized.main(state)
         else:
             from gui.gauss import gauss_comming_soon
-            print("from gui.gauss import gauss_comming_soon")
             gauss_comming_soon.main(isAuthenticated)
 
     elif option == chapters[4]:
