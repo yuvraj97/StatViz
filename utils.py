@@ -59,3 +59,75 @@ def urlIndex(url: dict) -> int:
             idx = distribution2idx[dist]
             break
     return idx
+
+
+def setMetaTags(meta_data):
+    import streamlit.components.v1 as components
+    image_meta_data = ""
+    if "image-url" in meta_data:
+        image_meta_data = f"""
+        var meta = parent.document.getElementById("og-image");
+        meta.setAttribute("property", "og:image");
+        meta.content = "{meta_data["image-url"]}";
+        
+        var meta = parent.document.getElementById("twitter-image");
+        meta.setAttribute("property", "twitter:image");
+        meta.content = "{meta_data["image-url"]}";
+        """
+    # components.html("""
+    # <script>
+    #     document.querySelectorAll('meta[name="description"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="og:type"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="og:url"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="og:title"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="og:description"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="twitter:card"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="twitter:url"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="twitter:title"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="twitter:description"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="twitter:card"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="og:image"]').forEach(function(element, index){element.remove()});
+    #     document.querySelectorAll('meta[property="twitter:image"]').forEach(function(element, index){element.remove()});
+    # </script>
+    # """, height=0, width=0)
+    components.html(f"""
+    <script>
+        var meta = parent.document.getElementById("description");
+        meta.name = "description";
+        meta.content = "{meta_data["description"]}";
+        
+        var meta = parent.document.getElementById("og-type");
+        meta.setAttribute("property", "og:type");
+        meta.content = "website";
+        
+        var meta = parent.document.getElementById("og-url");
+        meta.setAttribute("property", "og:url");
+        meta.content = "{meta_data["url"]}";
+        
+        var meta = parent.document.getElementById("og-title");
+        meta.setAttribute("property", "og:title");
+        meta.content = "{meta_data["title"]}";
+        
+        var meta = parent.document.getElementById("og-description");
+        meta.setAttribute("property", "og:description");
+        meta.content = "{meta_data["description"]}";
+        
+        var meta = parent.document.getElementById("twitter-card");
+        meta.setAttribute("property", "twitter:card");
+        meta.content = "summary_large_image";
+        
+        var meta = parent.document.getElementById("twitter-url");
+        meta.setAttribute("property", "twitter:url");
+        meta.content = "{meta_data["url"]}";
+        
+        var meta = parent.document.getElementById("twitter-title");
+        meta.setAttribute("property", "twitter:title");
+        meta.content = "{meta_data["title"]}";
+        
+        var meta = parent.document.getElementById("twitter-description");
+        meta.setAttribute("property", "twitter:description");
+        meta.content = "{meta_data["description"]}";
+        
+        {image_meta_data}
+        </script>
+    """, height=0, width=0)
