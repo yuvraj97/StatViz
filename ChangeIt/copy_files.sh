@@ -14,3 +14,6 @@ sudo cp ./Streamlit-Changes/Python38/Lib/site-packages/streamlit/report_thread.p
 sudo cp ./Streamlit-Changes/Python38/Lib/site-packages/streamlit/static/static/js/quantml-init.js /usr/local/lib/python3.8/dist-packages/streamlit/static/static/js/quantml-init.js
 sudo cp ./Streamlit-Changes/Python38/Lib/site-packages/streamlit/static/static/js/quantml.js /usr/local/lib/python3.8/dist-packages/streamlit/static/static/js/quantml.js
 sudo cp ./Streamlit-Changes/Python38/Lib/site-packages/streamlit/static/favicon.png /usr/local/lib/python3.8/dist-packages/streamlit/static/favicon.png
+
+sudo cp ./Streamlit-Changes/Python38/Lib/site-packages/streamlit/static/img/cover.webp /usr/local/lib/python3.8/dist-packages/streamlit/static/img/cover.webp
+sudo cp ./Streamlit-Changes/Python38/Lib/site-packages/streamlit/static/img-dark/cover.webp /usr/local/lib/python3.8/dist-packages/streamlit/static/img-dark/cover.webp

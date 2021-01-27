@@ -8,6 +8,7 @@ chapters: List[str] = [
     "Central Limit Theorem",
     "Gaussian Distribution",
     "Coming Soon",
+    "About"
 ]
 
 def chapter2idx(chapter: str) -> int:
@@ -18,7 +19,8 @@ chapters_acronyms: List[str] = [
     "Weak-Law-of-Large-Numbers",
     "Central-Limit-Theorem",
     "Gaussian-Distribution",
-    "Coming-Soon"
+    "Coming-Soon",
+    "About"
 ]
 
 chapters_acronyms_lowercase: List[str] = [e.lower() for e in chapters_acronyms]

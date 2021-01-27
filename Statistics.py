@@ -16,6 +16,7 @@ def initializeID(CURRENTLY_LOGIN_JSON):
         return
 
 def main():
+    cover_img=st.sidebar.empty()
     LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-login.json")
     CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-currently-loggedin.json")
     LOGIN_JSON: Dict[str, Dict[str, Union[str, int, Dict[str, int]]]] = read_JSON(LOGIN_JSON_PATH)
@@ -41,10 +42,11 @@ def main():
             "seed-number": st.empty() if state.stSettings is None else state.stSettings["seed-number"],
             "seed": None if state.stSettings is None else state.stSettings["seed"]
         }
-        # if st.checkbox("[Click here to see 🐞 Bugs]"):
-        #     st.info("""
-        #     Currently you may need to click twice to change theme.
-        #     """)
+
+    cover_img.markdown(f"""
+        <br>
+        <a rel='noreferrer' target='_blank' href="https://www.quantml.org/"><img src="/{"img-dark" if state.theme == "dark" else "img"}/cover.webp" alt="QuantML" width="100%"></a><br>
+        <br>""", unsafe_allow_html=True)
 
     if state.theme == "dark":
         applyDarkTheme()
@@ -87,7 +89,6 @@ if __name__ == '__main__':
     error = st.empty()
     mainStyle()
     # print("================ Statistics.py [START] ================")
-    st.sidebar.markdown("<h1 style='font-family:Arial;text-align:center;'><a rel='noreferrer' target='_blank' href='https://quantml.org'>QuantML</a></h1><br>", unsafe_allow_html=True)
 
     state = SessionState.get_state()
     if state.experimental_rerun_main is None:
