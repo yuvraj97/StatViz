@@ -115,7 +115,7 @@ def logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
     del CURRENTLY_LOGIN_JSON[state.ID]
 
 def logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON):
-    status = st.sidebar.button("Logout")
+    status = state.stSettings["logout"].button("Logout")
     if status:
         logout(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
         write_JSON(LOGIN_JSON, LOGIN_JSON_PATH)

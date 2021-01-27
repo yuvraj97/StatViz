@@ -16,7 +16,7 @@ def initializeID(CURRENTLY_LOGIN_JSON):
         return
 
 def main():
-    cover_img=st.sidebar.empty()
+    cover_img = st.sidebar.empty()
     LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-login.json")
     CURRENTLY_LOGIN_JSON_PATH: str = os.path.join(os.getcwd(), "..", "app-data", "app-currently-loggedin.json")
     LOGIN_JSON: Dict[str, Dict[str, Union[str, int, Dict[str, int]]]] = read_JSON(LOGIN_JSON_PATH)
@@ -37,14 +37,17 @@ def main():
             if state.theme != "light":  # Theme Changed to light
                 set_cookie("theme", "light")  # Don't rerun to set cookies
                 state.theme = "light"
+
+        # noinspection PyUnresolvedReferences
         state.stSettings = {
             "seed-checkbox": st.empty() if state.stSettings is None else state.stSettings["seed-checkbox"],
             "seed-number": st.empty() if state.stSettings is None else state.stSettings["seed-number"],
-            "seed": None if state.stSettings is None else state.stSettings["seed"]
+            "seed": None if state.stSettings is None else state.stSettings["seed"],
+            "logout": st.empty() if state.stSettings is None else state.stSettings["logout"]
         }
 
     cover_img.markdown(f"""
-        <br>
+        <br><br>
         <a rel='noreferrer' target='_blank' href="https://www.quantml.org/"><img src="/{"img-dark" if state.theme == "dark" else "img"}/cover.webp" alt="QuantML" width="100%"></a><br>
         <br>""", unsafe_allow_html=True)
 
@@ -82,7 +85,6 @@ def main():
 
 if __name__ == '__main__':
     st.set_page_config(
-        # page_title="Statistics App - QuantML", 
         layout='centered',
         initial_sidebar_state='expanded'
     )
