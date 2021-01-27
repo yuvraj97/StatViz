@@ -30,19 +30,21 @@ def main():
     with st.sidebar.beta_expander("Settings", expanded=True if state.theme is None else False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
             if state.theme != "dark":  # Theme Changed to dark
-                state.experimental_rerun = True
-                set_cookie("theme", "dark")
-            state.theme = "dark"
+                set_cookie("theme", "dark")  # Don't rerun to set cookies
+                state.theme = "dark"
         else:
             if state.theme != "light":  # Theme Changed to light
-                state.experimental_rerun = True
-                set_cookie("theme", "light")
-            state.theme = "light"
+                set_cookie("theme", "light")  # Don't rerun to set cookies
+                state.theme = "light"
         state.stSettings = {
             "seed-checkbox": st.empty() if state.stSettings is None else state.stSettings["seed-checkbox"],
             "seed-number": st.empty() if state.stSettings is None else state.stSettings["seed-number"],
             "seed": None if state.stSettings is None else state.stSettings["seed"]
         }
+        # if st.checkbox("[Click here to see 🐞 Bugs]"):
+        #     st.info("""
+        #     Currently you may need to click twice to change theme.
+        #     """)
 
     if state.theme == "dark":
         applyDarkTheme()

@@ -60,7 +60,6 @@ def urlIndex(url: dict) -> int:
             break
     return idx
 
-
 def setMetaTags(meta_data):
     import streamlit.components.v1 as components
     image_meta_data = ""
