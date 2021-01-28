@@ -12,7 +12,8 @@ def plot_histogram(data: np.ndarray,
                    tilde_equals: str = '~',
                    bins: np.ndarray = None,
                    counts: np.ndarray = None,
-                   centralize_bins: bool = True) -> Tuple[Figure, Tuple[np.ndarray, np.ndarray]]:
+                   centralize_bins: bool = True,
+                   showlegend: bool = True) -> Tuple[Figure, Tuple[np.ndarray, np.ndarray]]:
     """
     description = {
         "title": {
@@ -52,7 +53,7 @@ def plot_histogram(data: np.ndarray,
     fig.update_layout(title=description["title"]["main"],
                       xaxis_title=description["title"]["x"],
                       yaxis_title=description["title"]["y"])
-    fig.update_layout(showlegend=False if isMobile else True)
+    fig.update_layout(showlegend=False if isMobile or not showlegend else True)
     return fig, (counts, bins)
 
 def line_plot(x: np.ndarray,

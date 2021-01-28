@@ -14,6 +14,8 @@ def main(state):
     prev_seed = state.stSettings["seed"]
     if state.stSettings["seed-checkbox"].checkbox("Enable Seed", True):
         state.stSettings["seed"] = state.stSettings["seed-number"].number_input("Enter Seed", 0, 10000, 0, 1)
+    else:
+        state.stSettings["seed"] = None
     state.seed_changed = True if state.stSettings["seed"] != prev_seed else False
 
     state.gauss = state.gauss if state.gauss is not None else {"Random walk 1D": {}, "Random walk 2D": {}, "Multiple Die Rolls": {}}
