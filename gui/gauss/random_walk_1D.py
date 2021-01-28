@@ -122,3 +122,40 @@ def run(state):
     )
     st.plotly_chart(fig, use_container_width=True)
 
+    st.markdown(f"""
+    Doesn't this histogram of "Particle's PMF of Position after ${n_bounces}$ bounces" looks to be
+    Normally distributed.    
+    Let's visually inspect it, but how can we visually inspect that
+    "Particle's PMF of Position after ${n_bounces}$ bounces" approximates a Normal Distribution or not.
+    """)
+
+    with st.beta_expander("Imposing PDF of a Normal Distribution", expanded=True):
+        st.markdown(f""" 
+        **Question:** Can we impose a PDF of a Normal Distribution over our histogram and see if it fit's the histogram nicely?    
+        **Answer:** No we can't, our histogram shows "Particle's PMF of Position after ${n_bounces}$ bounces" 
+        and heights of PMF and PDF do not denotes same thing, height of PMF is a probability but 
+        height of PDF is not probability.    
+        Let's see ourselves, let's impose a Normal Distribution with empirical mean and empirical variance.
+        """)
+
+        mean = position_data.mean()
+        std = position_data.std()
+        iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
+        line_plot(x=iid_rvs,
+                  y=norm.pdf(iid_rvs, mean, std),
+                  description={
+                      "title": {
+                          "main": f"Particle's Position after {n_bounces} bounces/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                          "x": f"Position(x) after {n_bounces} bounces/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                          "y": f"PMF of Position(x) after {n_bounces} bounces/<br>PDF of Normal Distribution"
+                      },
+                      "label": {
+                          "main": "Normal distribution"
+                      },
+                      "hovertemplate": "Random draw(x): %{x}<br>PDF(x=%{x}): %{y}",
+                      "color": "green"
+                  },
+                  fig=fig,
+                  mode="lines",
+                  isMobile=state.isMobile)
+        st.plotly_chart(fig, use_container_width=True)
