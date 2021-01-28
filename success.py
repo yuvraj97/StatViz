@@ -72,4 +72,4 @@ def main(state, isAuthenticated):
     elif option == chapters[-1]:
         import gui.about as about
         set_title('About | Statistics App | Fundamentals of Statistics | Visualization - QuantML')
-        about.main(isAuthenticated)
+        about.main(state)

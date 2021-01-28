@@ -1,6 +1,8 @@
+import os
 import streamlit as st
+from PIL import Image
 
-def main(isAuthenticated):
+def main(state):
     with st.beta_expander("About", True):
         st.markdown("""
         Hello my name is <b>Yuvraj Garg</b><br>
@@ -27,8 +29,13 @@ def main(isAuthenticated):
         """, unsafe_allow_html=True)
 
     with st.beta_expander("🐞 Bugs", True):
+        # image_path = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "bad-msg-format.png")
+        # image = Image.open(image_path)
         st.markdown("""
         These bugs will be fixed in near future.
         - In Settings, (currently) you may need to click twice on "Apply Dark Theme" to change theme.
         - Sometime a reloading ("F5" / "Ctrl + R") is require to initialize the app.
+        - When you login you see a flash of an error.  
         """)
+        # if st.checkbox("Show error Image"):
+        #     st.image(image, use_column_width=True)
