@@ -93,18 +93,21 @@ if __name__ == '__main__':
     # print("================ Statistics.py [START] ================")
 
     state = SessionState.get_state()
-    if state.experimental_rerun_main is None:
-        state.experimental_rerun_main = True
+    # if state.experimental_rerun_main is None:
+    #     state.experimental_rerun_main = True
 
     # noinspection PyBroadException
     # try:
     status = main()
     if status == "first-load-failed":
-        st.info('''
-        Please refresh the page.    
-        Use **"F5"** or **Ctrl + R**    
-        (A refresh is require to initialize the app. This bug will be fixed in near future)
-        ''')
+        import streamlit.components.v1 as components
+        components.html(f"""
+        <script>
+            parent.document.location.reload()
+        </script>
+        """, height=0, width=0)
+
+        st.info("Initializing...")
 
     #     state.experimental_rerun_main = True
     # except Exception:

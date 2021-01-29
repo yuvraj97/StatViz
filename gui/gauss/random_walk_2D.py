@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from gui.utils import stPandas
+from logic.utils import animate_dot_2D
 
 
 def run(state):
@@ -11,27 +11,38 @@ def run(state):
         """, unsafe_allow_html=True)
 
     max_bounces, max_sim = 100, 500
-    prev_p_x = None if "p_x" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_x"]
-    prev_p_y = None if "p_y" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_y"]
-    p_x: float = 0.5
-    p_y: float = 0.5
+    prev_p_up = None if "p_up" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_up"]
+    prev_p_right = None if "p_right" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_right"]
+    prev_p_left = None if "p_left" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_left"]
+    p_up: float = 0.25
+    p_right: float = 0.25
+    p_left: float = 0.25
+    p_down: float = 0.25
     with st.sidebar.beta_container():
         st.markdown("", unsafe_allow_html=True)
         add_bias: bool = st.checkbox("Add bias")
         if add_bias:
-            p_x: float = st.number_input("Probability of particle moving right (in +x direction)",
-                                         min_value=0.0,
-                                         max_value=1.0,
-                                         value=0.5,
-                                         step=0.1)
-            p_y: float = st.number_input("Probability of particle moving up (in +y direction)",
-                                         min_value=0.0,
-                                         max_value=1.0,
-                                         value=0.5,
-                                         step=0.1)
+            p_up: float = st.slider("Probability of particle moving up (in +y direction)",
+                                    min_value=0.0,
+                                    max_value=1.0,
+                                    value=0.25,
+                                    step=0.1)
+            p_right: float = st.slider("Probability of particle moving right (in +x direction)",
+                                       min_value=0.0,
+                                       max_value=1.0 - p_up,
+                                       value=0.25 if 0.25 < 1.0 - p_up else (1.0 - p_up) / 2,
+                                       step=0.1)
+            p_left: float = st.slider("Probability of particle moving left (in -x direction)",
+                                      min_value=0.0,
+                                      max_value=1.0 - p_up - p_right,
+                                      value=0.25 if 0.25 < 1.0 - p_up - p_right else (1.0 - p_up - p_right) / 2,
+                                      step=0.1)
+            p_down: float = 1 - p_up - p_right - p_left
+            # st.markdown(f"Probability of particle moving down (in -y direction): {p_down}")
 
-        state.gauss["Random walk 1D"]["p_x"] = p_x
-        state.gauss["Random walk 1D"]["p_y"] = p_y
+        state.gauss["Random walk 1D"]["p_up"] = p_up
+        state.gauss["Random walk 1D"]["p_right"] = p_right
+        state.gauss["Random walk 1D"]["p_left"] = p_left
 
         n_bounces: int = st.slider("Number of bounces (N)",
                                    min_value=1,
@@ -43,41 +54,54 @@ def run(state):
                                      min_value=10,
                                      max_value=max_sim,
                                      value=200,
-                                     step=10)
+                                     step=10, )
 
-    if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
-    else: np.random.seed()
+    if state.stSettings["seed"] is not None:
+        np.random.seed(state.stSettings["seed"])
+    else:
+        np.random.seed()
 
-    state.gauss["Random walk 1D"]["random_walks_x"] = state.gauss["Random walk 1D"]["random_walks_x"] if \
-        "random_walks_x" in state.gauss["Random walk 1D"] and \
-        prev_p_x == p_x and \
+    directions = state.gauss["Random walk 1D"]["random_walks_direction"] = state.gauss["Random walk 1D"][
+        "random_walks_direction"] if \
+        "random_walks_direction" in state.gauss["Random walk 1D"] and \
+        prev_p_up == p_up and \
+        prev_p_right == p_right and \
+        prev_p_left == p_left and \
         state.stSettings["seed"] is not None and \
         state.seed_changed is False else \
-        np.array([np.cumsum(np.random.choice([+1, -1], max_bounces, p=[p_x, 1 - p_x])) for _ in range(max_sim)])
+        np.array([np.random.choice(["+y", "-y", "+x", "-x"], max_bounces, p=[p_up, p_down, p_right, p_left]) for _ in
+                  range(max_sim)])
 
-    state.gauss["Random walk 1D"]["random_walks_y"] = state.gauss["Random walk 1D"]["random_walks_y"] if \
-        "random_walks_y" in state.gauss["Random walk 1D"] and \
-        prev_p_y == p_y and \
-        state.stSettings["seed"] is not None and \
-        state.seed_changed is False else \
-        np.array([np.cumsum(np.random.choice([+1, -1], max_bounces, p=[p_y, 1 - p_y])) for _ in range(max_sim)])
+    x, y = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8), np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
+    for sim in range(max_sim):
+        for bounce in range(1, max_bounces):
+            if directions[sim][bounce] == "+y":
+                x[sim][bounce], y[sim][bounce] = x[sim][bounce - 1], y[sim][bounce - 1] + 1
+            elif directions[sim][bounce] == "-y":
+                x[sim][bounce], y[sim][bounce] = x[sim][bounce - 1], y[sim][bounce - 1] - 1
+            elif directions[sim][bounce] == "+x":
+                x[sim][bounce], y[sim][bounce] = x[sim][bounce - 1] + 1, y[sim][bounce - 1]
+            else:
+                x[sim][bounce], y[sim][bounce] = x[sim][bounce - 1] - 1, y[sim][bounce - 1]
 
     with st.beta_expander("Scenario", expanded=True):
         st.markdown(f"""
         Let's assume that there is a crazy particle wandering on a $2$-Dimensional surface.    
         Say that initial location of particle is origin $(x=0, y=0)$    
         (Say that it's current location is $(x,y)$)This particle bounces,
-        
-        - Right (at $x+1$) with probability ${'{:.2f}'.format(p_x)}$
-        - Left (at $x-1$) with probability ${'{:.2f}'.format(1-p_x)}$
-        - Up (at $y+1$) with probability ${'{:.2f}'.format(p_y)}$
-        - Down (at $y-1$) with probability ${'{:.2f}'.format(1-p_y)}$
+
+        - Up (at $y+1$) with probability ${'{:.2f}'.format(p_up)}$
+        - Right (at $x+1$) with probability ${'{:.2f}'.format(p_right)}$
+        - Left (at $x-1$) with probability ${'{:.2f}'.format(p_left)}$
+        - Down (at $y-1$) with probability ${'{:.2f}'.format(p_down)}$
 
         Now we want to study this particle's location after $N({n_bounces})$ number of bounces.    
         Now let's see a random walk of a single particle. Here column indicates number of bounces
         and value(of that column) indicates x-axis and y-axis position respectively after certain number of bounces.
         """)
-        npArray = np.array([state.gauss["Random walk 1D"]["random_walks_x"][0],state.gauss["Random walk 1D"]["random_walks_y"][0]])
-        npArray = pd.DataFrame(data=npArray, index=["Position (x-axis)", "Position (y-axis)"])
-        npArray.columns += 1
-        st.write(npArray)
+
+        # npArray.columns += 1
+        st.write(pd.DataFrame(
+            data=np.array([f"({x[0][bounce]}, {y[0][bounce]})" for bounce in range(n_bounces + 1)]).reshape(
+                (1, n_bounces + 1)), index=["Position (x, y)"]))
+        
