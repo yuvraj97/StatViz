@@ -48,7 +48,7 @@ def run(state):
     else: np.random.seed()
     # print('state.stSettings["seed"]', state.stSettings["seed"])
 
-    print("random_walks" in state.gauss["Random walk 1D"], prev_p == p, state.seed_changed is False)
+    # print("random_walks" in state.gauss["Random walk 1D"], prev_p == p, state.seed_changed is False)
     state.gauss["Random walk 1D"]["random_walks"] = state.gauss["Random walk 1D"]["random_walks"] if \
         "random_walks" in state.gauss["Random walk 1D"] and \
         prev_p == p and \

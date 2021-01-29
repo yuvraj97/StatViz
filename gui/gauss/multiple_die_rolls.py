@@ -1,4 +1,4 @@
 import streamlit as st
 
-def run():
+def run(state):
     pass
