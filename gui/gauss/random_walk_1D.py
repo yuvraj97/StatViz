@@ -15,7 +15,7 @@ def run(state):
     <a rel='noreferrer' target='_blank' href="https://en.wikipedia.org/wiki/Diffusion_process">Modeling Diffusion Process</a>,
     <a rel='noreferrer' target='_blank' href="https://en.wikipedia.org/wiki/PageRank#Distributed_algorithm_for_PageRank_computation">PageRank Algorithm</a>,
     etc.<br>
-    Here we will see how random walk in $1D$ results in a
+    Here we will see how random walk in $1$ Dimension results in a
     <a rel='noreferrer' target='_blank' href="https://read.quantml.org/statistics/gaussian-distribution/">Gaussian distribution</a>.<br>
     """, unsafe_allow_html=True)
 
@@ -159,3 +159,57 @@ def run(state):
                   mode="lines",
                   isMobile=state.isMobile)
         st.plotly_chart(fig, use_container_width=True)
+
+    with st.beta_expander("Imposing CDF of a Normal Distribution", expanded=True):
+        st.markdown(f"""
+        **Question:** Can we impose a **CDF** of a Normal Distribution over our histogram
+        and see if it fit's the histogram nicely?    
+        **Answer:** Yes we can, CDF of our histogram and CDF of Normal Distribution denotes same thing.    
+        Let's see ourselves, let's impose CDF of a Normal Distribution with empirical mean and empirical variance
+        on CDF of Particle's PMF of Position after ${n_bounces}$ bounces.
+        """)
+
+        fig = line_plot(x=iid_rvs,
+                        y=norm.cdf(iid_rvs, mean, std),
+                        description={
+                            "label": {
+                                "main": "Normal distribution CDF"
+                            },
+                            "hovertemplate": "Random draw(x): %{x}<br>CDF(x=%{x}): %{y}",
+                            "color": "green"
+                        },
+                        mode="lines",
+                        isMobile=state.isMobile)
+        fig = line_plot(x=bins,
+                        y=np.cumsum(counts) / np.sum(counts),
+                        description={
+                            "title": {
+                                "main": f"CDF:<br>Particle's Position after {n_bounces} bounces/<br>Normal Distribution N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                                "x": f"Position(x) after {n_bounces} bounces/<br>Random draw from N(μ={'{:.4f}'.format(mean)}, σ={'{:.4f}'.format(std)})",
+                                "y": f"<b>CDF</b> of Position(x) after {n_bounces} bounces/<br><b>CDF</b> of Normal Distribution"
+                            },
+                            "label": {
+                                "main": "Position's CDF"
+                            },
+                            "hovertemplate": "Position(x) = %{x}<br>CDF(x = %{x}): %{y}",
+                            "color": "royalblue"
+                        },
+                        fig=fig,
+                        mode="markers",
+                        isMobile=state.isMobile)
+        st.plotly_chart(fig, use_container_width=True)
+
+    with st.beta_expander("But why Normal Distribution?", expanded=True):
+        st.markdown(f"""
+        Ok we get it that Particle's PMF of Position after ${n_bounces}$ bounces approximates to a 
+        Normal Distribution (as number of bounces increases), but why Normal Distribution? 
+        Why it make sense for PMF of Position to be Normally distributed?<br>
+        And the answer is
+        <a rel='noreferrer' target='_blank' href="https://www.quantml.org/statistics/central-limit-theorem/">Central Limit Theorem</a>.<br>
+        To get the particle's position after ${n_bounces}$ bounces, we add ${n_bounces}$ steps taken by particle
+        $(\\pm 1)$, and each step is completely random (also independent of any other step).<br>
+        So here we are adding ${n_bounces}$ i.i.d. random variables, and 
+        <a rel='noreferrer' target='_blank' href="https://www.quantml.org/statistics/central-limit-theorem/">CLT</a>
+        says that as number of bounces increases, PMF of that particle's position after certain number of bounces
+        converges to a Normal Distribution.
+        """, unsafe_allow_html=True)
