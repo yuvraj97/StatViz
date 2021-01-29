@@ -1,7 +1,6 @@
 import streamlit as st
 
 from SessionState import set_title
-from logic.gauss import gauss
 from utils import set_get_URL
 from gui.gauss import random_walk_1D, random_walk_2D, multiple_die_rolls
 
