@@ -12,22 +12,30 @@ def get_st_probability(max_bounces, max_sim):
         st.markdown("", unsafe_allow_html=True)
         add_bias: bool = st.checkbox("Add bias")
         if add_bias:
+            p_up_max = 1.0
+            if p_up_max <= 0: return None
             p_up: float = st.slider("Probability of particle moving up (in +y direction)",
                                     min_value=0.0,
                                     max_value=1.0,
                                     value=0.25,
                                     step=0.1)
+            p_right_max = p_up_max - p_up
+            if p_right_max <= 0: return None
             p_right: float = st.slider("Probability of particle moving right (in +x direction)",
                                        min_value=0.0,
-                                       max_value=1.0 - p_up,
-                                       value=0.25 if 0.25 < 1.0 - p_up else (1.0 - p_up)/2,
+                                       max_value=p_right_max,
+                                       value=0.25 if 0.25 < p_right_max else p_right_max/2,
                                        step=0.1)
+            p_left_max = p_up_max - p_up - p_right
+            if p_left_max <= 0: return None
             p_left: float = st.slider("Probability of particle moving left (in -x direction)",
                                       min_value=0.0,
-                                      max_value=1.0 - p_up - p_right,
+                                      max_value=p_left_max,
                                       value=0.25 if 0.25 < 1.0 - p_up - p_right else (1.0 - p_up - p_right)/2,
                                       step=0.1)
             p_down: float = 1 - p_up - p_right - p_left
+            if p_down <= 0: return None
+
             # st.markdown(f"Probability of particle moving down (in -y direction): {p_down}")
         n_bounces: int = st.sidebar.slider("Number of bounces (N)",
                                            min_value=1,
@@ -57,7 +65,7 @@ def run(state):
     try:
         (p_up, p_down, p_right, p_left), (n_bounces, n_sim) = get_st_probability(max_bounces, max_sim)
     except:
-        st.markdown("""
+        st.sidebar.markdown("""
         <blockquote class="error">
             Probability selection is not valid!
         </blockquote>
