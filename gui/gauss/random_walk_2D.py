@@ -1,8 +1,10 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+
 from gui.utils import stPandas
-from logic.utils import animate_dot_2D
+from logic.utils import animate_dot_2D, plot_histogram3D
+
 
 def get_st_probability(max_bounces, max_sim):
     p_up: float = 0.25
@@ -123,3 +125,58 @@ def run(state):
                                        y=y[0][:n_bounces],
                                        title="Single Particle Random walk",
                                        button_label="Start"))
+
+    with st.beta_expander("Getting Data", expanded=True):
+        st.markdown(f"""
+        Data we see above is a random walk of a single particle, it's just a single observation,
+        we need multiple observations of in order to study position after ${n_bounces}$ bounces.    
+        So let's simulate data for ${n_sim}$ particles where each particle performs ${n_bounces}$
+        number of bounces.    
+        """)
+
+        st_table = np.array([[f"({x[sim][bounce]}, {y[sim][bounce]})" for bounce in range(n_bounces)] for sim in range(n_sim)])
+        index = ["1st Particle", "2nd Particle", "3rd Particle"]
+        index.extend([f"{i + 1}th Particle" for i in range(3, n_sim)])
+        df = pd.DataFrame(data=st_table, index=index)
+        df.columns += 1
+        st.write(df)
+
+    with st.beta_expander(f"Getting particle's position after {n_bounces} bounces", expanded=True):
+        st.markdown(f"""
+        Now we want to study particle's position after ${n_bounces}$ bounces.    
+        We have our data of ${n_sim}$ particles with ${n_bounces}$ bounces each.    
+        Let's extract particle's position after ${n_bounces}$ bounces, i.e. the last column of our data.   
+        """)
+
+        st_position_data = st_table[:n_sim, n_bounces - 1]
+        df: pd.DataFrame = pd.DataFrame(data=st_position_data)
+        index = ["1st Particle", "2nd Particle", "3rd Particle"]
+        index.extend([f"{i + 4}th Particle" for i in range(n_sim - 3)])
+        df.index = index
+        df.columns = [f"Position after {n_bounces} bounces"]
+        st.write(df)
+
+        fig = plot_histogram3D(
+            x[:n_sim, n_bounces - 1],
+            y[:n_sim, n_bounces - 1],
+            description={
+                "title": {
+                    "main": f"Particle's Position after {n_bounces} bounces",
+                    "x": f"Position(x) after {n_bounces} bounces",
+                    "y": f"Position(y) after {n_bounces} bounces",
+                    "z": f"PMF of Position(x, y) after {n_bounces} bounces",
+                },
+                "label": {
+                    "main": "Position's PMF",
+                    "x": "Position(x)",
+                    "y": "Position(y)",
+                    "z": "Position's PMF"
+                }
+            },
+            bins=(25, 25),
+            convert_into_probability_plot=True,
+            fig=None,
+            isMobile=state.isMobile,
+            showlegend=False,
+            tilda=" ~ ")
+        st.plotly_chart(fig, use_container_width=True)
