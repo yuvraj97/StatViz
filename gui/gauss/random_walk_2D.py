@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+from gui.utils import stPandas
 from logic.utils import animate_dot_2D
 
 def get_st_probability(max_bounces, max_sim):
@@ -90,6 +91,10 @@ def run(state):
 
     x, y = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8), np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
     for sim in range(max_sim):
+        if directions[sim][0] == "+y"  : x[sim][0], y[sim][0] = 0, 1
+        elif directions[sim][0] == "-y": x[sim][0], y[sim][0] = 0, -1
+        elif directions[sim][0] == "+x": x[sim][0], y[sim][0] = 1, 0
+        else: x[sim][0], y[sim][0] = -1, 0
         for bounce in range(1, max_bounces):
             if directions[sim][bounce]   == "+y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] + 1
             elif directions[sim][bounce] == "-y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] - 1
@@ -113,4 +118,8 @@ def run(state):
         """)
 
         # npArray.columns += 1
-        st.write(pd.DataFrame(data=np.array([f"({x[0][bounce]}, {y[0][bounce]})" for bounce in range(n_bounces + 1)]).reshape((1, n_bounces + 1)), index=["Position (x, y)"]))
+        st.write(stPandas(np.array([f"({x[0][bounce]}, {y[0][bounce]})" for bounce in range(n_bounces)]), "Position (x, y)"))
+        st.plotly_chart(animate_dot_2D(x=x[0][:n_bounces],
+                                       y=y[0][:n_bounces],
+                                       title="Single Particle Random walk",
+                                       button_label="Start"))

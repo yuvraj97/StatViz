@@ -1,4 +1,4 @@
-from typing import Dict, Union, Tuple
+from typing import Dict, Union, Tuple, List
 import numpy as np
 import plotly.graph_objects as go
 from plotly.graph_objs import Figure
@@ -88,4 +88,21 @@ def line_plot(x: np.ndarray,
         if "x" in description["title"]: fig.update_layout(xaxis_title=description["title"]["x"])
         if "y" in description["title"]: fig.update_layout(yaxis_title=description["title"]["y"])
     fig.update_layout(showlegend=False if isMobile else True)
+    return fig
+
+def animate_dot_2D(x, y, title, button_label="Start"):
+    fig = go.Figure(
+        data=[go.Scatter(x=[0], y=[0])],
+        layout=go.Layout(
+            xaxis=dict(range=[x.min() - 2, x.max() + 2], autorange=False),
+            yaxis=dict(range=[y.min() - 2, y.max() + 2], autorange=False),
+            title=title,
+            updatemenus=[dict(
+                type="buttons",
+                buttons=[dict(label=button_label,
+                              method="animate",
+                              args=[None])])]
+        ),
+        frames=[go.Frame(data=[go.Scatter(x=[x[i]], y=[y[i]])]) for i in range(len(x))]
+    )
     return fig
