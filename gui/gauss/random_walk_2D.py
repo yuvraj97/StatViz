@@ -203,11 +203,11 @@ def run(state):
         cov = np.cov(X, Y)
         st.latex("\\text{sample covariance matrix} = \\begin{bmatrix} "+f"{'{:.2f}'.format(cov[0,0])} & {'{:.2f}'.format(cov[0,1])} \\\\ {'{:.2f}'.format(cov[1,0])} & {'{:.2f}'.format(cov[1,1])} "+" \\\\ \end{bmatrix}")
 
-
         count = 20
-        _X = np.outer(np.linspace(-4 * X.std() * X.mean(), 4 * X.std() * X.mean(), count), np.ones(count))
+        _X = np.outer(np.linspace(-5 * X.std() * X.mean(), 5 * X.std() * X.mean(), count), np.ones(count))
         _Y = _X.copy().T
-        pdf = multivariate_normal.pdf(np.vstack((_X.reshape(1, count * count)[0], _Y.reshape(1, count * count)[0])).T, mean=mean, cov=cov).reshape(count,count)
+        _X_v, _Y_v = _X.reshape(1, count * count)[0], _Y.reshape(1, count * count)[0]
+        pdf = multivariate_normal.pdf(np.vstack((_X_v, _Y_v)).T, mean=mean, cov=cov).reshape(count,count)
         fig = surface_plot3D(x=_X, y=_Y, z=pdf,
                              description={
                                  "title": {
@@ -217,10 +217,54 @@ def run(state):
                                      "z": f"PMF of Position(x, y) after {n_bounces} bounces/<br>PDF of Bivariate Normal Distribution"
                                  },
                                  "label": {
-                                     "main": "Multivariate Normal distribution"
+                                     "main": "Bivariate Normal distribution"
                                  },
                                  "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>PDF((x, y)=(%{x}, %{y})): %{z}",
                              },
                              fig=fig,
+                             isMobile=state.isMobile)
+        st.plotly_chart(fig, use_container_width=True)
+
+    with st.beta_expander("Imposing CDF of a Bivariate Normal Distribution", expanded=True):
+        st.markdown(f"""
+        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk $1$D</a>
+        comparing CDFs is a good idea to see if one distribution coverges to another distribition.    
+        So let's see it ourselves, let's impose CDF of a Bivariate Normal Distribution with sample mean and sample covariance matrix,  
+        on CDF of Particle's PMF of Position after ${n_bounces}$ bounces.
+        """)
+
+        fig = surface_plot3D(x=_X,
+                             y=_Y,
+                             z=multivariate_normal.cdf(np.vstack((_X_v, _Y_v)).T, mean=mean, cov=cov).reshape(count, count),
+                             description={
+                                 "label": {
+                                     "main": "Bivariate distribution CDF"
+                                 },
+                                 "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
+                             },
+                             isMobile=state.isMobile)
+        _X = np.outer(X, np.ones(len(X)))
+        _Y = np.outer(Y, np.ones(len(Y))).T
+        _Z = np.zeros(shape=_X.shape)
+        for i in range(_Z.shape[0]):
+            _Z[i] = [((X < _X[i][j]) & (Y < _Y[i][j])).sum() for j in range(_Z.shape[1])]
+        _Z = _Z/_Z.max()
+
+        fig = surface_plot3D(x=_X, y=_Y,
+                             z=_Z,
+                             description={
+                                 "title": {
+                                     "main": f"CDF:<br>Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
+                                     "x": f"Position(x) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
+                                     "y": f"Position(y) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
+                                     "z": f"<b>CDF</b> of Position(x,y) after {n_bounces} bounces/<br><b>CDF</b> of Bivariate Normal Distribution"
+                                 },
+                                 "label": {
+                                     "main": "Position's CDF"
+                                 },
+                                 "hovertemplate": "Position(x, y) = (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
+                             },
+                             fig=fig,
+                             mode="markers",
                              isMobile=state.isMobile)
         st.plotly_chart(fig, use_container_width=True)

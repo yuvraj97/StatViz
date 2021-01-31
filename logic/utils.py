@@ -228,11 +228,13 @@ def surface_plot3D(x, y, z,
         fig = go.Figure()
     fig.add_trace(go.Surface(x=x, y=y, z=z,
                              name=description["label"]["main"],
-                             hovertemplate=description["hovertemplate"]))
+                             hovertemplate=description["hovertemplate"],
+                             opacity=0.5))
     if "title" in description:
-        if "main" in description["title"]: fig.update_layout(title=description["title"]["main"])
-        if "x" in description["title"]: fig.update_layout(xaxis_title=description["title"]["x"])
-        if "y" in description["title"]: fig.update_layout(yaxis_title=description["title"]["y"])
+        fig.update_layout(scene=dict(xaxis_title=description["title"]["x"],
+                                     yaxis_title=description["title"]["y"],
+                                     zaxis_title=description["title"]["z"]),
+                          title=description["title"]["main"])
     fig.update_layout(showlegend=False if isMobile else True)
     return fig
 
