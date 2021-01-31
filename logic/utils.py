@@ -99,8 +99,8 @@ def plot_histogram3D(x: np.ndarray,
                      isMobile: bool = False,
                      showlegend: bool = True,
                      bargap: float = 0.02,
-                     width: int = 650,
-                     height: int = 700,
+                     width: int = 585,
+                     height: int = 630,
                      tilda="~"):
     def bar_data(position3d, size=(1, 1, 1)):
         # position3d - 3-list or array of shape (3,) that represents the point of coords (x, y, 0), where a bar is placed
@@ -204,6 +204,38 @@ def plot_histogram3D(x: np.ndarray,
                            camera_eye_z=1.25),
                       showlegend=False if isMobile or not showlegend else True)
     return fig
+
+def surface_plot3D(x, y, z,
+                   description: dict,
+                   fig: Figure = None,
+                   mode="lines",
+                   isMobile: bool = False) -> Figure:
+    """
+    description={
+        "title": {
+            "main": "Title of plot",
+            "x": "x-axis title",
+            "y": "y-axis title"
+        },
+        "label": {
+            "main": "Legend",
+        },
+        "hovertemplate": "x-label (x): %{x}<br>y-label(x=%{x}): %{y}",
+        "color": "green"
+    }
+    """
+    if fig is None:
+        fig = go.Figure()
+    fig.add_trace(go.Surface(x=x, y=y, z=z,
+                             name=description["label"]["main"],
+                             hovertemplate=description["hovertemplate"]))
+    if "title" in description:
+        if "main" in description["title"]: fig.update_layout(title=description["title"]["main"])
+        if "x" in description["title"]: fig.update_layout(xaxis_title=description["title"]["x"])
+        if "y" in description["title"]: fig.update_layout(yaxis_title=description["title"]["y"])
+    fig.update_layout(showlegend=False if isMobile else True)
+    return fig
+
 
 def animate_dot_2D(x, y, title, button_label="Start"):
     fig = go.Figure(

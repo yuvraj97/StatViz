@@ -1,10 +1,9 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-
 from gui.utils import stPandas
-from logic.utils import animate_dot_2D, plot_histogram3D
-
+from logic.utils import animate_dot_2D, plot_histogram3D, surface_plot3D
+from scipy.stats import multivariate_normal
 
 def get_st_probability(max_bounces, max_sim):
     p_up: float = 0.25
@@ -91,7 +90,8 @@ def run(state):
         state.seed_changed is False else \
         np.array([np.random.choice(["+y", "-y", "+x", "-x"], max_bounces, p=[p_up, p_down, p_right, p_left]) for _ in range(max_sim)])
 
-    x, y = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8), np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
+    x: np.ndarray = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
+    y: np.ndarray = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
     for sim in range(max_sim):
         if directions[sim][0] == "+y"  : x[sim][0], y[sim][0] = 0, 1
         elif directions[sim][0] == "-y": x[sim][0], y[sim][0] = 0, -1
@@ -156,9 +156,12 @@ def run(state):
         df.columns = [f"Position after {n_bounces} bounces"]
         st.write(df)
 
+        X = x[:n_sim, n_bounces - 1],
+        Y = y[:n_sim, n_bounces - 1],
+        X, Y = X[0], Y[0]
         fig = plot_histogram3D(
-            x[:n_sim, n_bounces - 1],
-            y[:n_sim, n_bounces - 1],
+            X,
+            Y,
             description={
                 "title": {
                     "main": f"Particle's Position after {n_bounces} bounces",
@@ -179,4 +182,45 @@ def run(state):
             isMobile=state.isMobile,
             showlegend=False,
             tilda=" ~ ")
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown(f"""
+    Isn't this shape looks to follow the bell curve.        
+    Let's visually inspect it, but how can we visually inspect that
+    "Particle's PMF of Position after ${n_bounces}$ bounces" approximates
+    Multivariate Normal Distribution or not.
+    """)
+
+    with st.beta_expander("Imposing PDF of a Normal Distribution", expanded=True):
+        st.markdown(f""" 
+        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk $1$D</a>
+        that imposing PDF of a Normal distribution over our histogram don't help us answering (visually) that
+        do our "Particle's PMF of Position after ${n_bounces}$ bounces" approximates Multivariate Normal Distribution.<br>
+        Let's see it ourselves, let's impose a Multivariate Normal Distribution with
+        """, unsafe_allow_html=True)
+        mean = [X.mean(), Y.mean()]
+        st.latex("\\text{sample mean} = "+f"[\\mu_x = {mean[0]} , \\mu_y = {mean[1]}]")
+        cov = np.cov(X, Y)
+        st.latex("\\text{sample covariance matrix} = \\begin{bmatrix} "+f"{'{:.2f}'.format(cov[0,0])} & {'{:.2f}'.format(cov[0,1])} \\\\ {'{:.2f}'.format(cov[1,0])} & {'{:.2f}'.format(cov[1,1])} "+" \\\\ \end{bmatrix}")
+
+
+        count = 20
+        _X = np.outer(np.linspace(-4 * X.std() * X.mean(), 4 * X.std() * X.mean(), count), np.ones(count))
+        _Y = _X.copy().T
+        pdf = multivariate_normal.pdf(np.vstack((_X.reshape(1, count * count)[0], _Y.reshape(1, count * count)[0])).T, mean=mean, cov=cov).reshape(count,count)
+        fig = surface_plot3D(x=_X, y=_Y, z=pdf,
+                             description={
+                                 "title": {
+                                     "main": f"Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
+                                     "x": f"Position(x) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
+                                     "y": f"Position(y) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
+                                     "z": f"PMF of Position(x, y) after {n_bounces} bounces/<br>PDF of Bivariate Normal Distribution"
+                                 },
+                                 "label": {
+                                     "main": "Multivariate Normal distribution"
+                                 },
+                                 "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>PDF((x, y)=(%{x}, %{y})): %{z}",
+                             },
+                             fig=fig,
+                             isMobile=state.isMobile)
         st.plotly_chart(fig, use_container_width=True)
