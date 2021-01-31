@@ -193,7 +193,7 @@ def run(state):
 
     with st.beta_expander("Imposing PDF of a Normal Distribution", expanded=True):
         st.markdown(f""" 
-        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk $1$D</a>
+        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk 1D</a>
         that imposing PDF of a Normal distribution over our histogram don't help us answering (visually) that
         do our "Particle's PMF of Position after ${n_bounces}$ bounces" approximates Multivariate Normal Distribution.<br>
         Let's see it ourselves, let's impose a Multivariate Normal Distribution with
@@ -227,11 +227,40 @@ def run(state):
 
     with st.beta_expander("Imposing CDF of a Bivariate Normal Distribution", expanded=True):
         st.markdown(f"""
-        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk $1$D</a>
+        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk 1D</a>
         comparing CDFs is a good idea to see if one distribution coverges to another distribition.    
         So let's see it ourselves, let's impose CDF of a Bivariate Normal Distribution with sample mean and sample covariance matrix,  
-        on CDF of Particle's PMF of Position after ${n_bounces}$ bounces.
-        """)
+        on CDF of Particle's PMF of Position after ${n_bounces}$ bounces.    
+        Here,    
+        <span class="l2">Blue curve is for CDF of Position after ${n_bounces}$ bounces</span>    
+        <span class="l1">Red curve is for CDF of Bivariate distribution</span>    
+        
+        """, unsafe_allow_html=True)
+
+        _X_h = np.outer(X, np.ones(len(X)))
+        _Y_h = np.outer(Y, np.ones(len(Y))).T
+        _Z_h = np.zeros(shape=_X_h.shape)
+        for i in range(_Z_h.shape[0]):
+            _Z_h[i] = [((X < _X_h[i][j]) & (Y < _Y_h[i][j])).sum() for j in range(_Z_h.shape[1])]
+        _Z_h = _Z_h/_Z_h.max()
+
+        fig = surface_plot3D(x=_X_h, y=_Y_h,
+                             z=_Z_h,
+                             description={
+                                 "title": {
+                                     "main": f"CDF:<br>Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
+                                     "x": f"Position(x)",
+                                     "y": f"Position(y)",
+                                     "z": f"<b>CDF</b>"
+                                 },
+                                 "label": {
+                                     "main": "Position's CDF"
+                                 },
+                                 "hovertemplate": "Position(x, y) = (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
+                             },
+                             colorscale='Blues',
+                             opacity=0.01,
+                             isMobile=state.isMobile)
 
         fig = surface_plot3D(x=_X,
                              y=_Y,
@@ -242,29 +271,9 @@ def run(state):
                                  },
                                  "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
                              },
-                             isMobile=state.isMobile)
-        _X = np.outer(X, np.ones(len(X)))
-        _Y = np.outer(Y, np.ones(len(Y))).T
-        _Z = np.zeros(shape=_X.shape)
-        for i in range(_Z.shape[0]):
-            _Z[i] = [((X < _X[i][j]) & (Y < _Y[i][j])).sum() for j in range(_Z.shape[1])]
-        _Z = _Z/_Z.max()
-
-        fig = surface_plot3D(x=_X, y=_Y,
-                             z=_Z,
-                             description={
-                                 "title": {
-                                     "main": f"CDF:<br>Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
-                                     "x": f"Position(x) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
-                                     "y": f"Position(y) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
-                                     "z": f"<b>CDF</b> of Position(x,y) after {n_bounces} bounces/<br><b>CDF</b> of Bivariate Normal Distribution"
-                                 },
-                                 "label": {
-                                     "main": "Position's CDF"
-                                 },
-                                 "hovertemplate": "Position(x, y) = (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
-                             },
                              fig=fig,
-                             mode="markers",
+                             colorscale='Burg',
+                             opacity=1.0,
                              isMobile=state.isMobile)
+
         st.plotly_chart(fig, use_container_width=True)

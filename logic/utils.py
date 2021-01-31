@@ -208,7 +208,8 @@ def plot_histogram3D(x: np.ndarray,
 def surface_plot3D(x, y, z,
                    description: dict,
                    fig: Figure = None,
-                   mode="lines",
+                   colorscale='Viridis',
+                   opacity=0.5,
                    isMobile: bool = False) -> Figure:
     """
     description={
@@ -229,7 +230,8 @@ def surface_plot3D(x, y, z,
     fig.add_trace(go.Surface(x=x, y=y, z=z,
                              name=description["label"]["main"],
                              hovertemplate=description["hovertemplate"],
-                             opacity=0.5))
+                             colorscale=colorscale,
+                             opacity=opacity))
     if "title" in description:
         fig.update_layout(scene=dict(xaxis_title=description["title"]["x"],
                                      yaxis_title=description["title"]["y"],
