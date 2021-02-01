@@ -59,10 +59,10 @@ def run(state):
         <a rel='noreferrer' target='_blank' href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Multivariate Gaussian distribution</a>.<br>
         """, unsafe_allow_html=True)
 
-    max_bounces, max_sim = 100, 500
-    prev_p_up = None if "p_up" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_up"]
-    prev_p_right = None if "p_right" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_right"]
-    prev_p_left = None if "p_left" not in state.gauss["Random walk 1D"] else state.gauss["Random walk 1D"]["p_left"]
+    max_bounces, max_sim = 100, 200
+    prev_p_up = None if "p_up" not in state.gauss["Random walk 2D"] else state.gauss["Random walk 2D"]["p_up"]
+    prev_p_right = None if "p_right" not in state.gauss["Random walk 2D"] else state.gauss["Random walk 2D"]["p_right"]
+    prev_p_left = None if "p_left" not in state.gauss["Random walk 2D"] else state.gauss["Random walk 2D"]["p_left"]
 
     try:
         (p_up, p_down, p_right, p_left), (n_bounces, n_sim) = get_st_probability(max_bounces, max_sim)
@@ -74,34 +74,41 @@ def run(state):
         """, unsafe_allow_html=True)
         return
 
-    state.gauss["Random walk 1D"]["p_up"] = p_up
-    state.gauss["Random walk 1D"]["p_right"] = p_right
-    state.gauss["Random walk 1D"]["p_left"] = p_left
+    state.gauss["Random walk 2D"]["p_up"] = p_up
+    state.gauss["Random walk 2D"]["p_right"] = p_right
+    state.gauss["Random walk 2D"]["p_left"] = p_left
 
     if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
     else: np.random.seed()
 
-    directions = state.gauss["Random walk 1D"]["random_walks_direction"] = state.gauss["Random walk 1D"]["random_walks_direction"] if \
-        "random_walks_direction" in state.gauss["Random walk 1D"] and \
-        prev_p_up == p_up and \
+    dont_reinitialize: bool = True if prev_p_up == p_up and \
         prev_p_right == p_right and \
         prev_p_left == p_left and \
         state.stSettings["seed"] is not None and \
-        state.seed_changed is False else \
-        np.array([np.random.choice(["+y", "-y", "+x", "-x"], max_bounces, p=[p_up, p_down, p_right, p_left]) for _ in range(max_sim)])
+        not state.seed_changed else \
+        False
+    # print("don't reinitialize:", dont_reinitialize)
 
-    x: np.ndarray = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
-    y: np.ndarray = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
-    for sim in range(max_sim):
-        if directions[sim][0] == "+y"  : x[sim][0], y[sim][0] = 0, 1
-        elif directions[sim][0] == "-y": x[sim][0], y[sim][0] = 0, -1
-        elif directions[sim][0] == "+x": x[sim][0], y[sim][0] = 1, 0
-        else: x[sim][0], y[sim][0] = -1, 0
-        for bounce in range(1, max_bounces):
-            if directions[sim][bounce]   == "+y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] + 1
-            elif directions[sim][bounce] == "-y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] - 1
-            elif directions[sim][bounce] == "+x": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] + 1, y[sim][bounce-1]
-            else: x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] - 1, y[sim][bounce-1]
+    x = state.gauss["Random walk 2D"]["x"] = state.gauss["Random walk 2D"]["x"] \
+        if "x" in state.gauss["Random walk 2D"] and dont_reinitialize else\
+        np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
+
+    y = state.gauss["Random walk 2D"]["y"] = state.gauss["Random walk 2D"]["y"] \
+        if "y" in state.gauss["Random walk 2D"] and dont_reinitialize else\
+        np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
+
+    if dont_reinitialize is False:
+        directions = np.array([np.random.choice(["+y", "-y", "+x", "-x"], max_bounces, p=[p_up, p_down, p_right, p_left]) for _ in range(max_sim)])
+        for sim in range(max_sim):
+            if directions[sim][0] == "+y"  : x[sim][0], y[sim][0] = 0, 1
+            elif directions[sim][0] == "-y": x[sim][0], y[sim][0] = 0, -1
+            elif directions[sim][0] == "+x": x[sim][0], y[sim][0] = 1, 0
+            else: x[sim][0], y[sim][0] = -1, 0
+            for bounce in range(1, max_bounces):
+                if directions[sim][bounce]   == "+y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] + 1
+                elif directions[sim][bounce] == "-y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] - 1
+                elif directions[sim][bounce] == "+x": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] + 1, y[sim][bounce-1]
+                else: x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] - 1, y[sim][bounce-1]
 
     with st.beta_expander("Scenario", expanded=True):
         st.markdown(f"""
@@ -121,10 +128,11 @@ def run(state):
 
         # npArray.columns += 1
         st.write(stPandas(np.array([f"({x[0][bounce]}, {y[0][bounce]})" for bounce in range(n_bounces)]), "Position (x, y)"))
-        st.plotly_chart(animate_dot_2D(x=x[0][:n_bounces],
-                                       y=y[0][:n_bounces],
-                                       title="Single Particle Random walk",
-                                       button_label="Start"))
+        if st.checkbox("See the particle in action", False):
+            st.plotly_chart(animate_dot_2D(x=x[0][:n_bounces],
+                                           y=y[0][:n_bounces],
+                                           title="Single Particle Random walk",
+                                           button_label="Start"))
 
     with st.beta_expander("Getting Data", expanded=True):
         st.markdown(f"""
@@ -148,8 +156,7 @@ def run(state):
         Let's extract particle's position after ${n_bounces}$ bounces, i.e. the last column of our data.   
         """)
 
-        st_position_data = st_table[:n_sim, n_bounces - 1]
-        df: pd.DataFrame = pd.DataFrame(data=st_position_data)
+        df: pd.DataFrame = pd.DataFrame(data=st_table[:n_sim, n_bounces - 1])
         index = ["1st Particle", "2nd Particle", "3rd Particle"]
         index.extend([f"{i + 4}th Particle" for i in range(n_sim - 3)])
         df.index = index
@@ -277,3 +284,7 @@ def run(state):
                              isMobile=state.isMobile)
 
         st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown(f"""
+    Now we can say that Particle's Position after {n_bounces} bounces do follows a Bivariate Normal Distribution
+    with sample mean and sample covariance matrix,""")
