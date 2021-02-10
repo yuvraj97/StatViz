@@ -30,13 +30,11 @@ def main():
 
     with st.sidebar.beta_expander("Settings", expanded=True if state.theme is None else False):
         if st.checkbox("Apply Dark Theme", True if state.theme == "dark" else False):
-            if state.theme != "dark":  # Theme Changed to dark
-                set_cookie("theme", "dark")  # Don't rerun to set cookies
-                state.theme = "dark"
+            set_cookie("theme", "dark")  # Don't rerun to set cookies
+            state.theme = "dark"
         else:
-            if state.theme != "light":  # Theme Changed to light
-                set_cookie("theme", "light")  # Don't rerun to set cookies
-                state.theme = "light"
+            set_cookie("theme", "light")  # Don't rerun to set cookies
+            state.theme = "light"
 
         # noinspection PyUnresolvedReferences
         state.stSettings = {
