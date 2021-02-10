@@ -287,4 +287,4 @@ def run(state):
 
     st.markdown(f"""
     Now we can say that Particle's Position after {n_bounces} bounces do follows a Bivariate Normal Distribution
-    with sample mean and sample covariance matrix,""")
+    with sample mean and sample covariance matrix.""")

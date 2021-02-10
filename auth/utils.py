@@ -34,7 +34,7 @@ def sendOTP(state, email: str) -> int:
 # Replace send_hold() -> send()
 # noinspection SpellCheckingInspection
 def send_email_hold(email, subject, msg):
-    EMAIL_ADDRESS = "support@quantml.org"
+    EMAIL_ADDRESS = "no-reply@quantml.org"
     if email is None: email = EMAIL_ADDRESS
     # Replace smtp_username with your Amazon SES SMTP user name.
     USERNAME_SMTP = os.environ.get('QUANTMLAWSSMTPUSERNAME')
@@ -62,9 +62,9 @@ def send_email_hold(email, subject, msg):
 
 # noinspection SpellCheckingInspection
 def send_email(user_email, subject, msg):
-    EMAIL_ADDRESS = "quantml.app@gmail.com"  # os.environ.get('QUANTMLSTATISTICSEMAILADDR')
-    EMAIL_PASSWORD = "xmqlztccyguwvhax"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
+    EMAIL_ADDRESS = "no-reply@quantml.org"  # os.environ.get('QUANTMLSTATISTICSEMAILADDR')
+    EMAIL_PASSWORD = "DpPyfmmWa4gJ"  # os.environ.get('QUANTMLSTATISTICSEMAILPASS')
     if user_email is None: user_email = EMAIL_ADDRESS
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+    with smtplib.SMTP_SSL('smtp.zoho.in', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         return smtp.sendmail(EMAIL_ADDRESS, user_email, f'Subject: {subject}\n\n{msg}')

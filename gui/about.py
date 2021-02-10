@@ -25,7 +25,7 @@ def main(state):
         Join our &nbsp;&nbsp;&nbsp; <a rel='noreferrer' target='_blank' href="https://discord.gg/8wpzGhfXJR">Discussion form</a><br>
         Linkedin:&nbsp;&nbsp;
         <a rel='noreferrer' target='_blank' href="https://www.linkedin.com/in/yuvraj97/">yuvraj97</a><br> 
-        Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:yuvraj97.ml@gmail.com">yuvraj97.ml@gmail.com</a>
+        Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:yuvraj@quantml.org">yuvraj@quantml.org</a>
         """, unsafe_allow_html=True)
 
     with st.beta_expander("🐞 Bugs", True):
