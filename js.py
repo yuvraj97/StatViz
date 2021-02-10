@@ -1,13 +1,18 @@
 from typing import Dict
-import streamlit as st
+# import streamlit as st
 from uuid import uuid4
 from SessionState import get_cookie
+import streamlit.components.v1 as components
 
 
 def set_cookie(name: str, value: str) -> None:
     # print("set_cookie:: ", name, " : ", value)
-    st.markdown(f"""<div id="set-quantml-cookie" name="{name}" value="{value}"></div>""",
-                unsafe_allow_html=True)
+    components.html(f"""
+    <script>
+        parent.document.cookie = "{name}={value};expires=Fri, 31 Dec 9999 23:59:59 GMT;path=/;SameSite=Lax"
+    </script>
+    """, height=0, width=0)
+
 
 def get_ID(CURRENTLY_LOGIN_JSON: Dict[str, str]) -> str:
     quantml_id = get_cookie("quantml-app-ID")
