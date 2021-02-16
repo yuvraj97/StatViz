@@ -32,7 +32,7 @@ def initializeLogin(state, LOGIN_JSON, sidebar, login_heading):
         elif email not in LOGIN_JSON:
             from auth.patreonAPI import get_patreon_data
             users = get_patreon_data()
-            if email in users and users[email] >= 1000:
+            if email in users and users[email] >= 700:
                 st.markdown("""
                 <blockquote class="success">
                     It's your first Login.<br>
@@ -53,10 +53,10 @@ def initializeLogin(state, LOGIN_JSON, sidebar, login_heading):
                     "ID": "None"
                 }
                 resetPassword(state, email, LOGIN_JSON, sidebar)
-            elif email in users and users[email] < 1000:
+            elif email in users and users[email] < 700:
                 msg = f"""
                    <b>{email}</b>'s current pledge is <b>${"{:.2f}".format(users[email]/100.0)}</b>.<br>
-                    To gain <b>early</b> access to this app your pledge should be greater than or equals to <b>$10</b>.<br>
+                    To gain <b>early</b> access to this app your pledge should be greater than or equals to <b>$7</b>.<br>
                     So <a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">upgrade your pledge</a>
                     and gain <b>early</b> access to this app 😄.
                 """
