@@ -157,7 +157,9 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
 
 
 def main(state):
-    set_get_URL(dist="remove")
+    set_get_URL(dist="remove", parameters={
+        "topic": "remove"
+    })
 
     n_population: int = st.sidebar.number_input("Enter population size",
                                                 min_value=100,

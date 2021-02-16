@@ -45,10 +45,11 @@ def set_get_URL(ch: str = None,
     d: dict = {}
     if "ch" in url: d["ch"] = url["ch"][0]
     if "dist" in url: d["dist"] = url["dist"][0]
-    if "topic" in url: d["topic"] = url["topic"][0]
     if ch is not None: d["ch"] = ch
     if dist is not None: d["dist"] = dist
     if dist == "remove" and "dist" in d: del d["dist"]
+    if "topic" in parameters and parameters["topic"] == "remove": del parameters["topic"]
+    elif "topic" in url: d["topic"] = url["topic"][0]
     for k in parameters.keys():
         d[k] = parameters[k]
     st.experimental_set_query_params(**d)

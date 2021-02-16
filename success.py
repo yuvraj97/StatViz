@@ -11,6 +11,7 @@ def main(state, isAuthenticated):
 
     if option != chapters[0] and \
        option != chapters[3] and \
+       option != chapters[-2] and \
        option != chapters[-1]:
         distribution: str = st.sidebar.selectbox("Select Distribution", list(which_distribution.keys()), index=urlIndex(state.url))
     else:
@@ -56,10 +57,10 @@ def main(state, isAuthenticated):
         if concluded:
             if isAuthenticated:
                 from gui.gauss import gauss
-                gauss.main(state)
+                gauss.main(state)  # RUN ...
             else:
                 from gui.gauss import gauss_unauthorized
-                gauss_unauthorized.main(state)
+                gauss_unauthorized.main(state)  # Do not Run ___
         else:
             from gui.gauss import gauss_comming_soon
             gauss_comming_soon.main(isAuthenticated)
@@ -67,7 +68,7 @@ def main(state, isAuthenticated):
     elif option == chapters[4]:
         from gui.coming_soon import coming_soon
         set_title('Coming Soon | Visualization | Fundamentals of Statistics - QuantML')
-        coming_soon.main(state)
+        coming_soon.main(state, isAuthenticated)
 
     elif option == chapters[-1]:
         import gui.about as about

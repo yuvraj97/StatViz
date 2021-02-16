@@ -22,6 +22,7 @@ def main():
     LOGIN_JSON: Dict[str, Dict[str, Union[str, int, Dict[str, int]]]] = read_JSON(LOGIN_JSON_PATH)
     CURRENTLY_LOGIN_JSON: Dict[str, str] = read_JSON(CURRENTLY_LOGIN_JSON_PATH)
     state.experimental_rerun = False
+    state.url = state.url if state.url is not None else st.experimental_get_query_params()
     theme = SessionState.get_cookie("theme")
     if theme == "":
         return "first-load-failed"
@@ -60,21 +61,22 @@ def main():
     # state.FIRSTOTPSENT
     # state.FIRST_INCORRECT_OTP
     # state.INCORRECT_OTP
-
-    initializeID(CURRENTLY_LOGIN_JSON)
-
-    access_granted, email = alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON)
-    if not access_granted:
-        access_granted, email = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
-        if access_granted:
-            # st.balloons()
-            state.experimental_rerun = True
-    if access_granted:
-        logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
-        state.isLoggedIn = True
-        state.email = email
-        success.main(state, True)
-    else: success.main(state, False)
+    #
+    # initializeID(CURRENTLY_LOGIN_JSON)
+    #
+    # access_granted, email = alreadyLoggedIn(state, CURRENTLY_LOGIN_JSON)
+    # if not access_granted:
+    #     access_granted, email = login(state, LOGIN_JSON, CURRENTLY_LOGIN_JSON, True)
+    #     if access_granted:
+    #         # st.balloons()
+    #         state.experimental_rerun = True
+    # if access_granted:
+    #     logout_button(state, email, LOGIN_JSON, CURRENTLY_LOGIN_JSON)
+    #     state.isLoggedIn = True
+    #     state.email = email
+    #     success.main(state, True)
+    # else: success.main(state, False)
+    success.main(state, True)
 
     # Mandatory to avoid rollbacks with widgets, must be called at the end of your app
     # state.sync()
@@ -95,27 +97,21 @@ if __name__ == '__main__':
     #     state.experimental_rerun_main = True
 
     # noinspection PyBroadException
-    # try:
-    status = main()
-    if status == "first-load-failed":
-        import streamlit.components.v1 as components
-        components.html(f"""
-        <script>
-            parent.document.location.reload()
-        </script>
-        """, height=0, width=0)
-
-        st.info("Initializing...")
-
-    #     state.experimental_rerun_main = True
-    # except Exception:
-    #     if state.experimental_rerun_main:
-    #         state.experimental_rerun_main = False
-    #         st.experimental_rerun()
-    #     error.markdown("""
-    #     <blockquote class="error">
-    #     Unexpected error occurred please <b>try refreshing page</b>.
-    #     <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
-    #     </blockquote>
-    #     """, unsafe_allow_html=True)
+    try:
+        status = main()
+        if status == "first-load-failed":
+            st.info("Initializing...")
+            import streamlit.components.v1 as components
+            components.html("<script>parent.document.location.reload()</script>", height=0, width=0)
+        state.experimental_rerun_main = True
+    except Exception:
+        if state.experimental_rerun_main:
+            state.experimental_rerun_main = False
+            st.experimental_rerun()
+        error.markdown("""
+        <blockquote class="error">
+        Unexpected error occurred please <b>try refreshing page</b>.
+        <!--<span class="quant-bb">"CTRL + R"</span> or <span class="quant-bb">"F5"</span>-->
+        </blockquote>
+        """, unsafe_allow_html=True)
     # # print("================ Statistics.py  [END]  ================")

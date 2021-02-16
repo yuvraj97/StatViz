@@ -11,7 +11,9 @@ from utils import set_get_URL
 def main(distribution: str, state):
     dist: str = which_distribution[distribution]
 
-    set_get_URL(dist=distributions_properties[dist]["name"])
+    set_get_URL(dist=distributions_properties[dist]["name"], parameters={
+        "topic": "remove"
+    })
 
     var: Dict[str, Union[int, float]]
     n: Dict[str, int]

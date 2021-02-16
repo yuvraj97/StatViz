@@ -1,15 +1,20 @@
 import streamlit as st
-from auth.utils import send_email
-def main(state):
+# from auth.utils import send_email
+from utils import set_get_URL
+
+def main(state, isAuthenticated):
+    set_get_URL(dist="remove", parameters={
+        "topic": "remove"
+    })
     st.markdown("""
     <blockquote class="info">
         You should expect new concept <b>visualization</b> (and chapter for our
         <a rel='noreferrer' target='_blank' href="https://read.quantml.org/statistics/">Statistics Guide</a>
-        ) <b>every week</b>.
+        ) <b>every other week</b>.
     </blockquote>
     """, unsafe_allow_html=True)
 
-    if not state.isLoggedIn:
+    if not isAuthenticated:
         st.markdown("""
             <blockquote class="warning">
             This app is under development so currently <a rel='noreferrer' target='_blank' href="https://www.patreon.com/quantml">patreons</a>
@@ -62,28 +67,28 @@ def main(state):
     - [etc.]
     """)
 
-    if state.isLoggedIn:
-        st.markdown("""
-        <blockquote class="info">
-        If there is something you want to have visualization for in the realm of <b>Statistics</b>
-        tell below.
-        </blockquote>""", unsafe_allow_html=True)
-        feature_request = st.text_area("Feature Request")
-        if st.button("Send Request"):
-            if feature_request == "":
-                st.markdown("""
-                <blockquote class="error">
-                    There's nothing in Feature Request!
-                </blockquote>
-                """, unsafe_allow_html=True)
-            else:
-                response = send_email(None,
-                                      f"Feature Request from {state.email}",
-                                      f"Feature Request from {state.email}\n\n" + feature_request)
-                if response == {}:
-                    # st.balloons()
-                    st.markdown("""
-                    <blockquote class="success">
-                        Feature Request sent successfully.
-                    </blockquote>
-                    """, unsafe_allow_html=True)
+    # if isAuthenticated:
+    #     st.markdown("""
+    #     <blockquote class="info">
+    #     If there is something you want to have visualization for in the realm of <b>Statistics</b>
+    #     tell below.
+    #     </blockquote>""", unsafe_allow_html=True)
+    #     feature_request = st.text_area("Feature Request")
+    #     if st.button("Send Request"):
+    #         if feature_request == "":
+    #             st.markdown("""
+    #             <blockquote class="error">
+    #                 There's nothing in Feature Request!
+    #             </blockquote>
+    #             """, unsafe_allow_html=True)
+    #         else:
+    #             response = send_email(None,
+    #                                   f"Feature Request from {state.email}",
+    #                                   f"Feature Request from {state.email}\n\n" + feature_request)
+    #             if response == {}:
+    #                 # st.balloons()
+    #                 st.markdown("""
+    #                 <blockquote class="success">
+    #                     Feature Request sent successfully.
+    #                 </blockquote>
+    #                 """, unsafe_allow_html=True)
