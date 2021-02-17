@@ -46,7 +46,7 @@ def send(user_email, OTP):
     message['Subject'] = "Reset Statistics Guide Password"
     message['From'] = EMAIL_ADDRESS
     message['To'] = user_email
-    message.set_content("""<!DOCTYPE HTML><html lang="en"><head><style>body{font-size:14px;line-height:24px;font-family:'Open Sans','Trebuchet MS',sans-serif}.otp{font-size:22px;margin-top:20px;font-weight:800;font-style:oblique}</style></head><body><a href="https://www.quantml.org" class="logo image jump-big"><img src="https://www.quantml.org/data/img/cover.png" alt="QuantML.org" width="360px" height="75px"/></a> <br> We have received a request to reset your <b>Statistics Guide</b> password. <br> Please use the following one-time password to verify yourself.<div class="otp"> """ + str(OTP) + """</div><br> Regards, <br> <a href="https://www.quantml.org">QuantML</a></body></html>""", subtype='html')
+    message.set_content("""<!DOCTYPE HTML><html lang="en"><head><style>body{font-size:14px;line-height:24px;font-family:'Open Sans','Trebuchet MS',sans-serif}.otp{font-size:22px;margin-top:20px;font-weight:800;font-style:oblique}</style></head><body><a rel='noreferrer' target='_blank' href="https://www.quantml.org" class="logo image jump-big"><img src="https://www.quantml.org/data/img/cover.png" alt="QuantML.org" width="360px" height="75px"/></a> <br> We have received a request to reset your <b>Statistics Guide</b> password. <br> Please use the following one-time password to verify yourself.<div class="otp"> """ + str(OTP) + """</div><br> Regards, <br> <a href="https://www.quantml.org">QuantML</a></body></html>""", subtype='html')
 
     with smtplib.SMTP_SSL('smtp.zoho.in', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)

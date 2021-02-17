@@ -38,16 +38,14 @@ def getChapterIndexByURL(url: dict) -> int:
     return idx
 
 def set_get_URL(ch: str = None,
-                dist: str = None,
                 url: dict = None,
                 parameters: dict = {}) -> dict:
     url = st.experimental_get_query_params() if url is None else url
     d: dict = {}
     if "ch" in url: d["ch"] = url["ch"][0]
-    if "dist" in url: d["dist"] = url["dist"][0]
     if ch is not None: d["ch"] = ch
-    if dist is not None: d["dist"] = dist
-    if dist == "remove" and "dist" in d: del d["dist"]
+    if "dist" in parameters and parameters["dist"] == "remove": del parameters["dist"]
+    elif "dist" in url: d["dist"] = url["dist"][0]
     if "topic" in parameters and parameters["topic"] == "remove": del parameters["topic"]
     elif "topic" in url: d["topic"] = url["topic"][0]
     for k in parameters.keys():

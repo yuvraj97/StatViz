@@ -157,7 +157,8 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
 
 
 def main(state):
-    set_get_URL(dist="remove", parameters={
+    set_get_URL(parameters={
+        "dist" : "remove",
         "topic": "remove"
     })
 

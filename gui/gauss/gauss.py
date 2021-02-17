@@ -10,7 +10,8 @@ def main(state):
     if "topic" in state.url and state.url["topic"][0] in topics:
         idx = topics.index(state.url["topic"][0])
     option: str = st.sidebar.selectbox("Topic", topics, index=idx)
-    set_get_URL(dist="remove", parameters={
+    set_get_URL(parameters={
+        "dist" : "remove",
         "topic": option
     })
 

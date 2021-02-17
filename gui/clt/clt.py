@@ -6,7 +6,8 @@ from utils import set_get_URL
 def main(distribution, state):
     dist: str = which_distribution[distribution]
 
-    set_get_URL(dist=distributions_properties[dist]["name"], parameters={
+    set_get_URL(parameters={
+        "dist" : distributions_properties[dist]["name"],
         "topic": "remove"
     })
 

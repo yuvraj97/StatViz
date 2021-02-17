@@ -53,7 +53,7 @@ def main(state, isAuthenticated):
             "description": "Visualize Gaussian Distribution | Statistics. Here we can see simulation of Random Walk 1D, Random Walk 2D and Multiple Die Rolls. And see how they results in Gaussian Distribution."
         })
         # gauss.main(state)
-        concluded = True
+        concluded = False
         if concluded:
             if isAuthenticated:
                 from gui.gauss import gauss

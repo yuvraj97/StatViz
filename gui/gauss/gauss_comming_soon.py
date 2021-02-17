@@ -1,6 +1,12 @@
 import streamlit as st
+from utils import set_get_URL
 
 def main(isAuthenticated):
+    set_get_URL(parameters={
+        "dist": "remove",
+        "topic": "remove"
+    })
+
     app_under_dev = """
     <blockquote class="warning">
         This app is under development so currently
