@@ -47,7 +47,7 @@ def main():
 
     cover_img.markdown(f"""
         <br><br>
-        <a rel='noreferrer' target='_blank' href="https://www.quantml.org/"><img src="/{"img-dark" if state.theme == "dark" else "img"}/cover.webp" alt="QuantML" width="100%"></a><br>
+        <a rel='noreferrer' target='_blank' href="https://www.quantml.org/"><img src="https://cdn.quantml.org/{"img-dark" if state.theme == "dark" else "img"}/cover.webp" alt="QuantML" width="100%"></a><br>
         <br>""", unsafe_allow_html=True)
 
     if state.theme == "dark":

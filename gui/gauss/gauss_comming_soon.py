@@ -21,7 +21,7 @@ def main(isAuthenticated):
     """
     st.markdown(f"""
     <blockquote class="info">
-        Expected date of release: <b>DD/MM/YYYY</b><br>
+        Expected date of release: <b>6-Mar-2021</b><br>
     </blockquote>
     {app_under_dev if not isAuthenticated else ""}
     Hope you enjoyed the app so far, now our next step is to eliminate <b>most</b> of our doubts regarding the 
