@@ -5,7 +5,7 @@ from utils import set_get_URL
 from gui.gauss import random_walk_1D, random_walk_2D, multiple_die_rolls
 
 def main(state):
-    topics = ["Random walk 1D", "Random walk 2D", "Multiple Die Rolls"]
+    topics = ["Random walk 1D", "Random walk 2D"]#, "Multiple Die Rolls"]
     idx = 0
     if "topic" in state.url and state.url["topic"][0] in topics:
         idx = topics.index(state.url["topic"][0])
@@ -29,6 +29,6 @@ def main(state):
     if option == topics[1]:
         set_title('Random walk 2D | Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
         random_walk_2D.run(state)
-    if option == topics[2]:
-        set_title('Multiple Die Rolls | Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
-        multiple_die_rolls.run(state)
+    # if option == topics[2]:
+    #     set_title('Multiple Die Rolls | Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
+    #     multiple_die_rolls.run(state)
