@@ -6,9 +6,9 @@ from PIL import Image
 from plotly.graph_objs import Figure
 from typing import Union
 
-import logic.lln.lln as lln
-from gui.utils import get_parameters
-from logic.utils import plot_histogram
+import Chapters.Law_of_Large_Number.utils as lln
+from Chapters.utils.utils import get_parameters
+from Chapters.utils.plots import plot_histogram
 from distribution import distributions_properties, stDistribution
 from utils import set_get_URL, urlIndex
 

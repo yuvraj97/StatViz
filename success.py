@@ -8,7 +8,7 @@ def main(state):
     set_get_URL(ch=chapters_acronyms[chapters.index(option)])
 
     if option == chapters[0]:
-        from gui.stats import stats
+        from Chapters.Introduction import run
         set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Introduction | Visualization | Fundamentals of Statistics - QuantML",
@@ -16,9 +16,9 @@ def main(state):
             "description": "Let's visually see what is statistics with an example, then estimate parameter, "
                            "tweak some variables and see how it affects our estimation. "
         })
-        stats.main(state)
+        run.main(state)
     if option == chapters[1]:
-        from gui.lln import lln
+        from Chapters.Law_of_Large_Number import run
         set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML",
@@ -27,9 +27,9 @@ def main(state):
                            "convergence of sample average. Here you can learn Weak Law of Large Numbers by "
                            "interacting with it. "
         })
-        lln.main(state)
+        run.main(state)
     elif option == chapters[2]:
-        from gui.clt import clt
+        from Chapters.Central_Limit_Theorem import run
         set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML",
@@ -38,7 +38,7 @@ def main(state):
                            "convergence of distribution of sample average. Here you can learn Central Limit Theorem "
                            "by interacting with it. "
         })
-        clt.main(state)
+        run.main(state)
     elif option == chapters[3]:
         set_title('Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
@@ -48,15 +48,15 @@ def main(state):
                            "1D, Random Walk 2D and Multiple Die Rolls. And see how they results in Gaussian "
                            "Distribution. "
         })
-        from gui.gauss import gauss
-        gauss.main(state)
+        from Chapters.Gaussian_Distribution import run
+        run.main(state)
 
     elif option == chapters[4]:
-        from gui.coming_soon import coming_soon
+        from Chapters.Coming_Soon import run
         set_title('Coming Soon | Visualization | Fundamentals of Statistics - QuantML')
-        coming_soon.main(state)
+        run.main(state)
 
     elif option == chapters[-1]:
-        import gui.about as about
+        import Chapters.About.about as about
         set_title('About | Statistics App | Fundamentals of Statistics | Visualization - QuantML')
         about.main(state)

@@ -1,18 +1,7 @@
 from typing import Union, Tuple
 import numpy as np
-import plotly.express as px
 from plotly.graph_objs import Figure
-
-def get_plot(data: np.ndarray, title: str) -> Figure:
-    counts: np.ndarray
-    bins: np.ndarray
-    counts, bins = np.histogram(np.array(data * 100, dtype=int), bins=range(0, 101, 2))
-    bins = 0.5 * (bins[:-1] + bins[1:]) / 100
-    fig: Figure = px.bar(x=bins, y=counts, labels={'x': 'p', 'y': '# occurrence'})
-    fig.update_layout(title=title,
-                      xaxis_title='Proportion of red balls (p)',
-                      yaxis_title='# occurrence of certain (p) in our simulation')
-    return fig
+from Chapters.utils.plots import plot_histogram
 
 def get_sample_with_true_p(population: int, p: float) -> np.ndarray:
     a: np.ndarray = np.zeros(population, dtype=np.int8)
@@ -38,4 +27,21 @@ def run(n_population: int,
         sample = np.random.choice(population_sample, n_sample)
         estimators[i] = sample.sum() / n_sample
         samples.append(sample)
-    return population_sample, samples, get_plot(estimators, title), estimators.sum() / n_simulations, estimators
+
+    fig, (counts, bins) = plot_histogram(
+        estimators,
+        description={
+            "title": {
+                "main": title,
+                "x": "1Proportion of red balls (p)",
+                "y": "# occurrence of certain (p) in our simulation"
+            },
+            "label": {
+                "main": None,
+                "x": "p",
+                "y": "# occurrence of p"
+            }
+        },
+        num_bins=len(np.unique(estimators))
+    )
+    return population_sample, samples, fig, estimators.sum() / n_simulations, estimators

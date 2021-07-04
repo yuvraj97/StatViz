@@ -7,10 +7,10 @@ import streamlit as st
 from PIL import Image
 from plotly.graph_objs import Figure
 
-from logic.stats.simulation import plot_binary_data
-from logic.stats.stats import run
+from Chapters.utils.plots import plot_binary_data
+from Chapters.Introduction.utils import run
 from utils import set_get_URL
-from gui.utils import stPandas
+from Chapters.utils.utils import stPandas
 
 def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, seed: Union[int, None]):
     with st.beta_expander("Scenario", expanded=True):

@@ -6,10 +6,10 @@ import scipy.stats
 from PIL import Image
 from typing import Union, List
 from scipy.stats import norm
-from gui.utils import get_parameters
+from Chapters.utils.utils import get_parameters
 from utils import set_get_URL, urlIndex
 from distribution import get_distribution
-from logic.utils import plot_histogram, line_plot
+from Chapters.utils.plots import plot_histogram, line_plot
 from distribution import distributions_properties, stDistribution
 
 

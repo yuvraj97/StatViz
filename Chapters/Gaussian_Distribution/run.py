@@ -1,7 +1,7 @@
 import streamlit as st
 from SessionState import set_title
 from utils import set_get_URL
-from gui.gauss import random_walk_1D, random_walk_2D
+from Chapters.Gaussian_Distribution import random_walk_1D, random_walk_2D
 
 def main(state):
 

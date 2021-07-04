@@ -3,8 +3,8 @@ from typing import Union
 import streamlit as st
 import numpy as np
 import pandas as pd
-from gui.utils import stPandas
-from logic.utils import animate_dot_2D, plot_histogram3D, surface_plot3D
+from Chapters.utils.utils import stPandas
+from Chapters.utils.plots import animate_dot_2D, plot_histogram3D, surface_plot3D
 from scipy.stats import multivariate_normal
 
 def get_st_probability(max_bounces, max_sim):
