@@ -10,7 +10,7 @@ def get_plot(data: np.ndarray, title: str) -> Figure:
     bins = 0.5 * (bins[:-1] + bins[1:]) / 100
     fig: Figure = px.bar(x=bins, y=counts, labels={'x': 'p', 'y': '# occurrence'})
     fig.update_layout(title=title,
-                      xaxis_title='Proportion of people turning their head to right (p)',
+                      xaxis_title='Proportion of red balls (p)',
                       yaxis_title='# occurrence of certain (p) in our simulation')
     return fig
 

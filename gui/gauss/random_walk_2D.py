@@ -1,3 +1,5 @@
+from typing import Union
+
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -10,105 +12,102 @@ def get_st_probability(max_bounces, max_sim):
     p_right: float = 0.25
     p_left: float = 0.25
     p_down: float = 0.25
+
+    seed: Union[int, None] = st.sidebar.number_input(
+        "Enter Seed (-1 mean seed is disabled)",
+        min_value=-1,
+        max_value=10000,
+        value=0,
+        step=1
+    )
+    if seed == -1: seed = None
+
     with st.sidebar.beta_container():
-        st.markdown("", unsafe_allow_html=True)
         add_bias: bool = st.checkbox("Add bias")
         if add_bias:
+            st_u, st_r, st_l = st.beta_columns([1, 1, 1])
             p_up_max = 1.0
             if p_up_max <= 0: return None
-            p_up: float = st.slider("Probability of particle moving up (in +y direction)",
-                                    min_value=0.0,
-                                    max_value=1.0,
-                                    value=0.25,
-                                    step=0.1)
+            p_up: float = st_u.slider(
+                "P(moving up)",
+                min_value=0.0,
+                max_value=1.0,
+                value=0.25,
+                step=0.1
+            )
             p_right_max = p_up_max - p_up
             if p_right_max <= 0: return None
-            p_right: float = st.slider("Probability of particle moving right (in +x direction)",
-                                       min_value=0.0,
-                                       max_value=p_right_max,
-                                       value=0.25 if 0.25 < p_right_max else p_right_max/2,
-                                       step=0.1)
+            p_right: float = st_r.slider(
+                "P(moving right)",
+                min_value=0.0,
+                max_value=p_right_max,
+                value=0.25 if 0.25 < p_right_max else p_right_max/2,
+                step=0.1
+            )
             p_left_max = p_up_max - p_up - p_right
             if p_left_max <= 0: return None
-            p_left: float = st.slider("Probability of particle moving left (in -x direction)",
-                                      min_value=0.0,
-                                      max_value=p_left_max,
-                                      value=0.25 if 0.25 < 1.0 - p_up - p_right else (1.0 - p_up - p_right)/2,
-                                      step=0.1)
+            p_left: float = st_l.slider(
+                "P(moving left)",
+                min_value=0.0,
+                max_value=p_left_max,
+                value=0.25 if 0.25 < 1.0 - p_up - p_right else (1.0 - p_up - p_right)/2,
+                step=0.1
+            )
             p_down: float = 1 - p_up - p_right - p_left
             if p_down <= 0: return None
 
-            # st.markdown(f"Probability of particle moving down (in -y direction): {p_down}")
-        n_bounces: int = st.sidebar.slider("Number of bounces (N)",
-                                           min_value=1,
-                                           max_value=max_bounces,
-                                           value=50,
-                                           step=1)
+        st_bounces, st_sim = st.beta_columns([1, 1])
+        n_bounces: int = st_bounces.slider(
+            "Number of bounces (N)",
+            min_value=1,
+            max_value=max_bounces,
+            value=50,
+            step=1
+        )
 
-        n_sim: int = st.sidebar.number_input("Number of simulations",
-                                             min_value=10,
-                                             max_value=max_sim,
-                                             value=200,
-                                             step=10, )
+        n_sim: int = st_sim.slider(
+            "Number of simulations",
+            min_value=10,
+            max_value=max_sim,
+            value=200,
+            step=10)
 
-    return (p_up, p_down, p_right, p_left), (n_bounces, n_sim)
+    return (p_up, p_down, p_right, p_left), (n_bounces, n_sim), seed
 
 def run(state):
     st.markdown("""
         Now let's see how Random walk in $2$ Dimension results in a
-        <a rel='noreferrer' target='_blank' href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">Multivariate Gaussian distribution</a>.<br>
-        """, unsafe_allow_html=True)
+        [Multivariate Gaussian distribution](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)
+        """)
 
     max_bounces, max_sim = 100, 200
-    prev_p_up = None if "p_up" not in state.gauss["Random walk 2D"] else state.gauss["Random walk 2D"]["p_up"]
-    prev_p_right = None if "p_right" not in state.gauss["Random walk 2D"] else state.gauss["Random walk 2D"]["p_right"]
-    prev_p_left = None if "p_left" not in state.gauss["Random walk 2D"] else state.gauss["Random walk 2D"]["p_left"]
 
     try:
-        (p_up, p_down, p_right, p_left), (n_bounces, n_sim) = get_st_probability(max_bounces, max_sim)
+        (p_up, p_down, p_right, p_left), (n_bounces, n_sim), seed = get_st_probability(max_bounces, max_sim)
     except:
-        st.sidebar.markdown("""
-        <blockquote class="error">
-            Probability selection is not valid!
-        </blockquote>
-        """, unsafe_allow_html=True)
+        st.sidebar.error("Probability selection is not valid!\nProbabilities should sum to $1$")
         return
 
-    state.gauss["Random walk 2D"]["p_up"] = p_up
-    state.gauss["Random walk 2D"]["p_right"] = p_right
-    state.gauss["Random walk 2D"]["p_left"] = p_left
+    if seed is not None: np.random.seed(seed)
 
-    if state.stSettings["seed"] is not None: np.random.seed(state.stSettings["seed"])
-    else: np.random.seed()
+    x = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
 
-    dont_reinitialize: bool = True if prev_p_up == p_up and \
-        prev_p_right == p_right and \
-        prev_p_left == p_left and \
-        state.stSettings["seed"] is not None and \
-        not state.seed_changed else \
-        False
-    # print("don't reinitialize:", dont_reinitialize)
+    y = np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
 
-    x = state.gauss["Random walk 2D"]["x"] = state.gauss["Random walk 2D"]["x"] \
-        if "x" in state.gauss["Random walk 2D"] and dont_reinitialize else\
-        np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
-
-    y = state.gauss["Random walk 2D"]["y"] = state.gauss["Random walk 2D"]["y"] \
-        if "y" in state.gauss["Random walk 2D"] and dont_reinitialize else\
-        np.zeros(shape=(max_sim, max_bounces), dtype=np.int8)
-
-    if dont_reinitialize is False:
-        directions = np.array([np.random.choice(["+y", "-y", "+x", "-x"], max_bounces, p=[p_up, p_down, p_right, p_left]) for _ in range(max_sim)])
-        for sim in range(max_sim):
-            if directions[sim][0] == "+y"  : x[sim][0], y[sim][0] = 0, 1
-            elif directions[sim][0] == "-y": x[sim][0], y[sim][0] = 0, -1
-            elif directions[sim][0] == "+x": x[sim][0], y[sim][0] = 1, 0
-            else: x[sim][0], y[sim][0] = -1, 0
-            for bounce in range(1, max_bounces):
-                if directions[sim][bounce]   == "+y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] + 1
-                elif directions[sim][bounce] == "-y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1] - 1
-                elif directions[sim][bounce] == "+x": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] + 1, y[sim][bounce-1]
-                else: x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] - 1, y[sim][bounce-1]
+    directions = np.array([
+        np.random.choice(["+y", "-y", "+x", "-x"], max_bounces, p=[p_up, p_down, p_right, p_left])
+        for _ in range(max_sim)
+    ])
+    for sim in range(max_sim):
+        if directions[sim][0] == "+y": x[sim][0], y[sim][0] = 0, 1
+        elif directions[sim][0] == "-y": x[sim][0], y[sim][0] = 0, -1
+        elif directions[sim][0] == "+x": x[sim][0], y[sim][0] = 1, 0
+        else: x[sim][0], y[sim][0] = -1, 0
+        for bounce in range(1, max_bounces):
+            if directions[sim][bounce] == "+y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1]+1
+            elif directions[sim][bounce] == "-y": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1], y[sim][bounce-1]-1
+            elif directions[sim][bounce] == "+x": x[sim][bounce], y[sim][bounce] = x[sim][bounce-1]+1, y[sim][bounce-1]
+            else: x[sim][bounce], y[sim][bounce] = x[sim][bounce-1] - 1, y[sim][bounce-1]
 
     with st.beta_expander("Scenario", expanded=True):
         st.markdown(f"""
@@ -126,8 +125,10 @@ def run(state):
         and value(of that column) indicates x-axis and y-axis position respectively after certain number of bounces.
         """)
 
-        # npArray.columns += 1
-        st.write(stPandas(np.array([f"({x[0][bounce]}, {y[0][bounce]})" for bounce in range(n_bounces)]), "Position (x, y)"))
+        st.write(stPandas(np.array([
+            f"({x[0][bounce]}, {y[0][bounce]})" for bounce in range(n_bounces)
+        ]), "Position (x, y)"))
+
         if st.checkbox("See the particle in action", False):
             st.plotly_chart(animate_dot_2D(x=x[0][:n_bounces],
                                            y=y[0][:n_bounces],
@@ -142,7 +143,10 @@ def run(state):
         number of bounces.    
         """)
 
-        st_table = np.array([[f"({x[sim][bounce]}, {y[sim][bounce]})" for bounce in range(n_bounces)] for sim in range(n_sim)])
+        st_table = np.array([[
+                f"({x[sim][bounce]}, {y[sim][bounce]})" for bounce in range(n_bounces)
+            ] for sim in range(n_sim)
+        ])
         index = ["1st Particle", "2nd Particle", "3rd Particle"]
         index.extend([f"{i + 1}th Particle" for i in range(3, n_sim)])
         df = pd.DataFrame(data=st_table, index=index)
@@ -200,44 +204,57 @@ def run(state):
 
     with st.beta_expander("Imposing PDF of a Normal Distribution", expanded=True):
         st.markdown(f""" 
-        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk 1D</a>
+        As we saw in 
+        [Random walk 1D](https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D")
         that imposing PDF of a Normal distribution over our histogram don't help us answering (visually) that
-        do our "Particle's PMF of Position after ${n_bounces}$ bounces" approximates Multivariate Normal Distribution.<br>
+        do our "Particle's PMF of Position after ${n_bounces}$ bounces" approximates Multivariate Normal Distribution.  
         Let's see it ourselves, let's impose a Multivariate Normal Distribution with
         """, unsafe_allow_html=True)
         mean = [X.mean(), Y.mean()]
         st.latex("\\text{sample mean} = "+f"[\\mu_x = {mean[0]} , \\mu_y = {mean[1]}]")
         cov = np.cov(X, Y)
-        st.latex("\\text{sample covariance matrix} = \\begin{bmatrix} "+f"{'{:.2f}'.format(cov[0,0])} & {'{:.2f}'.format(cov[0,1])} \\\\ {'{:.2f}'.format(cov[1,0])} & {'{:.2f}'.format(cov[1,1])} "+" \\\\ \end{bmatrix}")
+        st.latex(f"""
+        \\text{{sample covariance matrix}} = \\begin{{bmatrix}} 
+        {'{:.2f}'.format(cov[0,0])} & {'{:.2f}'.format(cov[0,1])} \\\\ 
+        {'{:.2f}'.format(cov[1,0])} & {'{:.2f}'.format(cov[1,1])} \\\\ 
+        \\end{{bmatrix}}""")
 
         count = 20
         _X = np.outer(np.linspace(-5 * X.std() * X.mean(), 5 * X.std() * X.mean(), count), np.ones(count))
         _Y = _X.copy().T
         _X_v, _Y_v = _X.reshape(1, count * count)[0], _Y.reshape(1, count * count)[0]
-        pdf = multivariate_normal.pdf(np.vstack((_X_v, _Y_v)).T, mean=mean, cov=cov).reshape(count,count)
-        fig = surface_plot3D(x=_X, y=_Y, z=pdf,
-                             description={
-                                 "title": {
-                                     "main": f"Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
-                                     "x": f"Position(x) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
-                                     "y": f"Position(y) after {n_bounces} bounces/<br>Random draw from Bivariate Normal Distribution",
-                                     "z": f"PMF of Position(x, y) after {n_bounces} bounces/<br>PDF of Bivariate Normal Distribution"
-                                 },
-                                 "label": {
-                                     "main": "Bivariate Normal distribution"
-                                 },
-                                 "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>PDF((x, y)=(%{x}, %{y})): %{z}",
-                             },
-                             fig=fig,
-                             isMobile=state.isMobile)
+        pdf = multivariate_normal.pdf(
+            np.vstack((_X_v, _Y_v)).T, mean=mean, cov=cov
+        ).reshape(count, count)
+
+        fig = surface_plot3D(
+            x=_X, y=_Y, z=pdf,
+            description={
+             "title": {
+                 "main": f"Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
+                 "x": f"Position(x) after {n_bounces} bounces/<br>"
+                      f"Random draw from Bivariate Normal Distribution",
+                 "y": f"Position(y) after {n_bounces} bounces/<br>"
+                      f"Random draw from Bivariate Normal Distribution",
+                 "z": f"PMF of Position(x, y) after {n_bounces} bounces/<br>"
+                      f"PDF of Bivariate Normal Distribution"
+             },
+             "label": {
+                 "main": "Bivariate Normal distribution"
+             },
+             "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>PDF((x, y)=(%{x}, %{y})): %{z}",
+            },
+            fig=fig,
+            isMobile=state.isMobile)
+
         st.plotly_chart(fig, use_container_width=True)
 
     with st.beta_expander("Imposing CDF of a Bivariate Normal Distribution", expanded=True):
         st.markdown(f"""
-        As we saw in <a rel='noreferrer' target='_blank' href="https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D">Random walk 1D</a>
+        As we saw in [Random walk 1D](https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D)
         comparing CDFs is a good idea to see if one distribution coverges to another distribition.    
-        So let's see it ourselves, let's impose CDF of a Bivariate Normal Distribution with sample mean and sample covariance matrix,  
-        on CDF of Particle's PMF of Position after ${n_bounces}$ bounces.    
+        So let's see it ourselves, let's impose CDF of a Bivariate Normal Distribution with sample mean and 
+        sample covariance matrix, on CDF of Particle's PMF of Position after ${n_bounces}$ bounces.    
         Here,    
         <span class="l2">Blue curve is for CDF of Position after ${n_bounces}$ bounces</span>    
         <span class="l1">Red curve is for CDF of Bivariate distribution</span>    
@@ -248,40 +265,43 @@ def run(state):
         _Y_h = np.outer(Y, np.ones(len(Y))).T
         _Z_h = np.zeros(shape=_X_h.shape)
         for i in range(_Z_h.shape[0]):
-            _Z_h[i] = [((X < _X_h[i][j]) & (Y < _Y_h[i][j])).sum() for j in range(_Z_h.shape[1])]
-        _Z_h = _Z_h/_Z_h.max()
+            _Z_h[i] = [np.sum((X < _X_h[i][j]) & (Y < _Y_h[i][j])) for j in range(_Z_h.shape[1])]
+        _Z_h = _Z_h/np.max(_Z_h)
 
-        fig = surface_plot3D(x=_X_h, y=_Y_h,
-                             z=_Z_h,
-                             description={
-                                 "title": {
-                                     "main": f"CDF:<br>Particle's Position after {n_bounces} bounces/<br>Bivariate Normal Distribution",
-                                     "x": f"Position(x)",
-                                     "y": f"Position(y)",
-                                     "z": f"<b>CDF</b>"
-                                 },
-                                 "label": {
-                                     "main": "Position's CDF"
-                                 },
-                                 "hovertemplate": "Position(x, y) = (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
-                             },
-                             colorscale='Blues',
-                             opacity=0.01,
-                             isMobile=state.isMobile)
+        fig = surface_plot3D(
+            x=_X_h, y=_Y_h, z=_Z_h,
+            description={
+             "title": {
+                 "main": f"CDF:<br>Particle's Position after {n_bounces} bounces/<br>"""
+                         f"Bivariate Normal Distribution",
+                 "x": f"Position(x)",
+                 "y": f"Position(y)",
+                 "z": f"<b>CDF</b>"
+             },
+             "label": {
+                 "main": "Position's CDF"
+             },
+             "hovertemplate": "Position(x, y) = (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
+            },
+            colorscale='Blues',
+            opacity=0.01,
+            isMobile=state.isMobile
+        )
 
-        fig = surface_plot3D(x=_X,
-                             y=_Y,
-                             z=multivariate_normal.cdf(np.vstack((_X_v, _Y_v)).T, mean=mean, cov=cov).reshape(count, count),
-                             description={
-                                 "label": {
-                                     "main": "Bivariate distribution CDF"
-                                 },
-                                 "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
-                             },
-                             fig=fig,
-                             colorscale='Burg',
-                             opacity=1.0,
-                             isMobile=state.isMobile)
+        fig = surface_plot3D(
+            x=_X, y=_Y,
+            z=multivariate_normal.cdf(np.vstack((_X_v, _Y_v)).T, mean=mean, cov=cov).reshape(count, count),
+            description={
+             "label": {
+                 "main": "Bivariate distribution CDF"
+             },
+             "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>CDF((x, y)=(%{x}, %{y})): %{z}",
+            },
+            fig=fig,
+            colorscale='Burg',
+            opacity=1.0,
+            isMobile=state.isMobile
+        )
 
         st.plotly_chart(fig, use_container_width=True)
 

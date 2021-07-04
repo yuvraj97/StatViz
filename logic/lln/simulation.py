@@ -130,7 +130,8 @@ def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, stat
     fig.add_trace(go.Scatter(x=ns, y=average,
                              mode='lines',
                              name='Sample Average',
-                             hovertemplate='In this Simulation<br>For <b style="color:pink">Sample Size</b>=%{x}<br>Sample Average=%{y}',
+                             hovertemplate='In this Simulation<br>'
+                                           'For <b style="color:pink">Sample Size</b>=%{x}<br>Sample Average=%{y}',
                              line=dict(color='royalblue')))
     fig.add_trace(go.Scatter(x=ns, y=iid_rvs,
                              mode='markers',

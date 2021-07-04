@@ -1,6 +1,6 @@
 from typing import List
 import streamlit as st
-from distribution import distributions_properties, distribution2idx
+from distribution import distributions_properties
 
 chapters: List[str] = [
     "Introduction",
@@ -10,9 +10,6 @@ chapters: List[str] = [
     "Coming Soon",
     "About"
 ]
-
-def chapter2idx(chapter: str) -> int:
-    return chapters.index(chapter)
 
 chapters_acronyms: List[str] = [
     "Introduction",
@@ -25,17 +22,9 @@ chapters_acronyms: List[str] = [
 
 chapters_acronyms_lowercase: List[str] = [e.lower() for e in chapters_acronyms]
 
-def getChapterByURL(url: dict) -> str:
-    if "ch" in url and url["ch"][0].lower() in chapters_acronyms_lowercase:
-        chapter = url["ch"][0].lower()
-    else:
-        chapter = None
-    return chapter
-
 def getChapterIndexByURL(url: dict) -> int:
-    chapter_acronym = getChapterByURL(url)
-    idx = chapters_acronyms_lowercase.index(chapter_acronym) if chapter_acronym is not None else 0
-    return idx
+    if "ch" not in url or url["ch"][0].lower() not in chapters_acronyms_lowercase: return 0
+    return chapters_acronyms_lowercase.index(url["ch"][0].lower())
 
 def set_get_URL(ch: str = None,
                 url: dict = None,
@@ -59,9 +48,9 @@ def urlIndex(url: dict) -> int:
         return 0
     dist_name = url["dist"][0]
     idx = 0
-    for dist in distributions_properties.keys():
+    for dist in distributions_properties:
         if distributions_properties[dist]["name"] == dist_name:
-            idx = distribution2idx[dist]
+            idx = distributions_properties[dist]["idx"]
             break
     return idx
 
@@ -78,22 +67,6 @@ def setMetaTags(meta_data):
         meta.setAttribute("property", "twitter:image");
         meta.content = "{meta_data["image-url"]}";
         """
-    # components.html("""
-    # <script>
-    #     document.querySelectorAll('meta[name="description"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="og:type"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="og:url"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="og:title"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="og:description"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="twitter:card"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="twitter:url"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="twitter:title"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="twitter:description"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="twitter:card"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="og:image"]').forEach(function(element, index){element.remove()});
-    #     document.querySelectorAll('meta[property="twitter:image"]').forEach(function(element, index){element.remove()});
-    # </script>
-    # """, height=0, width=0)
     components.html(f"""
     <script>
         var meta = parent.document.getElementById("description");

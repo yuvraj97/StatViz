@@ -13,8 +13,7 @@ def get_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
     parameters: str = ""
     i = 0
     for parameter in distributions_properties[dist]["stSlider"]:
-        parameters += """- """ + distributions_properties[dist]["parameters"][i] + """: $""" + str(_vars[parameter]) + """$
-"""
+        parameters += f"""- {distributions_properties[dist]["parameters"][i]} : ${_vars[parameter]}$\n"""
         i += 1
     return parameters
 
