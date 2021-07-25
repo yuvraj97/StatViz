@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
 import scipy
 import streamlit as st
 from scipy.stats import bernoulli, geom, binom, poisson
@@ -31,7 +31,7 @@ n: Dict[str, int] = {
 #     "Exp(λ)": "expon"
 # }
 
-distributions_properties: dict[str, Union[dict[str, Union[str, int, bool, list[str], dict[str, int], dict[str, dict[str, float]]]], dict[str, Union[str, int, bool, list[str], dict[str, int], dict[str, Union[dict[str, int], dict[str, float]]]]]]] = {
+distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
     "norm": {
         "name": "Normal distribution",
         "repr": "Gaussian(μ, σ)",
@@ -201,7 +201,7 @@ def stDistribution(idx=0,
                    default_values: Dict[str, Dict[str, int]] = None,
                    n_simulations: bool = False,
                    seed: Union[int, None] = None
-                   ) -> tuple[dict[str, Union[str, int, None, dict[str, int]]], dict[str, Union[int, float]]]:
+                   ) -> Tuple[Dict[str, Union[str, int, None, Dict[str, int]]], Dict[str, Union[int, float]]]:
 
     if seed is None:
         seed: Union[int, None] = st.sidebar.number_input(

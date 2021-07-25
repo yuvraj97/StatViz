@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 import scipy.stats
 from PIL import Image
-from typing import Union, List
+from typing import Union, List, Dict
 from scipy.stats import norm
 from Chapters.utils.utils import get_parameters
 from utils import set_get_URL, urlIndex
@@ -14,8 +14,8 @@ from distribution import distributions_properties, stDistribution
 
 
 def stDisplay(
-        dist_vars: dict[str, Union[str, int, None, dict[str, int]]],
-        dist_params: dict[str, Union[int, float]],
+        dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]],
+        dist_params: Dict[str, Union[int, float]],
         state):
 
     n_population: int = dist_vars["n"]["population"]
@@ -271,8 +271,8 @@ def stDisplay(
 
 def main(state):
 
-    dist_vars: dict[str, Union[str, int, None, dict[str, int]]]
-    dist_params: dict[str, Union[int, float]]
+    dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
+    dist_params: Dict[str, Union[int, float]]
     dist_vars, dist_params = stDistribution(urlIndex(state.url), default_values={
         "sample": {
             "min_value": 1,

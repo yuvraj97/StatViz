@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 from plotly.graph_objs import Figure
-from typing import Union
+from typing import Union, Dict
 
 import Chapters.Law_of_Large_Number.utils as lln
 from Chapters.utils.utils import get_parameters
@@ -14,9 +14,9 @@ from utils import set_get_URL, urlIndex
 
 
 def stDisplay(
-        dist_vars: dict[str, Union[str, int, None, dict[str, int]]],
-        dist_params: dict[str, Union[int, float]],
-        var: dict[str, Union[float, np.ndarray, Figure]],
+        dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]],
+        dist_params: Dict[str, Union[int, float]],
+        var: Dict[str, Union[float, np.ndarray, Figure]],
         state) -> None:
 
     parameters: str = get_parameters(dist_vars["dist"], dist_params)
@@ -152,8 +152,8 @@ def stDisplay(
 
 
 def main(state):
-    dist_vars: dict[str, Union[str, int, None, dict[str, int]]]
-    dist_params: dict[str, Union[int, float]]
+    dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
+    dist_params: Dict[str, Union[int, float]]
     dist_vars, dist_params = stDistribution(urlIndex(state.url))
 
     set_get_URL(parameters={
@@ -161,7 +161,7 @@ def main(state):
         "topic": "remove"
     })
 
-    var: dict[str, Union[float, np.ndarray, Figure]] = lln.run(
+    var: Dict[str, Union[float, np.ndarray, Figure]] = lln.run(
         dist_vars["dist"], dist_params, dist_vars["n"], state, dist_vars["seed"]
     )
 

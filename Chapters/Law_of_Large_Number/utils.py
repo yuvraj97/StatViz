@@ -69,7 +69,7 @@ def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, stat
 def run(dist: str,
         var: Dict[str, Union[int, float]],
         n: Dict[str, int],
-        state, seed=None) -> dict[str, Union[float, np.ndarray, Figure]]:
+        state, seed=None) -> Dict[str, Union[float, np.ndarray, Figure]]:
 
     iscontinuous: bool = distributions_properties[dist]["iscontinuous"]
     n_population: int = n["population"]
