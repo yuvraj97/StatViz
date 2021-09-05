@@ -1,57 +1,47 @@
+import traceback
+
 import streamlit as st
-import SessionState
 import success
 
 
+
 def main():
-    cover_img = st.sidebar.empty()
-    state.experimental_rerun = False
-    state.url = state.url if state.url is not None else st.experimental_get_query_params()
-    state.isMobile = True if (SessionState.get_cookie("notDesktop") == "true") else False
+    """
+    We will never use it in production it will came handy in development
+    :return: None
+    """
 
-    cover_img.markdown(f"""
-    <br><br>
-    <a rel='noreferrer' target='_blank' href="https://www.quantml.org/">
-        <img src="https://cdn.quantml.org/img/cover.webp" alt="QuantML" width="100%">
-    </a><br>""", unsafe_allow_html=True)
+    chapters = [
+        "Introduction",
+        "Law of Large Number",
+        "Central Limit Theorem",
+        "Gaussian Distribution",
+        "Coming Soon",
+        "About"
+    ]
 
-    success.main(state)
+    if "chapter" in st.session_state:
+        prev_idx = st.session_state["chapter"]
+    else:
+        params = st.experimental_get_query_params()
+        prev_idx = chapters.index(params["chapter"][0]) if "chapter" in params else 0
+
+    chapter = chapters[prev_idx]
+    exec(f"from Chapters.{chapter.replace(' ', '_')}.run import main;main()")
+
+    st.sidebar.write("-----")
+    chapter: str = st.sidebar.selectbox("Choose Chapter", chapters, index=prev_idx)
+    chosen_idx = chapters.index(chapter)
+    if prev_idx != chosen_idx:
+        st.session_state["chapter"] = chosen_idx
+        st.experimental_rerun()
+    st.experimental_set_query_params(**{"chapter": chapter})
 
 
 if __name__ == '__main__':
-    # st.set_page_config(
-    #     layout='centered',
-    #     initial_sidebar_state='expanded'
-    # )
-    error = st.empty()
-    state = SessionState.get_state()
 
-    # noinspection PyBroadException
-    # try:
-    main()
-    # except Exception:
-    #     error.markdown("""
-    #     Unexpected error occurred please **try refreshing page**.
-    #     **"CTRL + R"** or **"F5"**
-    #     """)
-
-    st.sidebar.write("-----")
-    st.sidebar.write("""
-    If you like this project, <br> then give it a ⭐ on [GitHub](https://github.com/yuvraj97/apps)
-    <iframe 
-        src="https://ghbtns.com/github-btn.html?user=yuvraj97&repo=apps&type=star&count=true&size=large" 
-        frameborder="0" scrolling="0" width="170" height="30" title="GitHub">
-    </iframe>""", unsafe_allow_html=True)
-
-    st.sidebar.markdown("## Connect")
-    st.sidebar.write("""
-    <iframe 
-        src="https://ghbtns.com/github-btn.html?user=yuvraj97&type=follow&count=true&size=large" 
-        frameborder="0" scrolling="0" width="250" height="30" title="GitHub">
-    </iframe>""", unsafe_allow_html=True)
-    st.sidebar.markdown("""
-    [Donate Here if you like this project](http://www.quantml.org/donate)    
-    LinkedIn: [yuvraj97](https://www.linkedin.com/in/yuvraj97/)    
-    Github: [yuvraj97](https://github.com/yuvraj97/)    
-    Email: [yuvraj@quantml.org](mailto:yuvraj@quantml.org)
-    """, unsafe_allow_html=True)
+    try:
+        main()
+    except Exception as e:
+        traceback.print_exc()
+        st.error("Something went wrong!")
