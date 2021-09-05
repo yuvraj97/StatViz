@@ -228,7 +228,7 @@ def stDistribution(idx=0,
         )
         dist: str = repr2dist(dist_repr)
 
-    st_population, st_samples = st.sidebar.beta_columns([1, 1])
+    st_population, st_samples = st.sidebar.columns([1, 1])
     _n: Dict[str, int] = {
         "population": st_population.number_input(
             "Enter Population size",

@@ -22,10 +22,10 @@ def run():
     """)
 
     p: float = 0.5
-    with st.sidebar.beta_container():
+    with st.sidebar.container():
         add_bias: bool = st.checkbox("Add bias")
-        st_seed_p = st.beta_columns([1, 1] if add_bias else [1])
-        st_bounce_sim = st.beta_columns([1, 1])
+        st_seed_p = st.columns([1, 1] if add_bias else [1])
+        st_bounce_sim = st.columns([1, 1])
 
         seed: Union[int, None] = st_seed_p[0].number_input(
             "Enter Seed (-1 mean seed is disabled)",
@@ -65,7 +65,7 @@ def run():
 
     random_walks = np.array([np.cumsum(np.random.choice([+1, -1], 100, p=[p, 1 - p])) for _ in range(500)])
 
-    with st.beta_expander("Scenario", expanded=True):
+    with st.expander("Scenario", expanded=True):
         st.markdown(f"""
         Say you have a very thin pipe and you place a crazy particle inside that pipe.    
         Say that initial location of particle is $x=0$    
@@ -77,7 +77,7 @@ def run():
         """)
         st.write(stPandas(random_walks[0], label="Position"))
 
-    with st.beta_expander("Getting Data", expanded=True):
+    with st.expander("Getting Data", expanded=True):
         st.markdown(f"""
         Data we see above is just for a single observation, we need multiple observations of in order to
         study position after ${n_bounces}$ bounces.    
@@ -91,7 +91,7 @@ def run():
         df.columns += 1
         st.write(df)
 
-    with st.beta_expander(f"Getting particle's position after {n_bounces} bounces", expanded=True):
+    with st.expander(f"Getting particle's position after {n_bounces} bounces", expanded=True):
         st.markdown(f"""
         Now we want to study particle's position after ${n_bounces}$ bounces.    
         We have our data of ${n_sim}$ particles with ${n_bounces}$ bounces each.    
@@ -138,7 +138,7 @@ def run():
     "Particle's PMF of Position after ${n_bounces}$ bounces" approximates a Normal Distribution or not.
     """)
 
-    with st.beta_expander("Imposing PDF of a Normal Distribution", expanded=True):
+    with st.expander("Imposing PDF of a Normal Distribution", expanded=True):
         st.markdown(f""" 
         **Question:** Can we impose a PDF of a Normal Distribution over our histogram 
         and see if it fit's the histogram nicely?    
@@ -173,7 +173,7 @@ def run():
         )
         st.plotly_chart(fig, use_container_width=True)
 
-    with st.beta_expander("Imposing CDF of a Normal Distribution", expanded=True):
+    with st.expander("Imposing CDF of a Normal Distribution", expanded=True):
         st.markdown(f"""
         **Question:** Can we impose a **CDF** of a Normal Distribution over our histogram
         and see if it fit's the histogram nicely?    
@@ -219,7 +219,7 @@ def run():
 
         st.plotly_chart(fig, use_container_width=True)
 
-    with st.beta_expander("But why Normal Distribution?", expanded=True):
+    with st.expander("But why Normal Distribution?", expanded=True):
         st.markdown(f"""
         Ok we get it that Particle's PMF of Position after ${n_bounces}$ bounces approximates to a 
         Normal Distribution (as number of bounces increases), but why Normal Distribution?  

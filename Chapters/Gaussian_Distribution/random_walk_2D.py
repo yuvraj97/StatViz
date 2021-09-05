@@ -23,10 +23,10 @@ def get_st_probability(max_bounces, max_sim):
     )
     if seed == -1: seed = None
 
-    with st.sidebar.beta_container():
+    with st.sidebar.container():
         add_bias: bool = st.checkbox("Add bias")
         if add_bias:
-            st_u, st_r, st_l = st.beta_columns([1, 1, 1])
+            st_u, st_r, st_l = st.columns([1, 1, 1])
             p_up_max = 1.0
             if p_up_max <= 0: return None
             p_up: float = st_u.slider(
@@ -57,7 +57,7 @@ def get_st_probability(max_bounces, max_sim):
             p_down: float = 1 - p_up - p_right - p_left
             if p_down <= 0: return None
 
-        st_bounces, st_sim = st.beta_columns([1, 1])
+        st_bounces, st_sim = st.columns([1, 1])
         n_bounces: int = st_bounces.slider(
             "Number of bounces (N)",
             min_value=1,
@@ -78,7 +78,6 @@ def get_st_probability(max_bounces, max_sim):
 
 def run():
 
-    state = st.session_state()
     st.markdown("""
         Now let's see how Random walk in $2$ Dimension results in a
         [Multivariate Gaussian distribution](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)
@@ -121,7 +120,7 @@ def run():
             else:
                 x[sim][bounce], y[sim][bounce] = x[sim][bounce - 1] - 1, y[sim][bounce - 1]
 
-    with st.beta_expander("Scenario", expanded=True):
+    with st.expander("Scenario", expanded=True):
         st.markdown(f"""
         Let's assume that there is a crazy particle wandering on a $2$-Dimensional surface.    
         Say that initial location of particle is origin $(x=0, y=0)$    
@@ -147,7 +146,7 @@ def run():
                                            title="Single Particle Random walk",
                                            button_label="Start"))
 
-    with st.beta_expander("Getting Data", expanded=True):
+    with st.expander("Getting Data", expanded=True):
         st.markdown(f"""
         Data we see above is a random walk of a single particle, it's just a single observation,
         we need multiple observations of in order to study position after ${n_bounces}$ bounces.    
@@ -165,7 +164,7 @@ def run():
         df.columns += 1
         st.write(df)
 
-    with st.beta_expander(f"Getting particle's position after {n_bounces} bounces", expanded=True):
+    with st.expander(f"Getting particle's position after {n_bounces} bounces", expanded=True):
         st.markdown(f"""
         Now we want to study particle's position after ${n_bounces}$ bounces.    
         We have our data of ${n_sim}$ particles with ${n_bounces}$ bounces each.    
@@ -215,7 +214,7 @@ def run():
     Multivariate Normal Distribution or not.
     """)
 
-    with st.beta_expander("Imposing PDF of a Normal Distribution", expanded=True):
+    with st.expander("Imposing PDF of a Normal Distribution", expanded=True):
         st.markdown(f""" 
         As we saw in 
         [Random walk 1D](https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D")
@@ -263,7 +262,7 @@ def run():
 
         st.plotly_chart(fig, use_container_width=True)
 
-    with st.beta_expander("Imposing CDF of a Bivariate Normal Distribution", expanded=True):
+    with st.expander("Imposing CDF of a Bivariate Normal Distribution", expanded=True):
         st.markdown(f"""
         As we saw in [Random walk 1D](https://app.quantml.org/statistics/?ch=Gaussian-Distribution&topic=Random+walk+2D)
         comparing CDFs is a good idea to see if one distribution coverges to another distribition.    

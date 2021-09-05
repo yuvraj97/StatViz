@@ -35,11 +35,11 @@ def stDisplay(
         
 {parameters}
         """
-    with st.beta_expander("Truth", expanded=True):
+    with st.expander("Truth", expanded=True):
         st.markdown("""Let's, first define the **Truth**, in this case the truth is,""")
         st.markdown(truth)
 
-    with st.beta_expander("Probability", expanded=True):
+    with st.expander("Probability", expanded=True):
         st.markdown(f"""
         *Here we use probability to generate our data using the **Truth** we defined above.*   
         Using the knowledge of truth we generate a (synthetic) population of
@@ -77,7 +77,7 @@ def stDisplay(
         **{distributions_properties[dist_vars["dist"]]["name"]}**,
         {distributions_properties[dist_vars["dist"]]["latex"]}""")
 
-    with st.beta_expander("Observation", expanded=True):
+    with st.expander("Observation", expanded=True):
         st.markdown(f"""
         *Here we took a sample from our population.*   
         Now we have our ${dist_vars["n"]["population"]}$ **observations**,
@@ -109,7 +109,7 @@ def stDisplay(
         sample.columns += 1
         st.write(sample)
 
-    with st.beta_expander("Statistics", expanded=True):
+    with st.expander("Statistics", expanded=True):
         st.plotly_chart(pdf, use_container_width=True)
         st.markdown(f"""
         So now we have ${dist_vars["n"]["samples"]}$ Random variables,

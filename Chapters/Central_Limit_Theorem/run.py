@@ -21,14 +21,14 @@ def stDisplay(
     n_sample: int = dist_vars["n"]["samples"]
     n_simulations: int = dist_vars["n"]["simulations"]
 
-    with st.beta_expander("Scenario", expanded=True):
+    with st.expander("Scenario", expanded=True):
         st.markdown(f"""
         Assume that there are ${n_population}$ students in your school and you want to know,
         what is the average height of ${n_sample}$ randomly selected students?
         And how is that average height distributed (or say the distribution of that average height)?<br>
         """)
 
-    with st.beta_expander("How CLT can help us", expanded=True):
+    with st.expander("How CLT can help us", expanded=True):
         st.markdown("Central Limit Theorem says that,")
         st.info(f"""
         As $n\\to \\infty$ then **CDF**
@@ -51,7 +51,7 @@ def stDisplay(
 
     parameters: str = get_parameters(dist_vars["dist"], dist_params)
 
-    with st.beta_expander("Truth", expanded=True):
+    with st.expander("Truth", expanded=True):
         st.markdown("""Let's, first define the **Truth**, in this case the truth is,""")
         st.markdown(f"""
         - Data is drawn from a **{distributions_properties[dist_vars["dist"]]["name"]}**,
@@ -59,7 +59,7 @@ def stDisplay(
 {parameters}
         """)
 
-    with st.beta_expander("Probability", expanded=True):
+    with st.expander("Probability", expanded=True):
         st.markdown(f"""
         Now we have defined that students height is distributed according to
         {distributions_properties[dist_vars["dist"]]["name"]}.   
@@ -116,7 +116,7 @@ def stDisplay(
         samples.append(sample)
         sample_means[k] = np.mean(sample)
 
-    with st.beta_expander("Observation", expanded=True):
+    with st.expander("Observation", expanded=True):
         st.markdown(f"""
         Now lets take ${n_simulations}$ samples from our population of ${n_population}$ students, and each sample
         consists of ${n_sample}$ observations of random student's height.    
@@ -143,7 +143,7 @@ def stDisplay(
                 del population_pd
         del samples
 
-    with st.beta_expander("Statistics", expanded=True):
+    with st.expander("Statistics", expanded=True):
         st.markdown(f"""
         Now we have {n_simulations} samples.   
         According to **CLT** distribution of sample mean $\\overline X_n$ converges to Normal distribution for larger
@@ -155,7 +155,7 @@ def stDisplay(
                                   ("Use Estimated mean & variance", "Use True mean & variance"))
         use_estimated = True if true_estimated == "Use Estimated mean & variance" else False
 
-        col = st.beta_columns([1, 30])
+        col = st.columns([1, 30])
         with col[0]:
             use_centered_dist: bool = st.checkbox(" ", False)
         with col[1]:
