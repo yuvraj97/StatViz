@@ -22,8 +22,6 @@ def main():
         "Law of Large Number",
         "Central Limit Theorem",
         "Gaussian Distribution",
-        "Coming Soon",
-        "About"
     ]
 
     if "chapter" in st.session_state:
