@@ -12,13 +12,28 @@ def main():
     """)
 
     st.markdown("""
-   ## Table of Content
-   [$1.$ **Introduction:**](https://app.quantml.org/machine-learning/introduction/)  
-   [$2.$ **Logistic Regression:**](https://app.quantml.org/machine-learning/logistic-regression/)  
-   [$3.$ **K-Means Clustering**](https://app.quantml.org/machine-learning/k-means-clustering/)
-
-    ### Concepts that are planned to be covered:    
+    ## Table of Content
+    [$1.$ **Introduction:**](https://app.quantml.org/statistics/introduction/)  
     
+    [$2.$ **Law of Large Number:**](https://app.quantml.org/statistics/law-of-large-number/)  
+    
+    [$3.$ **Central Limit Theorem**](https://app.quantml.org/statistics/central-limit-theorem/)  
+    
+    [$4.$ **Gaussian Distribution**](https://app.quantml.org/statistics/gaussian-distribution/)  
+      - [**Random Walk 2D**](https://app.quantml.org/statistics/gaussian-distribution/?topic=Random+Walk+1D)  
+      - [**Random Walk 3D**](https://app.quantml.org/statistics/gaussian-distribution/?topic=Random+Walk+2D)  
+    """)
+
+    st.write("")
+    st.write("")
+
+    st.warning("""
+    This app is on hold for time being, at-least till **November 2021**.
+    """)
+
+    st.markdown("""
+    ## Concepts planned to be covered:
+            
     - Confidence Intervals
     - Hypothesis Testing
     - Type 1 and Type 2 errors
@@ -49,4 +64,3 @@ def main():
     - GLM: Link Functions and the Canonical Link Function
     - [etc.]
        """)
-

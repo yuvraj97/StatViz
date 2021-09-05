@@ -3,6 +3,11 @@ import traceback
 import streamlit as st
 import success
 
+# NEED TO BE CHANGE
+# NEED TO BE CHANGE
+# NEED TO BE CHANGE
+# NEED TO BE CHANGE
+# NEED TO BE CHANGE
 
 
 def main():
@@ -12,6 +17,7 @@ def main():
     """
 
     chapters = [
+        "Statistics",
         "Introduction",
         "Law of Large Number",
         "Central Limit Theorem",
