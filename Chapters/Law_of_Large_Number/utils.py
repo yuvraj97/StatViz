@@ -8,7 +8,7 @@ from Chapters.utils.plots import get_pdf
 from Chapters.utils.distribution import distributions_properties, get_distribution, graph_label
 
 
-def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, state) -> Figure:
+def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str) -> Figure:
     ns = np.linspace(1, n_samples, n_samples, dtype=int)
 
     # sample mean for each n
@@ -63,7 +63,9 @@ def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, stat
     fig.update_layout(title=name,
                       xaxis_title='Sample Size',
                       yaxis_title='<b>iid</b> Random Variable')
-    fig.update_layout(showlegend=False if state.isMobile else True)
+    # fig.update_layout(showlegend=False if state.isMobile else True)
+    # NEED TO BE CHANGE
+    fig.update_layout(showlegend=True)
     return fig
 
 
@@ -84,7 +86,7 @@ def run(dist: str,
     if seed is not None: np.random.seed(seed)
     pdf_plot: Figure = get_pdf(iid_rvs, pdf_rvs, name, iscontinuous)
     if seed is not None: np.random.seed(seed)
-    simulation_plot: Figure = simulation(iid_rvs, mean, n_samples, name, state)
+    simulation_plot: Figure = simulation(iid_rvs, mean, n_samples, name)
     return {
         "mean": mean,
         "population": population,

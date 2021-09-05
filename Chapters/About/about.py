@@ -2,7 +2,7 @@ import streamlit as st
 from utils.utils import set_get_URL
 
 
-def main(state):
+def main():
     set_get_URL(parameters={
         "dist": "remove",
         "topic": "remove"

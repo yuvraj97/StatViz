@@ -15,8 +15,7 @@ from Chapters.utils.distribution import distributions_properties, stDistribution
 
 def stDisplay(
         dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]],
-        dist_params: Dict[str, Union[int, float]],
-        state):
+        dist_params: Dict[str, Union[int, float]]):
 
     n_population: int = dist_vars["n"]["population"]
     n_sample: int = dist_vars["n"]["samples"]
@@ -46,7 +45,7 @@ def stDisplay(
     [Remember the Central Dogma of Probability and Statistics](https://read.quantml.org/statistics/introduction/#dogma)
     """)
 
-    image_path = os.path.join(os.getcwd(), "img-dark" if state.theme == "dark" else "img", "dogma.png")
+    image_path = os.path.join(os.getcwd(), "img", "dogma.png")
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
@@ -89,7 +88,7 @@ def stDisplay(
              }
             },
             num_bins=len(np.unique(population)) // 4,
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -179,7 +178,8 @@ def stDisplay(
             },
             num_bins=len(np.unique(sample_means)) // 2,
             convert_into_probability_plot=True,
-            isMobile=state.isMobile)
+            isMobile=False  # NEED TO BE CHANGE
+        )
 
         st.plotly_chart(fig, use_container_width=True)
 
@@ -211,7 +211,7 @@ def stDisplay(
             },
             fig=fig,
             mode="lines",
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -232,7 +232,7 @@ def stDisplay(
             "color": "green"
         },
         mode="lines",
-        isMobile=state.isMobile
+        isMobile=False  # NEED TO BE CHANGE
     )
 
     fig = line_plot(
@@ -253,7 +253,7 @@ def stDisplay(
         },
         fig=fig,
         mode="markers",
-        isMobile=state.isMobile
+        isMobile=False  # NEED TO BE CHANGE
     )
     st.plotly_chart(fig, use_container_width=True)
     st.markdown("""
@@ -269,11 +269,11 @@ def stDisplay(
     """)
 
 
-def main(state):
+def main():
 
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
-    dist_vars, dist_params = stDistribution(urlIndex(state.url), default_values={
+    dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()), default_values={
         "sample": {
             "min_value": 1,
             "max_value": 40,
@@ -287,4 +287,4 @@ def main(state):
         "topic": "remove"
     })
 
-    stDisplay(dist_vars, dist_params, state)
+    stDisplay(dist_vars, dist_params)

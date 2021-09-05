@@ -76,7 +76,9 @@ def get_st_probability(max_bounces, max_sim):
     return (p_up, p_down, p_right, p_left), (n_bounces, n_sim), seed
 
 
-def run(state):
+def run():
+
+    state = st.session_state()
     st.markdown("""
         Now let's see how Random walk in $2$ Dimension results in a
         [Multivariate Gaussian distribution](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)
@@ -200,9 +202,10 @@ def run(state):
             bins=(25, 25),
             convert_into_probability_plot=True,
             fig=None,
-            isMobile=state.isMobile,
             showlegend=False,
-            tilda=" ~ ")
+            tilda=" ~ ",
+            isMobile=False  # NEED TO BE CHANGE
+        )
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown(f"""
@@ -255,7 +258,8 @@ def run(state):
                 "hovertemplate": "Random draw(x, y): (%{x}, %{y})<br>PDF((x, y)=(%{x}, %{y})): %{z}",
             },
             fig=fig,
-            isMobile=state.isMobile)
+            isMobile=False  # NEED TO BE CHANGE
+        )
 
         st.plotly_chart(fig, use_container_width=True)
 
@@ -295,7 +299,7 @@ def run(state):
             },
             colorscale='Blues',
             opacity=0.01,
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
 
         fig = surface_plot3D(
@@ -310,7 +314,7 @@ def run(state):
             fig=fig,
             colorscale='Burg',
             opacity=1.0,
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
 
         st.plotly_chart(fig, use_container_width=True)

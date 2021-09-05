@@ -16,15 +16,14 @@ from utils.utils import set_get_URL, urlIndex
 def stDisplay(
         dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]],
         dist_params: Dict[str, Union[int, float]],
-        var: Dict[str, Union[float, np.ndarray, Figure]],
-        state) -> None:
+        var: Dict[str, Union[float, np.ndarray, Figure]]) -> None:
 
     parameters: str = get_parameters(dist_vars["dist"], dist_params)
     pdf: Figure
     simulation: Figure
     pdf, simulation = var["pdf_plot"], var["simulation_plot"]
 
-    image_path = os.path.join(os.getcwd(), "img" if state.theme != "dark" else "img-dark", "dogma.png")
+    image_path = os.path.join(os.getcwd(), "img", "dogma.png")
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
@@ -151,10 +150,10 @@ def stDisplay(
     """)
 
 
-def main(state):
+def main():
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
-    dist_vars, dist_params = stDistribution(urlIndex(state.url))
+    dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()))
 
     set_get_URL(parameters={
         "dist": distributions_properties[dist_vars["dist"]]["name"],
@@ -162,7 +161,7 @@ def main(state):
     })
 
     var: Dict[str, Union[float, np.ndarray, Figure]] = lln.run(
-        dist_vars["dist"], dist_params, dist_vars["n"], state, dist_vars["seed"]
+        dist_vars["dist"], dist_params, dist_vars["n"], dist_vars["seed"]
     )
 
-    stDisplay(dist_vars, dist_params, var, state)
+    stDisplay(dist_vars, dist_params, var)

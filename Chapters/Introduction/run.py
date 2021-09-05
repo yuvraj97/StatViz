@@ -170,7 +170,7 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
     </blockquote>""", unsafe_allow_html=True)
 
 
-def main(state):
+def main():
     set_get_URL(parameters={
         "dist": "remove",
         "topic": "remove"

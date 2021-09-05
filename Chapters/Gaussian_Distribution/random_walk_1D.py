@@ -9,7 +9,8 @@ from Chapters.utils.utils import stPandas
 from Chapters.utils.plots import plot_histogram, line_plot
 
 
-def run(state):
+def run():
+
     st.markdown("""
     We can find Random walk everywhere like in
     [Brownian motion](https://en.wikipedia.org/wiki/Brownian_motion),
@@ -121,12 +122,12 @@ def run(state):
             }
         },
         convert_into_probability_plot=True,
-        isMobile=state.isMobile,
         tilde_equals="=",
         bins=bins,
         counts=counts,
         centralize_bins=False,
-        showlegend=False
+        showlegend=False,
+        isMobile=False  # NEED TO BE CHANGE
     )
     st.plotly_chart(fig, use_container_width=True)
 
@@ -168,7 +169,7 @@ def run(state):
             },
             fig=fig,
             mode="lines",
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -191,7 +192,7 @@ def run(state):
                 "color": "green"
             },
             mode="lines",
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
 
         fig = line_plot(
@@ -213,7 +214,7 @@ def run(state):
             },
             fig=fig,
             mode="markers",
-            isMobile=state.isMobile
+            isMobile=False  # NEED TO BE CHANGE
         )
 
         st.plotly_chart(fig, use_container_width=True)
