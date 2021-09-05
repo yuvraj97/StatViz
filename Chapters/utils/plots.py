@@ -41,6 +41,7 @@ def plot_binary_data(info: Dict[str, Union[str, int]], seed: Union[int, None]) -
     )
     return fig
 
+
 def plot_histogram(data: np.ndarray,
                    description: Dict[str, Union[str, Dict[str, str]]],
                    num_bins: int = -1,
@@ -68,19 +69,19 @@ def plot_histogram(data: np.ndarray,
     }
     """
     if num_bins == -1 and bins is None:
-        num_bins = len(np.unique(data))//4
+        num_bins = len(np.unique(data)) // 4
     if bins is None:
         bins = np.linspace(np.min(data), np.max(data), num_bins)
     if counts is None: counts, bins = np.histogram(data, bins=bins)
     if centralize_bins: bins = 0.5 * (bins[:-1] + bins[1:])
     if convert_into_probability_plot:
-        counts = counts/counts.sum()
+        counts = counts / counts.sum()
         if "force" in description['title'] and description['title']['force']:
             description["title"]["y"] = f"Probability of {description['title']['x']}<br>Falling into particular bin"
-        hovertemplate = f"{description['label']['x']} (x)  {tilde_equals}  %{{x}}<br>"\
+        hovertemplate = f"{description['label']['x']} (x)  {tilde_equals}  %{{x}}<br>" \
                         f"Probability(x {tilde_equals}  %{{x}}): %{{y}}"
     else:
-        hovertemplate = f"{description['label']['x']} (x)  {tilde_equals}  %{{x}}<br>"\
+        hovertemplate = f"{description['label']['x']} (x)  {tilde_equals}  %{{x}}<br>" \
                         f"{description['label']['y']} (x {tilde_equals}  %{{x}}): %{{y}}"
     if fig is None: fig: Figure = go.Figure()
     fig.add_trace(go.Bar(x=bins,
@@ -94,6 +95,7 @@ def plot_histogram(data: np.ndarray,
                       yaxis_title=description["title"]["y"])
     fig.update_layout(showlegend=False if isMobile or not showlegend else True)
     return fig, (counts, bins)
+
 
 def line_plot(x: np.ndarray,
               y: np.ndarray,
@@ -128,6 +130,7 @@ def line_plot(x: np.ndarray,
         if "y" in description["title"]: fig.update_layout(yaxis_title=description["title"]["y"])
     fig.update_layout(showlegend=False if isMobile else True)
     return fig
+
 
 def plot_histogram3D(x: np.ndarray,
                      y: np.ndarray,
@@ -217,10 +220,10 @@ def plot_histogram3D(x: np.ndarray,
 
     if convert_into_probability_plot:
         Z = Z / Z.sum()
-        hovertemplate = f"{description['label']['x']} {tilda} %{{x}}<br>{description['label']['y']} {tilda} %{{y}}<br>"\
+        hovertemplate = f"{description['label']['x']} {tilda} %{{x}}<br>{description['label']['y']} {tilda} %{{y}}<br>" \
                         f"Probability(x {tilda} %{{x}} and y {tilda} %{{y}}): %{{z}}"
     else:
-        hovertemplate = f"{description['label']['x']} {tilda} %{{x}}<br>{description['label']['y']} {tilda} %{{y}}<br>"\
+        hovertemplate = f"{description['label']['x']} {tilda} %{{x}}<br>{description['label']['y']} {tilda} %{{y}}<br>" \
                         f"{description['label']['x']}(x {tilda} %{{x}} and y {tilda} %{{y}}): %{{z}}"
 
     if fig is None: fig: Figure = go.Figure()
@@ -237,11 +240,12 @@ def plot_histogram3D(x: np.ndarray,
                       yaxis_title=description["title"]["y"],
                       # zaxis_title=description["title"]["z"],
                       scene=dict(
-                           camera_eye_x=-1.25,
-                           camera_eye_y=1.25,
-                           camera_eye_z=1.25),
+                          camera_eye_x=-1.25,
+                          camera_eye_y=1.25,
+                          camera_eye_z=1.25),
                       showlegend=False if isMobile or not showlegend else True)
     return fig
+
 
 def surface_plot3D(x, y, z,
                    description: dict,
@@ -296,6 +300,7 @@ def animate_dot_2D(x, y, title, button_label="Start"):
     )
     return fig
 
+
 def simulation_mpl(distribution, n_samples, name=""):
     fig = plt.figure()
     ax = fig.gca()
@@ -326,7 +331,8 @@ def simulation_mpl(distribution, n_samples, name=""):
     ax.legend(**legend_args, fontsize=12)
     return fig
 
-def continuous_chart(fig: Figure, iid_rvs:  np.ndarray, pdf_rvs: np.ndarray) -> None:
+
+def continuous_chart(fig: Figure, iid_rvs: np.ndarray, pdf_rvs: np.ndarray) -> None:
     std = np.std(iid_rvs)
     pdf_lower, pdf_upper = pdf_rvs - std / 2, pdf_rvs + std / 2
     fig.add_trace(go.Scatter(x=iid_rvs, y=pdf_rvs,
@@ -347,7 +353,8 @@ def continuous_chart(fig: Figure, iid_rvs:  np.ndarray, pdf_rvs: np.ndarray) -> 
     fig.update_layout(xaxis_title='<b>iid</b> Random Variables(x)',
                       yaxis_title='Simulated PDF(x)')
 
-def discrete_chart(fig: Figure, iid_rvs:  np.ndarray, pdf_rvs: np.ndarray) -> None:
+
+def discrete_chart(fig: Figure, iid_rvs: np.ndarray, pdf_rvs: np.ndarray) -> None:
     n_samples = len(iid_rvs)
     x = [0] * (3 * n_samples - 1)
     y = [0] * (3 * n_samples - 1)
@@ -374,7 +381,8 @@ def discrete_chart(fig: Figure, iid_rvs:  np.ndarray, pdf_rvs: np.ndarray) -> No
     fig.update_layout(xaxis_title='<b>iid</b> Random Variables(x)',
                       yaxis_title='Simulated PMF(x)')
 
-def get_pdf(iid_rvs:  np.ndarray, pdf_rvs: np.ndarray, name: str, iscontinuous: bool = True) -> Figure:
+
+def get_pdf(iid_rvs: np.ndarray, pdf_rvs: np.ndarray, name: str, iscontinuous: bool = True) -> Figure:
     idx = np.argsort(iid_rvs)
     fig = go.Figure()
 

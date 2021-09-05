@@ -3,6 +3,7 @@ import numpy as np
 from plotly.graph_objs import Figure
 from Chapters.utils.plots import plot_histogram
 
+
 def get_sample_with_true_p(population: int, p: float) -> np.ndarray:
     a: np.ndarray = np.zeros(population, dtype=np.int8)
     _1_s: int = int(population * p)
@@ -11,13 +12,13 @@ def get_sample_with_true_p(population: int, p: float) -> np.ndarray:
     np.random.shuffle(a)
     return a
 
+
 def run(n_population: int,
         n_sample: int,
         true_p: float,
         n_simulations: int,
         title: str,
         seed: Union[int, None]) -> Tuple[np.ndarray, list, Figure, float, np.ndarray]:
-
     if seed is not None: np.random.seed(seed)
     population_sample: np.ndarray = get_sample_with_true_p(n_population, true_p)
     estimators: np.ndarray = np.empty(n_simulations)

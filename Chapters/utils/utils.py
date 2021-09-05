@@ -3,6 +3,7 @@ from distribution import distributions_properties
 import numpy as np
 import pandas as pd
 
+
 def get_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
     """
 
@@ -16,6 +17,7 @@ def get_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
         parameters += f"""- {distributions_properties[dist]["parameters"][i]} : ${_vars[parameter]}$\n"""
         i += 1
     return parameters
+
 
 def stPandas(npArray: np.ndarray, label: str = "Random Draws") -> pd.DataFrame:
     npArray = npArray.reshape((1, len(npArray)))

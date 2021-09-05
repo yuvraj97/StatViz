@@ -2,6 +2,7 @@ import streamlit as st
 from SessionState import set_title
 from utils import chapters, chapters_acronyms, getChapterIndexByURL, set_get_URL, setMetaTags
 
+
 def main(state):
     idx: int = getChapterIndexByURL(state.url)
     option: str = st.selectbox("", chapters, index=idx)

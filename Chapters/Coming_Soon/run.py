@@ -2,6 +2,7 @@ import streamlit as st
 # from auth.utils import send_email
 from utils import set_get_URL
 
+
 def main(state):
     set_get_URL(parameters={
         "dist": "remove",

@@ -12,6 +12,7 @@ from Chapters.Introduction.utils import run
 from utils import set_get_URL
 from Chapters.utils.utils import stPandas
 
+
 def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, seed: Union[int, None]):
     with st.beta_expander("Scenario", expanded=True):
         st.markdown("""
@@ -170,7 +171,6 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
 
 
 def main(state):
-
     set_get_URL(parameters={
         "dist": "remove",
         "topic": "remove"

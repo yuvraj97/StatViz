@@ -7,6 +7,7 @@ from plotly.graph_objs import Figure
 from Chapters.utils.plots import get_pdf
 from distribution import distributions_properties, get_distribution, graph_label
 
+
 def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str, state) -> Figure:
     ns = np.linspace(1, n_samples, n_samples, dtype=int)
 
@@ -70,7 +71,6 @@ def run(dist: str,
         var: Dict[str, Union[int, float]],
         n: Dict[str, int],
         state, seed=None) -> Dict[str, Union[float, np.ndarray, Figure]]:
-
     iscontinuous: bool = distributions_properties[dist]["iscontinuous"]
     n_population: int = n["population"]
     n_samples: int = n["samples"]

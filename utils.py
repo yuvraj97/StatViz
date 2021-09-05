@@ -22,9 +22,11 @@ chapters_acronyms: List[str] = [
 
 chapters_acronyms_lowercase: List[str] = [e.lower() for e in chapters_acronyms]
 
+
 def getChapterIndexByURL(url: dict) -> int:
     if "ch" not in url or url["ch"][0].lower() not in chapters_acronyms_lowercase: return 0
     return chapters_acronyms_lowercase.index(url["ch"][0].lower())
+
 
 def set_get_URL(ch: str = None,
                 url: dict = None,
@@ -33,15 +35,20 @@ def set_get_URL(ch: str = None,
     d: dict = {}
     if "ch" in url: d["ch"] = url["ch"][0]
     if ch is not None: d["ch"] = ch
-    if "dist" in parameters and parameters["dist"] == "remove": del parameters["dist"]
-    elif "dist" in url: d["dist"] = url["dist"][0]
-    if "topic" in parameters and parameters["topic"] == "remove": del parameters["topic"]
-    elif "topic" in url: d["topic"] = url["topic"][0]
+    if "dist" in parameters and parameters["dist"] == "remove":
+        del parameters["dist"]
+    elif "dist" in url:
+        d["dist"] = url["dist"][0]
+    if "topic" in parameters and parameters["topic"] == "remove":
+        del parameters["topic"]
+    elif "topic" in url:
+        d["topic"] = url["topic"][0]
     for k in parameters.keys():
         d[k] = parameters[k]
     st.experimental_set_query_params(**d)
     url = st.experimental_get_query_params()
     return url
+
 
 def urlIndex(url: dict) -> int:
     if "dist" not in url:
@@ -53,6 +60,7 @@ def urlIndex(url: dict) -> int:
             idx = distributions_properties[dist]["idx"]
             break
     return idx
+
 
 def setMetaTags(meta_data):
     import streamlit.components.v1 as components

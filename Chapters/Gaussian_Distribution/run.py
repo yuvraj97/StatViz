@@ -3,8 +3,8 @@ from SessionState import set_title
 from utils import set_get_URL
 from Chapters.Gaussian_Distribution import random_walk_1D, random_walk_2D
 
-def main(state):
 
+def main(state):
     topics, idx = ["Random walk 1D", "Random walk 2D"], 0
     if "topic" in state.url and state.url["topic"][0] in topics:
         idx = topics.index(state.url["topic"][0])

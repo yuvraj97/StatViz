@@ -31,7 +31,9 @@ n: Dict[str, int] = {
 #     "Exp(λ)": "expon"
 # }
 
-distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
+distributions_properties: Dict[str, Union[
+    Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[
+        str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
     "norm": {
         "name": "Normal distribution",
         "repr": "Gaussian(μ, σ)",
@@ -174,14 +176,19 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
     }
 }
 
+
 def repr2dist(repr_: str):
     dist = [dist for dist in distributions_properties if distributions_properties[dist]["repr"] == repr_]
-    if len(dist) == 0: return
-    else: return dist[0]
+    if len(dist) == 0:
+        return
+    else:
+        return dist[0]
+
 
 def clear(L: List) -> None:
     for e in L:
         e.empty()
+
 
 def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:
     params: Dict[str, Dict[str, float]] = distributions_properties[dist]["stSlider"]
@@ -196,13 +203,13 @@ def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:
         )
     return var
 
+
 def stDistribution(idx=0,
                    dist: Union[str, None] = None,
                    default_values: Dict[str, Dict[str, int]] = None,
                    n_simulations: bool = False,
                    seed: Union[int, None] = None
                    ) -> Tuple[Dict[str, Union[str, int, None, Dict[str, int]]], Dict[str, Union[int, float]]]:
-
     if seed is None:
         seed: Union[int, None] = st.sidebar.number_input(
             "Enter Seed (-1 mean seed is disabled)",
@@ -243,11 +250,11 @@ def stDistribution(idx=0,
     st.sidebar.markdown("## Parameters")
     return {"dist": dist, "seed": seed, "n": _n}, stGetParameters(dist)
 
+
 def get_distribution(
         dist: str,
         var: List[Union[int, float]]
-        ) -> Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete]:
-
+) -> Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete]:
     if dist == "norm":
         return norm(*var)
     elif dist == "uniform":
@@ -264,6 +271,7 @@ def get_distribution(
         return beta(*var)
     elif dist == "expon":
         return expon(1 / var[0])
+
 
 def graph_label(dist: str, var: List[Union[int, float]]) -> str:
     if dist == "norm":
