@@ -1,7 +1,11 @@
 import streamlit as st
 
+from utils.ui import intialize, footer
+
 
 def main():
+    intialize(None)
+
     st.markdown("""
     # Statistics Concepts Visualization
     
@@ -64,3 +68,5 @@ def main():
     - GLM: Link Functions and the Canonical Link Function
     - [etc.]
        """)
+
+    footer()

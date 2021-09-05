@@ -1,10 +1,14 @@
 import streamlit as st
 from Chapters.utils.SessionState import set_title
+from utils.ui import intialize, footer
 from utils.utils import set_get_URL
 from Chapters.Gaussian_Distribution import random_walk_1D, random_walk_2D
 
 
 def main():
+
+    intialize("Gaussian Distribution")
+
     topics, idx = ["Random walk 1D", "Random walk 2D"], 0
     url = st.experimental_get_query_params()
     if "topic" in url and url["topic"][0] in topics:
@@ -25,3 +29,5 @@ def main():
     if option == topics[1]:
         # set_title('Random walk 2D | Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
         random_walk_2D.run()
+
+    footer()

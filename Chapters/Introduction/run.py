@@ -9,6 +9,7 @@ from plotly.graph_objs import Figure
 
 from Chapters.utils.plots import plot_binary_data
 from Chapters.Introduction.utils import run
+from utils.ui import intialize, footer
 from utils.utils import set_get_URL
 from Chapters.utils.utils import stPandas
 
@@ -171,6 +172,9 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
 
 
 def main():
+
+    intialize("Introduction")
+
     set_get_URL(parameters={
         "dist": "remove",
         "topic": "remove"
@@ -205,3 +209,5 @@ def main():
                                                  value=50)
 
     stDisplay(n_population, n_sample, true_p, n_simulations, seed)
+
+    footer()

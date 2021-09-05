@@ -10,6 +10,7 @@ import Chapters.Law_of_Large_Number.utils as lln
 from Chapters.utils.utils import get_parameters
 from Chapters.utils.plots import plot_histogram
 from Chapters.utils.distribution import distributions_properties, stDistribution
+from utils.ui import intialize, footer
 from utils.utils import set_get_URL, urlIndex
 
 
@@ -151,6 +152,9 @@ def stDisplay(
 
 
 def main():
+
+    intialize("Law of Large Number")
+
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
     dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()))
@@ -165,3 +169,5 @@ def main():
     )
 
     stDisplay(dist_vars, dist_params, var)
+
+    footer()
