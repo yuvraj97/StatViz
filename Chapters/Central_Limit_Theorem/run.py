@@ -7,10 +7,10 @@ from PIL import Image
 from typing import Union, List, Dict
 from scipy.stats import norm
 from Chapters.utils.utils import get_parameters
-from utils import set_get_URL, urlIndex
-from distribution import get_distribution
+from utils.utils import set_get_URL, urlIndex
+from Chapters.utils.distribution import get_distribution
 from Chapters.utils.plots import plot_histogram, line_plot
-from distribution import distributions_properties, stDistribution
+from Chapters.utils.distribution import distributions_properties, stDistribution
 
 
 def stDisplay(

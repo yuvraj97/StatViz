@@ -1,6 +1,6 @@
 from typing import List
 import streamlit as st
-from distribution import distributions_properties
+from Chapters.utils.distribution import distributions_properties
 
 chapters: List[str] = [
     "Introduction",

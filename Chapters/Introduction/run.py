@@ -9,7 +9,7 @@ from plotly.graph_objs import Figure
 
 from Chapters.utils.plots import plot_binary_data
 from Chapters.Introduction.utils import run
-from utils import set_get_URL
+from utils.utils import set_get_URL
 from Chapters.utils.utils import stPandas
 
 

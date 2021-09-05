@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import set_get_URL
+from utils.utils import set_get_URL
 
 
 def main(state):
