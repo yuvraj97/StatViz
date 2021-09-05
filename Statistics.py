@@ -19,10 +19,10 @@ def main():
 
 
 if __name__ == '__main__':
-    st.set_page_config(
-        layout='centered',
-        initial_sidebar_state='expanded'
-    )
+    # st.set_page_config(
+    #     layout='centered',
+    #     initial_sidebar_state='expanded'
+    # )
     error = st.empty()
     state = SessionState.get_state()
 

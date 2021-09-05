@@ -10,7 +10,7 @@ def main(state):
 
     if option == chapters[0]:
         from Chapters.Introduction import run
-        set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
+        # set_title('Introduction | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Introduction | Visualization | Fundamentals of Statistics - QuantML",
             "url": "https://app.quantml.org/?ch=Introduction",
@@ -20,7 +20,7 @@ def main(state):
         run.main(state)
     if option == chapters[1]:
         from Chapters.Law_of_Large_Number import run
-        set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
+        # set_title('Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Weak Law of Large Numbers | Visualization | Fundamentals of Statistics - QuantML",
             "url": "https://app.quantml.org/?ch=Weak-Law-of-Large-Numbers&dist=Normal+distribution",
@@ -31,7 +31,7 @@ def main(state):
         run.main(state)
     elif option == chapters[2]:
         from Chapters.Central_Limit_Theorem import run
-        set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
+        # set_title('Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Central Limit Theorem | Visualization | Fundamentals of Statistics - QuantML",
             "url": "https://app.quantml.org/?ch=Central-Limit-Theorem&dist=Normal+distribution",
@@ -41,7 +41,7 @@ def main(state):
         })
         run.main(state)
     elif option == chapters[3]:
-        set_title('Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
+        # set_title('Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML')
         setMetaTags({
             "title": "Gaussian Distribution | Visualization | Fundamentals of Statistics - QuantML",
             "url": "https://app.quantml.org/?ch=Gaussian-Distribution",
@@ -54,10 +54,10 @@ def main(state):
 
     elif option == chapters[4]:
         from Chapters.Coming_Soon import run
-        set_title('Coming Soon | Visualization | Fundamentals of Statistics - QuantML')
+        # set_title('Coming Soon | Visualization | Fundamentals of Statistics - QuantML')
         run.main(state)
 
     elif option == chapters[-1]:
         import Chapters.About.about as about
-        set_title('About | Statistics App | Fundamentals of Statistics | Visualization - QuantML')
+        # set_title('About | Statistics App | Fundamentals of Statistics | Visualization - QuantML')
         about.main(state)
