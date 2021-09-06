@@ -19,7 +19,7 @@ def stDisplay(inputs: Dict[str, Union[int, None, float]]):
     n_population: int = inputs["n_population"]
     n_sample: int = inputs["n_sample"]
     true_p: float = inputs["p"]
-    n_simulation: int = inputs["n_simulation"]
+    n_simulations: int = inputs["n_simulations"]
     seed: Union[int, None] = inputs["seed"]
 
     with st.expander("Scenario", expanded=True):
@@ -81,7 +81,7 @@ def stDisplay(inputs: Dict[str, Union[int, None, float]]):
         population_sample, samples, fig, estimate, estimators = run(n_population,
                                                                     n_sample,
                                                                     true_p,
-                                                                    n_simulation,
+                                                                    n_simulations,
                                                                     "Simulated Distribution",
                                                                     seed)
 
@@ -152,7 +152,7 @@ def stDisplay(inputs: Dict[str, Union[int, None, float]]):
     samples from same population multiple times, we can get a better picture of our estimator. <br>
     By collecting multiple sample we can see how our estimator is distributed. <br>
     Let's collect samples, <br>
-    We have {n_simulation} samples, let's see first $3$ samples, <br>
+    We have {n_simulations} samples, let's see first $3$ samples, <br>
     #### Experiment 1: 
     *   In first experiment out of ${n_sample}$,  ${int(estimators[0] * n_sample)}$ balls are 
         <span class="l1">red balls</span>.    
@@ -193,14 +193,14 @@ def main():
 
     st_n_sample, st_n_simulation = st.sidebar.columns([1, 1])
     n_sample: int = int(st_n_sample.text_input("Enter sample size", "30"))
-    n_simulation: int = int(st_n_simulation.text_input("Enter number of simulation", "50"))
+    n_simulations: int = int(st_n_simulation.text_input("Enter number of simulation", "50"))
     true_p: float = float(st.sidebar.text_input("Proportion of Red balls (p)", "0.5"))
 
     inputs: Dict[str, Union[int, None, float]] = {
         "seed": seed,
         "n_population": n_population,
         "n_sample": n_sample,
-        "n_simulation": n_simulation,
+        "n_simulations": n_simulations,
         "p": true_p
     }
 

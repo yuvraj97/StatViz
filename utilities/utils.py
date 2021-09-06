@@ -126,7 +126,7 @@ def rename_inputs(inputs: dict):
         if "samples" in inputs["n"]:
             inputs["n_sample"] = inputs["n"]["samples"]
         if "simulations" in inputs["n"]:
-            inputs["n_simulation"] = inputs["n"]["simulations"]
+            inputs["n_simulations"] = inputs["n"]["simulations"]
 
     return inputs
 
@@ -150,9 +150,9 @@ def check_input_limits(inputs):
         st.error(f"Sample size should be in between $10$ and $50$")
         return
 
-    if "n_simulation" in inputs and (
-            inputs["n_simulation"] < 10 or
-            inputs["n_simulation"] > 50):
+    if "n_simulations" in inputs and (
+            inputs["n_simulations"] < 10 or
+            inputs["n_simulations"] > 50):
         st.error(f"Simulation size should be in between $10$ and $50$")
         return
 
