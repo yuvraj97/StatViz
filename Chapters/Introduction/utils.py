@@ -1,7 +1,7 @@
 from typing import Union, Tuple
 import numpy as np
 from plotly.graph_objs import Figure
-from Chapters.utils.plots import plot_histogram
+from Chapters.utilities.plots import plot_histogram
 
 
 def get_sample_with_true_p(population: int, p: float) -> np.ndarray:

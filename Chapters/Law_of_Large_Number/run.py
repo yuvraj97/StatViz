@@ -7,11 +7,11 @@ from plotly.graph_objs import Figure
 from typing import Union, Dict
 
 import Chapters.Law_of_Large_Number.utils as lln
-from utils.distribution import show_parameters
-from Chapters.utils.plots import plot_histogram
-from utils.distribution import distributions_properties, stDistribution
-from utils.ui import intialize, footer
-from utils.utils import set_get_URL, urlIndex
+from utilities.distribution import show_parameters
+from Chapters.utilities.plots import plot_histogram
+from utilities.distribution import distributions_properties, stDistribution
+from utilities.ui import intialize, footer
+from utilities.utils import set_get_URL, urlIndex
 
 
 def stDisplay(

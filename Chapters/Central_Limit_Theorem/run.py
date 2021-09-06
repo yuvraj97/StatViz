@@ -6,12 +6,12 @@ import scipy.stats
 from PIL import Image
 from typing import Union, List, Dict
 from scipy.stats import norm
-from utils.distribution import show_parameters
-from utils.ui import intialize, footer
-from utils.utils import set_get_URL, urlIndex
-from Chapters.utils.utils import get_distribution
-from Chapters.utils.plots import plot_histogram, line_plot
-from utils.distribution import distributions_properties, stDistribution
+from utilities.distribution import show_parameters
+from utilities.ui import intialize, footer
+from utilities.utils import set_get_URL, urlIndex
+from Chapters.utilities.utils import get_distribution
+from Chapters.utilities.plots import plot_histogram, line_plot
+from utilities.distribution import distributions_properties, stDistribution
 
 
 def stDisplay(

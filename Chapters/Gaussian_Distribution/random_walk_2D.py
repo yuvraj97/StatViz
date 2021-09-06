@@ -3,8 +3,8 @@ from typing import Union
 import streamlit as st
 import numpy as np
 import pandas as pd
-from Chapters.utils.utils import stPandas
-from Chapters.utils.plots import animate_dot_2D, plot_histogram3D, surface_plot3D
+from Chapters.utilities.utils import stPandas
+from Chapters.utilities.plots import animate_dot_2D, plot_histogram3D, surface_plot3D
 from scipy.stats import multivariate_normal
 
 
@@ -87,7 +87,7 @@ def run():
 
     try:
         (p_up, p_down, p_right, p_left), (n_bounces, n_sim), seed = get_st_probability(max_bounces, max_sim)
-    except:
+    except Exception:
         st.sidebar.error("Probability selection is not valid!\nProbabilities should sum to $1$")
         return
 

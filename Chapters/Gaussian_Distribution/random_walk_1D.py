@@ -5,8 +5,8 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from scipy.stats import norm
-from Chapters.utils.utils import stPandas
-from Chapters.utils.plots import plot_histogram, line_plot
+from Chapters.utilities.utils import stPandas
+from Chapters.utilities.plots import plot_histogram, line_plot
 
 
 def run():

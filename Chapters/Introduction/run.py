@@ -7,11 +7,11 @@ import streamlit as st
 from PIL import Image
 from plotly.graph_objs import Figure
 
-from Chapters.utils.plots import plot_binary_data
+from Chapters.utilities.plots import plot_binary_data
 from Chapters.Introduction.utils import run
-from utils.ui import intialize, footer
-from utils.utils import set_get_URL
-from Chapters.utils.utils import stPandas
+from utilities.ui import intialize, footer
+from utilities.utils import set_get_URL
+from Chapters.utilities.utils import stPandas
 
 
 def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, seed: Union[int, None]):

@@ -1,6 +1,6 @@
 import streamlit as st
-from utils.ui import intialize, footer
-from utils.utils import set_get_URL
+from utilities.ui import intialize, footer
+from utilities.utils import set_get_URL
 from Chapters.Gaussian_Distribution import random_walk_1D, random_walk_2D
 
 
