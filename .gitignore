@@ -1,1 +1,5 @@
 __pycache__/
+.idea/
+debug.log
+Todo.txt
+venv/
