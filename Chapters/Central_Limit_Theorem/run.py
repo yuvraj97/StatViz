@@ -276,14 +276,7 @@ def main():
 
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
-    dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()), default_values={
-        "sample": {
-            "min_value": 1,
-            "max_value": 40,
-            "value": 30,
-            "step": 1,
-        }
-    }, n_simulations=True)
+    dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()), n_simulations=True)
 
     set_get_URL(parameters={
         "dist": distributions_properties[dist_vars["dist"]]["name"],
