@@ -186,14 +186,15 @@ def main():
 
     st_n_sample, st_n_simulations = st.sidebar.columns([1, 1])
     n_sample: int = int(st_n_sample.text_input("Enter sample size", "30"))
-    true_p: float = float(st_n_simulations.text_input("Proportion of Red balls (p)", "0.5"))
-    n_simulations: int = int(st.sidebar.text_input("Enter number of simulation", "50"))
+    n_simulations: int = int(st_n_simulations.text_input("Enter number of simulation", "50"))
+    true_p: float = float(st.sidebar.text_input("Proportion of Red balls (p)", "0.5"))
 
     inputs = {
         "seed": seed,
         "n_population": n_population,
         "n_sample": n_sample,
         "n_simulations": n_simulations,
+        "p": true_p
     }
 
     if not check_input_limits(inputs):
