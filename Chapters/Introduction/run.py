@@ -10,7 +10,7 @@ from plotly.graph_objs import Figure
 from Chapters.utilities.plots import plot_binary_data
 from Chapters.Introduction.utils import run
 from utilities.ui import intialize, footer
-from utilities.utils import set_get_URL
+from utilities.utils import set_get_URL, check_input_limits
 from Chapters.utilities.utils import stPandas
 
 
@@ -180,33 +180,24 @@ def main():
         "topic": "remove"
     })
 
-    seed: Union[int, None] = st.sidebar.number_input(
-        "Enter Seed (-1 mean seed is disabled)",
-        min_value=-1,
-        max_value=10000,
-        value=0,
-        step=1
-    )
+    st_seed, st_n_population = st.sidebar.columns([1, 1])
+    seed: Union[int, None] = int(st_seed.text_input("Enter Seed (-1 mean seed is disabled)", "0"))
+    n_population: int = int(st_n_population.text_input("Enter population size", "200"))
 
-    if seed == -1: seed = None
+    st_n_sample, st_n_simulations = st.sidebar.columns([1, 1])
+    n_sample: int = int(st_n_sample.text_input("Enter sample size", "30"))
+    true_p: float = float(st_n_simulations.text_input("Proportion of Red balls (p)", "0.5"))
+    n_simulations: int = int(st.sidebar.text_input("Enter number of simulation", "50"))
 
-    n_population: int = st.sidebar.number_input("Enter population size",
-                                                min_value=100,
-                                                max_value=400,
-                                                value=200)
-    n_sample: int = st.sidebar.number_input("Enter sample size",
-                                            min_value=10,
-                                            max_value=50,
-                                            value=30)
-    true_p: float = st.sidebar.slider("Proportion of Red balls (p)",
-                                      min_value=0.0,
-                                      max_value=1.0,
-                                      value=0.5,
-                                      step=0.05)
-    n_simulations: int = st.sidebar.number_input("Enter number of simulation",
-                                                 min_value=10,
-                                                 max_value=50,
-                                                 value=50)
+    inputs = {
+        "seed": seed,
+        "n_population": n_population,
+        "n_sample": n_sample,
+        "n_simulations": n_simulations,
+    }
+
+    if not check_input_limits(inputs):
+        return
 
     stDisplay(n_population, n_sample, true_p, n_simulations, seed)
 
