@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from scipy.stats import norm
-from Chapters.utilities.utils import stPandas
+from Chapters.utilities.lite_utils import stPandas
 from Chapters.utilities.plots import plot_histogram, line_plot
 
 

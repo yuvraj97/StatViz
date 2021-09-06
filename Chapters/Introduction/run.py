@@ -11,7 +11,7 @@ from Chapters.utilities.plots import plot_binary_data
 from Chapters.Introduction.utils import run
 from utilities.ui import intialize, footer
 from utilities.utils import set_get_URL, check_input_limits
-from Chapters.utilities.utils import stPandas
+from Chapters.utilities.lite_utils import stPandas
 
 
 def stDisplay(inputs: Dict[str, Union[int, None, float]]):

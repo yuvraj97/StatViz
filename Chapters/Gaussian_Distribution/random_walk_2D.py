@@ -3,7 +3,7 @@ from typing import Union
 import streamlit as st
 import numpy as np
 import pandas as pd
-from Chapters.utilities.utils import stPandas
+from Chapters.utilities.lite_utils import stPandas
 from Chapters.utilities.plots import animate_dot_2D, plot_histogram3D, surface_plot3D
 from scipy.stats import multivariate_normal
 
