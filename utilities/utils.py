@@ -116,3 +116,28 @@ def setMetaTags(meta_data):
         {image_meta_data}
         </script>
     """, height=0, width=0)
+
+
+def check_input_limits(inputs):
+    if "seed" in inputs and inputs["seed"] < -1:
+        st.error(f"Seed Can't be less then $-1$")
+        return
+    if "n_population" in inputs and (
+            inputs["n_population"] < 100 or
+            inputs["n_population"] > 400):
+        st.error(f"Population size should be in between $100$ and $400$")
+        return
+
+    if "n_sample" in inputs and (
+            inputs["n_sample"] < 10 or
+            inputs["n_sample"] > 50):
+        st.error(f"Sample size should be in between $10$ and $50$")
+        return
+
+    if "n_simulations" in inputs and (
+            inputs["n_simulations"] < 10 or
+            inputs["n_simulations"] > 50):
+        st.error(f"Simulation size should be in between $10$ and $50$")
+        return
+
+    return True
