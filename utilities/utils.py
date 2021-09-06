@@ -134,8 +134,7 @@ def rename_inputs(inputs: dict):
 def check_input_limits(inputs):
 
     inputs = rename_inputs(inputs)
-    st.json(inputs)
-
+    
     if "seed" in inputs and (inputs["seed"] is not None and inputs["seed"] < -1):
         st.error(f"Seed Can't be less then $-1$")
         return
