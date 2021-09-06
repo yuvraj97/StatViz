@@ -1,5 +1,5 @@
 import os
-from typing import Union
+from typing import Union, Dict
 
 import numpy as np
 import pandas as pd
@@ -14,7 +14,14 @@ from utilities.utils import set_get_URL, check_input_limits
 from Chapters.utilities.utils import stPandas
 
 
-def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, seed: Union[int, None]):
+def stDisplay(inputs: Dict[str, Union[int, None, float]]):
+
+    n_population: int = inputs["n_population"]
+    n_sample: int = inputs["n_sample"]
+    true_p: float = inputs["p"]
+    n_simulations: int = inputs["n_simulations"]
+    seed: Union[int, None] = inputs["seed"]
+
     with st.expander("Scenario", expanded=True):
         st.markdown("""
         Say we have a <b>room</b> full of <span class="l1">Red balls</span> and <span class="l2">Blue balls</span>. <br>
@@ -189,7 +196,7 @@ def main():
     n_simulations: int = int(st_n_simulations.text_input("Enter number of simulation", "50"))
     true_p: float = float(st.sidebar.text_input("Proportion of Red balls (p)", "0.5"))
 
-    inputs = {
+    inputs: Dict[str, Union[int, None, float]] = {
         "seed": seed,
         "n_population": n_population,
         "n_sample": n_sample,
@@ -200,6 +207,6 @@ def main():
     if not check_input_limits(inputs):
         return
 
-    stDisplay(n_population, n_sample, true_p, n_simulations, seed)
+    stDisplay(inputs)
 
     footer()
