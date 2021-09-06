@@ -1,4 +1,4 @@
-from typing import Dict, List, Union, Tuple
+from typing import Dict, List, Union, Tuple, Type
 import streamlit as st
 
 
@@ -155,16 +155,28 @@ def repr2dist(repr_: str):
 
 
 def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:
-    params: Dict[str, Dict[str, float]] = distributions_properties[dist]["stSlider"]
+
+    def check_param_limit(_param, _value, _min, _max):
+        if _value < _min or _value > _max:
+            st.error(f'{_param} should be in between ${_min}$ and ${_max}$')
+            raise ValueError
+
+    dist_parameters: Dict[str, Dict[str, Union[float, Type[float]]]] = distributions_properties[dist]["stSlider"]
+    dist_parameters_list = list(dist_parameters.keys())
     var: Dict[str, Union[int, float]] = {}
-    for k in params.keys():
-        var[k] = st.sidebar.slider(
-            k,
-            params[k]["min"],
-            params[k]["max"],
-            params[k]["value"],
-            params[k]["increment"]
-        )
+    for param1, param2 in zip(*[iter(dist_parameters_list)] * 2):
+        st_param1, st_param2 = st.sidebar.columns([1, 1])
+        _type1, _type2 = dist_parameters[param1]["type"], dist_parameters[param2]["type"]
+        var[param1] = _type1(st_param1.text_input(param1, dist_parameters[param1]["value"]))
+        var[param2] = _type2(st_param2.text_input(param2, dist_parameters[param2]["value"]))
+        check_param_limit(param1, var[param1], dist_parameters[param1]["min"], dist_parameters[param1]["max"])
+        check_param_limit(param2, var[param2], dist_parameters[param2]["min"], dist_parameters[param2]["max"])
+    if len(dist_parameters_list) % 2 != 0:
+        param1 = dist_parameters_list[-1]
+        _type1 = dist_parameters[param1]["type"]
+        var[param1] = _type1(st.sidebar.text_input(param1, dist_parameters[param1]["value"]))
+        check_param_limit(param1, var[param1], dist_parameters[param1]["min"], dist_parameters[param1]["max"])
+
     return var
 
 
