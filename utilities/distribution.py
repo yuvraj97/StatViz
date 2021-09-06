@@ -186,15 +186,6 @@ def stDistribution(idx=0,
                    n_simulations: bool = False,
                    seed: Union[int, None] = None
                    ) -> Tuple[Dict[str, Union[str, int, None, Dict[str, int]]], Dict[str, Union[int, float]]]:
-    if seed is None:
-        seed: Union[int, None] = st.sidebar.number_input(
-            "Enter Seed (-1 mean seed is disabled)",
-            min_value=-1,
-            max_value=10000,
-            value=0,
-            step=1
-        )
-        if seed == -1: seed = None
 
     if dist is None:
         dist_repr = st.sidebar.selectbox(
@@ -204,25 +195,18 @@ def stDistribution(idx=0,
         )
         dist: str = repr2dist(dist_repr)
 
-    st_population, st_samples = st.sidebar.columns([1, 1])
+    st_seed, st_population, st_samples = st.sidebar.columns([0.8, 1, 1])
+
+    if seed is None:
+        seed: Union[int, None] = int(st_seed.text_input("Enter Seed (-1: disable)", "0"))
+        if seed == -1: seed = None
+
     _n: Dict[str, int] = {
-        "population": st_population.number_input(
-            "Enter Population size",
-            min_value=100,
-            max_value=400,
-            value=200,
-            step=10
-        ),
-        "samples": st_samples.slider(
-            "Sample Size",
-            min_value=10 if default_values is None else default_values["sample"]["min_value"],
-            max_value=100 if default_values is None else default_values["sample"]["max_value"],
-            value=50 if default_values is None else default_values["sample"]["value"],
-            step=5 if default_values is None else default_values["sample"]["step"]
-        )
+        "population": int(st_population.text_input("Enter Population size", "200")),
+        "samples": int(st_samples.text_input("Sample Size", "50"))
     }
     if n_simulations:
-        _n["simulations"] = st.sidebar.slider("Number of simulations(k)", 10, 100, 50, 10)
+        _n["simulations"] = int(st.sidebar.text_input("Number of simulations(k)", "50"))
     st.sidebar.markdown("## Parameters")
     return {"dist": dist, "seed": seed, "n": _n}, stGetParameters(dist)
 
