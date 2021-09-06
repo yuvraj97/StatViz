@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_binary_data(info: Dict[str, Union[str, int]], seed: Union[int, None]) -> Figure:
+    if seed == -1: seed = None
     if seed is not None: np.random.seed(seed)
     count_1: int
     count_2: int

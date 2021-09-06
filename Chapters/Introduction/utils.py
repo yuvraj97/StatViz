@@ -19,6 +19,7 @@ def run(n_population: int,
         n_simulations: int,
         title: str,
         seed: Union[int, None]) -> Tuple[np.ndarray, list, Figure, float, np.ndarray]:
+    if seed == -1: seed = None
     if seed is not None: np.random.seed(seed)
     population_sample: np.ndarray = get_sample_with_true_p(n_population, true_p)
     estimators: np.ndarray = np.empty(n_simulations)
