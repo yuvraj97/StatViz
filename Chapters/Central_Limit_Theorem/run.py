@@ -6,7 +6,7 @@ import scipy.stats
 from PIL import Image
 from typing import Union, List, Dict
 from scipy.stats import norm
-from Chapters.utils.utils import show_parameters
+from utils.distribution import show_parameters
 from utils.ui import intialize, footer
 from utils.utils import set_get_URL, urlIndex
 from utils.distribution import get_distribution

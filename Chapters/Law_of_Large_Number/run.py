@@ -7,7 +7,7 @@ from plotly.graph_objs import Figure
 from typing import Union, Dict
 
 import Chapters.Law_of_Large_Number.utils as lln
-from Chapters.utils.utils import show_parameters
+from utils.distribution import show_parameters
 from Chapters.utils.plots import plot_histogram
 from utils.distribution import distributions_properties, stDistribution
 from utils.ui import intialize, footer
