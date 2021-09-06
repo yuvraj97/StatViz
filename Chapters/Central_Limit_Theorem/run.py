@@ -19,13 +19,13 @@ def stDisplay(
         dist_params: Dict[str, Union[int, float]]):
 
     n_population: int = dist_vars["n"]["population"]
-    n_sample: int = dist_vars["n"]["samples"]
+    n_samples: int = dist_vars["n"]["samples"]
     n_simulations: int = dist_vars["n"]["simulations"]
 
     with st.expander("Scenario", expanded=True):
         st.markdown(f"""
         Assume that there are ${n_population}$ students in your school and you want to know,
-        what is the average height of ${n_sample}$ randomly selected students?
+        what is the average height of ${n_samples}$ randomly selected students?
         And how is that average height distributed (or say the distribution of that average height)?<br>
         """)
 
@@ -113,20 +113,20 @@ def stDisplay(
     sample_means: np.ndarray = np.zeros(n_simulations)
     samples: List[np.ndarray] = []
     for k in range(n_simulations):
-        sample = np.random.choice(population, n_sample)
+        sample = np.random.choice(population, n_samples)
         samples.append(sample)
         sample_means[k] = np.mean(sample)
 
     with st.expander("Observation", expanded=True):
         st.markdown(f"""
         Now lets take ${n_simulations}$ samples from our population of ${n_population}$ students, and each sample
-        consists of ${n_sample}$ observations of random student's height.    
+        consists of ${n_samples}$ observations of random student's height.    
         Let's see first $3$ samples.
         """)
 
         for i in range(3):
             population_pd: pd.DataFrame = pd.DataFrame(
-                data=samples[i].reshape((1, n_sample)),
+                data=samples[i].reshape((1, n_samples)),
                 index=[f"Sample {i + 1}"]
             )
             population_pd.columns += 1
@@ -136,7 +136,7 @@ def stDisplay(
 
         if st.checkbox("Show all samples", False):
             for i in range(3, n_simulations):
-                population_pd: pd.DataFrame = pd.DataFrame(data=samples[i].reshape((1, n_sample)),
+                population_pd: pd.DataFrame = pd.DataFrame(data=samples[i].reshape((1, n_samples)),
                                                            index=[f"Sample {i + 1}"])
                 population_pd.columns += 1
                 st.write(population_pd)
@@ -148,7 +148,7 @@ def stDisplay(
         st.markdown(f"""
         Now we have {n_simulations} samples.   
         According to **CLT** distribution of sample mean $\\overline X_n$ converges to Normal distribution for larger
-        sample size $(n)$, here we set $n={n_sample}$, let's see the shape of our Sampling distribution.
+        sample size $(n)$, here we set $n={n_samples}$, let's see the shape of our Sampling distribution.
         """)
 
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -164,7 +164,7 @@ def stDisplay(
                 "Use Sampling distribution of $\\sqrt{n}(\\overline{X}_n - \\mu)$ instead of $\\overline{X}_n$")
 
         fig, (counts, bins) = plot_histogram(
-            sample_means if not use_centered_dist else np.sqrt(n_sample) * (sample_means - distribution.mean()),
+            sample_means if not use_centered_dist else np.sqrt(n_samples) * (sample_means - distribution.mean()),
             description={
                 "title": {
                     "main": "Sampling Distribution",
@@ -189,11 +189,11 @@ def stDisplay(
         and variance as of our Sampling distribution.""")
 
         if use_centered_dist:
-            mean = 0 if not use_estimated else np.mean(np.sqrt(n_sample) * (sample_means - distribution.mean()))
-            std = distribution.std() if not use_estimated else np.sqrt(n_sample) * np.std(sample_means)
+            mean = 0 if not use_estimated else np.mean(np.sqrt(n_samples) * (sample_means - distribution.mean()))
+            std = distribution.std() if not use_estimated else np.sqrt(n_samples) * np.std(sample_means)
         else:
             mean = distribution.mean() if not use_estimated else np.mean(sample_means)
-            std = distribution.std() / np.sqrt(n_sample) if not use_estimated else np.std(sample_means)
+            std = distribution.std() / np.sqrt(n_samples) if not use_estimated else np.std(sample_means)
         iid_rvs = np.linspace(mean - 3 * std, mean + 3 * std, 100)
         line_plot(
             x=iid_rvs, y=norm.pdf(iid_rvs, mean, std),

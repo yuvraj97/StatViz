@@ -14,7 +14,7 @@ def get_sample_with_true_p(population: int, p: float) -> np.ndarray:
 
 
 def run(n_population: int,
-        n_sample: int,
+        n_samples: int,
         true_p: float,
         n_simulations: int,
         title: str,
@@ -25,9 +25,9 @@ def run(n_population: int,
     estimators: np.ndarray = np.empty(n_simulations)
     samples: list = []
     for i in range(0, n_simulations):
-        # Here we randomly select "n_sample" couples out of "population_sample"
-        sample = np.random.choice(population_sample, n_sample)
-        estimators[i] = sample.sum() / n_sample
+        # Here we randomly select "n_samples" couples out of "population_sample"
+        sample = np.random.choice(population_sample, n_samples)
+        estimators[i] = sample.sum() / n_samples
         samples.append(sample)
 
     fig, (counts, bins) = plot_histogram(
