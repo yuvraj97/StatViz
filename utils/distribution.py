@@ -4,36 +4,8 @@ import streamlit as st
 from scipy.stats import bernoulli, geom, binom, poisson
 from scipy.stats import beta, expon, uniform, cauchy, norm, chi2
 
-idx2distribution: Dict[int, str] = {
-    0: "norm",
-    1: "uniform",
-    2: "bernoulli",
-    3: "geom",
-    4: "binom",
-    5: "poisson",
-    6: "beta",
-    7: "expon"
-}
 
-n: Dict[str, int] = {
-    "population": 400,
-    "samples": 50,
-}
-
-# which_distribution: Dict[str, str] = {
-#     "Gaussian(μ, σ)": "norm",
-#     "Uniform(a, b)": "uniform",
-#     "Bernoulli(p)": "bernoulli",
-#     "Geometric(p)": "geom",
-#     "Binomial(n, p)": "binom",
-#     "Poisson(λ)": "poisson",
-#     "Beta(α,β)": "beta",
-#     "Exp(λ)": "expon"
-# }
-
-distributions_properties: Dict[str, Union[
-    Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[
-        str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
+distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
     "norm": {
         "name": "Normal distribution",
         "repr": "Gaussian(μ, σ)",
@@ -183,11 +155,6 @@ def repr2dist(repr_: str):
         return
     else:
         return dist[0]
-
-
-def clear(L: List) -> None:
-    for e in L:
-        e.empty()
 
 
 def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:

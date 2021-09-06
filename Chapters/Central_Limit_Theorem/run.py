@@ -9,9 +9,9 @@ from scipy.stats import norm
 from Chapters.utils.utils import get_parameters
 from utils.ui import intialize, footer
 from utils.utils import set_get_URL, urlIndex
-from Chapters.utils.distribution import get_distribution
+from utils.distribution import get_distribution
 from Chapters.utils.plots import plot_histogram, line_plot
-from Chapters.utils.distribution import distributions_properties, stDistribution
+from utils.distribution import distributions_properties, stDistribution
 
 
 def stDisplay(

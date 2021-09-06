@@ -1,5 +1,5 @@
 from typing import Dict, Union
-from Chapters.utils.distribution import distributions_properties
+from utils.distribution import distributions_properties
 import numpy as np
 import pandas as pd
 
