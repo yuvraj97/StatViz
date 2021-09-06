@@ -140,4 +140,10 @@ def check_input_limits(inputs):
         st.error(f"Simulation size should be in between $10$ and $50$")
         return
 
+    if "p" in inputs and (
+            inputs["p"] <= 0.0 or
+            inputs["p"] >= 1.0):
+        st.error(f"Probability should be in between $0.0$ and $1.0$")
+        return
+
     return True
