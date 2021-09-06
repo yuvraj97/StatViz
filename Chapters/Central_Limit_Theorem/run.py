@@ -6,7 +6,7 @@ import scipy.stats
 from PIL import Image
 from typing import Union, List, Dict
 from scipy.stats import norm
-from Chapters.utils.utils import get_parameters
+from Chapters.utils.utils import show_parameters
 from utils.ui import intialize, footer
 from utils.utils import set_get_URL, urlIndex
 from utils.distribution import get_distribution
@@ -50,7 +50,7 @@ def stDisplay(
     image = Image.open(image_path)
     st.image(image, use_column_width=True)
 
-    parameters: str = get_parameters(dist_vars["dist"], dist_params)
+    parameters: str = show_parameters(dist_vars["dist"], dist_params)
 
     with st.expander("Truth", expanded=True):
         st.markdown("""Let's, first define the **Truth**, in this case the truth is,""")

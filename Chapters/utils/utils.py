@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-def get_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
+def show_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
     """
 
     :param dist: distribution

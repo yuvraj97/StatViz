@@ -7,7 +7,7 @@ from plotly.graph_objs import Figure
 from typing import Union, Dict
 
 import Chapters.Law_of_Large_Number.utils as lln
-from Chapters.utils.utils import get_parameters
+from Chapters.utils.utils import show_parameters
 from Chapters.utils.plots import plot_histogram
 from utils.distribution import distributions_properties, stDistribution
 from utils.ui import intialize, footer
@@ -19,7 +19,7 @@ def stDisplay(
         dist_params: Dict[str, Union[int, float]],
         var: Dict[str, Union[float, np.ndarray, Figure]]) -> None:
 
-    parameters: str = get_parameters(dist_vars["dist"], dist_params)
+    parameters: str = show_parameters(dist_vars["dist"], dist_params)
     pdf: Figure
     simulation: Figure
     pdf, simulation = var["pdf_plot"], var["simulation_plot"]
