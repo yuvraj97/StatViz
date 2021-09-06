@@ -118,8 +118,25 @@ def setMetaTags(meta_data):
     """, height=0, width=0)
 
 
+def rename_inputs(inputs: dict):
+    if "n" in inputs:
+        inputs = inputs.copy()
+        if "population" in inputs["n"]:
+            inputs["n_population"] = inputs["n"]["population"]
+        if "samples" in inputs["n"]:
+            inputs["n_sample"] = inputs["n"]["samples"]
+        if "simulations" in inputs["n"]:
+            inputs["n_simulation"] = inputs["n"]["simulations"]
+
+    return inputs
+
+
 def check_input_limits(inputs):
-    if "seed" in inputs and inputs["seed"] < -1:
+
+    inputs = rename_inputs(inputs)
+    st.json(inputs)
+
+    if "seed" in inputs and (inputs["seed"] is not None and inputs["seed"] < -1):
         st.error(f"Seed Can't be less then $-1$")
         return
     if "n_population" in inputs and (
@@ -134,9 +151,9 @@ def check_input_limits(inputs):
         st.error(f"Sample size should be in between $10$ and $50$")
         return
 
-    if "n_simulations" in inputs and (
-            inputs["n_simulations"] < 10 or
-            inputs["n_simulations"] > 50):
+    if "n_simulation" in inputs and (
+            inputs["n_simulation"] < 10 or
+            inputs["n_simulation"] > 50):
         st.error(f"Simulation size should be in between $10$ and $50$")
         return
 
