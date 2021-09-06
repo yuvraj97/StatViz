@@ -11,7 +11,7 @@ from utilities.distribution import show_parameters
 from Chapters.utilities.plots import plot_histogram
 from utilities.distribution import distributions_properties, stDistribution
 from utilities.ui import intialize, footer
-from utilities.utils import set_get_URL, urlIndex
+from utilities.utils import set_get_URL, urlIndex, check_input_limits
 
 
 def stDisplay(
@@ -158,6 +158,9 @@ def main():
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
     dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()))
+
+    if not check_input_limits(dist_vars):
+        return
 
     set_get_URL(parameters={
         "dist": distributions_properties[dist_vars["dist"]]["name"],
