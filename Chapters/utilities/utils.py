@@ -1,16 +1,7 @@
 import scipy
-import numpy as np
-import pandas as pd
 from typing import List, Union
 from scipy.stats import bernoulli, geom, binom, poisson
 from scipy.stats import beta, expon, uniform, cauchy, norm, chi2
-
-
-def stPandas(npArray: np.ndarray, label: str = "Random Draws") -> pd.DataFrame:
-    npArray = npArray.reshape((1, len(npArray)))
-    npArray = pd.DataFrame(data=npArray, index=[label])
-    npArray.columns += 1
-    return npArray
 
 
 def get_distribution(
