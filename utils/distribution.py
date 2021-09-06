@@ -1,8 +1,5 @@
 from typing import Dict, List, Union, Tuple
-import scipy
 import streamlit as st
-from scipy.stats import bernoulli, geom, binom, poisson
-from scipy.stats import beta, expon, uniform, cauchy, norm, chi2
 
 
 distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
@@ -216,28 +213,6 @@ def stDistribution(idx=0,
         _n["simulations"] = st.sidebar.slider("Number of simulations(k)", 10, 100, 50, 10)
     st.sidebar.markdown("## Parameters")
     return {"dist": dist, "seed": seed, "n": _n}, stGetParameters(dist)
-
-
-def get_distribution(
-        dist: str,
-        var: List[Union[int, float]]
-) -> Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete]:
-    if dist == "norm":
-        return norm(*var)
-    elif dist == "uniform":
-        return uniform(*var)
-    elif dist == "bernoulli":
-        return bernoulli(*var)
-    elif dist == "geom":
-        return geom(*var)
-    elif dist == "binom":
-        return binom(*var)
-    elif dist == "poisson":
-        return poisson(*var)
-    elif dist == "beta":
-        return beta(*var)
-    elif dist == "expon":
-        return expon(1 / var[0])
 
 
 def show_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:

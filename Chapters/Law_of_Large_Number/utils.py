@@ -5,7 +5,8 @@ import plotly.graph_objects as go
 from plotly.graph_objs import Figure
 
 from Chapters.utils.plots import get_pdf
-from utils.distribution import distributions_properties, get_distribution, graph_label
+from utils.distribution import distributions_properties, graph_label
+from Chapters.utils.utils import get_distribution
 
 
 def simulation(iid_rvs: np.ndarray, mean: float, n_samples: int, name: str) -> Figure:
