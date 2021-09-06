@@ -15,10 +15,10 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"Mean(μ)": 0, "Standard deviation(σ)": 1},
         "stSlider": {
             "Mean(μ)": {
-                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5
+                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5, "type": float
             },
             "Standard deviation(σ)": {
-                "min": 0.1, "max": 10.0, "value": 1.0, "increment": 0.5
+                "min": 0.1, "max": 10.0, "value": 1.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -34,10 +34,10 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"Lower Bound(a)": 0, "Scale(Δ)": 1},
         "stSlider": {
             "Lower Bound(a)": {
-                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5
+                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5, "type": float
             },
             "Scale(Δ)": {
-                "min": 0.0, "max": 20.0, "value": 10.0, "increment": 0.5
+                "min": 0.0, "max": 20.0, "value": 10.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -53,7 +53,7 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"probability(p)": 0},
         "stSlider": {
             "probability(p)": {
-                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05
+                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05, "type": float
             }
         }
     },
@@ -69,7 +69,7 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"probability(p)": 0},
         "stSlider": {
             "probability(p)": {
-                "min": 0.1, "max": 1.0, "value": 0.5, "increment": 0.05
+                "min": 0.1, "max": 1.0, "value": 0.5, "increment": 0.05, "type": float
             }
         }
     },
@@ -85,10 +85,10 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"Total trials(n)": 0, "probability(p)": 1},
         "stSlider": {
             "Total trials(n)": {
-                "min": 1, "max": 100, "value": 50, "increment": 1
+                "min": 1, "max": 100, "value": 50, "increment": 1, "type": int
             },
             "probability(p)": {
-                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05
+                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05, "type": float
             },
         }
     },
@@ -104,7 +104,7 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"#Expected occurrence(λ)": 0},
         "stSlider": {
             "#Expected occurrence(λ)": {
-                "min": 0.0, "max": 30.0, "value": 1.0, "increment": 0.5
+                "min": 0.0, "max": 30.0, "value": 1.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -120,10 +120,10 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"Shape Parameter(α)": 0, "Shape Parameter(β)": 1},
         "stSlider": {
             "Shape Parameter(α)": {
-                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5
+                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5, "type": float
             },
             "Shape Parameter(β)": {
-                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5
+                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -139,7 +139,7 @@ distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[s
         "stSlider2idx": {"#Expected occurrence(λ)": 0},
         "stSlider": {
             "Rate Parameter(λ)": {
-                "min": 0.5, "max": 30.0, "value": 1.0, "increment": 0.5
+                "min": 0.5, "max": 30.0, "value": 1.0, "increment": 0.5, "type": float
             }
         }
     }
