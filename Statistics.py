@@ -29,7 +29,6 @@ def main():
         params = st.experimental_get_query_params()
         prev_idx = chapters.index(params["chapter"][0]) if "chapter" in params else 0
 
-    st.sidebar.write("-----")
     chapter: str = st.selectbox("Choose Chapter", chapters, index=prev_idx)
     chosen_idx = chapters.index(chapter)
     if prev_idx != chosen_idx:

@@ -45,7 +45,7 @@ def set_get_URL(ch: str = None,
         d["topic"] = url["topic"][0]
     for k in parameters.keys():
         d[k] = parameters[k]
-    st.experimental_set_query_params(**d)
+    # st.experimental_set_query_params(**d)
     url = st.experimental_get_query_params()
     return url
 
