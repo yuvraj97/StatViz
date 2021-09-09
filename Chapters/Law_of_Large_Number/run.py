@@ -7,11 +7,11 @@ from plotly.graph_objs import Figure
 from typing import Union, Dict
 
 import Chapters.Law_of_Large_Number.utils as lln
-from Chapters.utils.utils import get_parameters
-from Chapters.utils.plots import plot_histogram
-from Chapters.utils.distribution import distributions_properties, stDistribution
-from utils.ui import intialize, footer
-from utils.utils import set_get_URL, urlIndex
+from utilities.distribution import show_parameters
+from Chapters.utilities.plots import plot_histogram
+from utilities.distribution import distributions_properties, stDistribution
+from utilities.ui import intialize, footer
+from utilities.utils import set_get_URL, urlIndex, check_input_limits
 
 
 def stDisplay(
@@ -19,7 +19,7 @@ def stDisplay(
         dist_params: Dict[str, Union[int, float]],
         var: Dict[str, Union[float, np.ndarray, Figure]]) -> None:
 
-    parameters: str = get_parameters(dist_vars["dist"], dist_params)
+    parameters: str = show_parameters(dist_vars["dist"], dist_params)
     pdf: Figure
     simulation: Figure
     pdf, simulation = var["pdf_plot"], var["simulation_plot"]
@@ -158,6 +158,9 @@ def main():
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
     dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()))
+
+    if not check_input_limits(dist_vars):
+        return
 
     set_get_URL(parameters={
         "dist": distributions_properties[dist_vars["dist"]]["name"],

@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.ui import intialize, footer
+from utilities.ui import intialize, footer
 
 
 def main():

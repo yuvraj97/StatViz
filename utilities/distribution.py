@@ -1,39 +1,8 @@
-from typing import Dict, List, Union, Tuple
-import scipy
+from typing import Dict, List, Union, Tuple, Type
 import streamlit as st
-from scipy.stats import bernoulli, geom, binom, poisson
-from scipy.stats import beta, expon, uniform, cauchy, norm, chi2
 
-idx2distribution: Dict[int, str] = {
-    0: "norm",
-    1: "uniform",
-    2: "bernoulli",
-    3: "geom",
-    4: "binom",
-    5: "poisson",
-    6: "beta",
-    7: "expon"
-}
 
-n: Dict[str, int] = {
-    "population": 400,
-    "samples": 50,
-}
-
-# which_distribution: Dict[str, str] = {
-#     "Gaussian(μ, σ)": "norm",
-#     "Uniform(a, b)": "uniform",
-#     "Bernoulli(p)": "bernoulli",
-#     "Geometric(p)": "geom",
-#     "Binomial(n, p)": "binom",
-#     "Poisson(λ)": "poisson",
-#     "Beta(α,β)": "beta",
-#     "Exp(λ)": "expon"
-# }
-
-distributions_properties: Dict[str, Union[
-    Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[
-        str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
+distributions_properties: Dict[str, Union[Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Dict[str, float]]]], Dict[str, Union[str, int, bool, List[str], Dict[str, int], Dict[str, Union[Dict[str, int], Dict[str, float]]]]]]] = {
     "norm": {
         "name": "Normal distribution",
         "repr": "Gaussian(μ, σ)",
@@ -46,10 +15,10 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"Mean(μ)": 0, "Standard deviation(σ)": 1},
         "stSlider": {
             "Mean(μ)": {
-                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5
+                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5, "type": float
             },
             "Standard deviation(σ)": {
-                "min": 0.1, "max": 10.0, "value": 1.0, "increment": 0.5
+                "min": 0.1, "max": 10.0, "value": 1.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -65,10 +34,10 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"Lower Bound(a)": 0, "Scale(Δ)": 1},
         "stSlider": {
             "Lower Bound(a)": {
-                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5
+                "min": -10.0, "max": 10.0, "value": 0.0, "increment": 0.5, "type": float
             },
             "Scale(Δ)": {
-                "min": 0.0, "max": 20.0, "value": 10.0, "increment": 0.5
+                "min": 0.0, "max": 20.0, "value": 10.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -84,7 +53,7 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"probability(p)": 0},
         "stSlider": {
             "probability(p)": {
-                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05
+                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05, "type": float
             }
         }
     },
@@ -100,7 +69,7 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"probability(p)": 0},
         "stSlider": {
             "probability(p)": {
-                "min": 0.1, "max": 1.0, "value": 0.5, "increment": 0.05
+                "min": 0.1, "max": 1.0, "value": 0.5, "increment": 0.05, "type": float
             }
         }
     },
@@ -116,10 +85,10 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"Total trials(n)": 0, "probability(p)": 1},
         "stSlider": {
             "Total trials(n)": {
-                "min": 1, "max": 100, "value": 50, "increment": 1
+                "min": 1, "max": 100, "value": 50, "increment": 1, "type": int
             },
             "probability(p)": {
-                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05
+                "min": 0.0, "max": 1.0, "value": 0.5, "increment": 0.05, "type": float
             },
         }
     },
@@ -135,7 +104,7 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"#Expected occurrence(λ)": 0},
         "stSlider": {
             "#Expected occurrence(λ)": {
-                "min": 0.0, "max": 30.0, "value": 1.0, "increment": 0.5
+                "min": 0.0, "max": 30.0, "value": 1.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -151,10 +120,10 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"Shape Parameter(α)": 0, "Shape Parameter(β)": 1},
         "stSlider": {
             "Shape Parameter(α)": {
-                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5
+                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5, "type": float
             },
             "Shape Parameter(β)": {
-                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5
+                "min": 1.0, "max": 10.0, "value": 5.0, "increment": 0.5, "type": float
             }
         }
     },
@@ -170,7 +139,7 @@ distributions_properties: Dict[str, Union[
         "stSlider2idx": {"#Expected occurrence(λ)": 0},
         "stSlider": {
             "Rate Parameter(λ)": {
-                "min": 0.5, "max": 30.0, "value": 1.0, "increment": 0.5
+                "min": 0.5, "max": 30.0, "value": 1.0, "increment": 0.5, "type": float
             }
         }
     }
@@ -185,22 +154,29 @@ def repr2dist(repr_: str):
         return dist[0]
 
 
-def clear(L: List) -> None:
-    for e in L:
-        e.empty()
-
-
 def stGetParameters(dist: str) -> Dict[str, Union[int, float]]:
-    params: Dict[str, Dict[str, float]] = distributions_properties[dist]["stSlider"]
+
+    def check_param_limit(_param, _value, _min, _max):
+        if _value < _min or _value > _max:
+            st.error(f'{_param} should be in between ${_min}$ and ${_max}$')
+            raise ValueError
+
+    dist_parameters: Dict[str, Dict[str, Union[float, Type[float]]]] = distributions_properties[dist]["stSlider"]
+    dist_parameters_list = list(dist_parameters.keys())
     var: Dict[str, Union[int, float]] = {}
-    for k in params.keys():
-        var[k] = st.sidebar.slider(
-            k,
-            params[k]["min"],
-            params[k]["max"],
-            params[k]["value"],
-            params[k]["increment"]
-        )
+    for param1, param2 in zip(*[iter(dist_parameters_list)] * 2):
+        st_param1, st_param2 = st.sidebar.columns([1, 1])
+        _type1, _type2 = dist_parameters[param1]["type"], dist_parameters[param2]["type"]
+        var[param1] = _type1(st_param1.text_input(param1, dist_parameters[param1]["value"]))
+        var[param2] = _type2(st_param2.text_input(param2, dist_parameters[param2]["value"]))
+        check_param_limit(param1, var[param1], dist_parameters[param1]["min"], dist_parameters[param1]["max"])
+        check_param_limit(param2, var[param2], dist_parameters[param2]["min"], dist_parameters[param2]["max"])
+    if len(dist_parameters_list) % 2 != 0:
+        param1 = dist_parameters_list[-1]
+        _type1 = dist_parameters[param1]["type"]
+        var[param1] = _type1(st.sidebar.text_input(param1, dist_parameters[param1]["value"]))
+        check_param_limit(param1, var[param1], dist_parameters[param1]["min"], dist_parameters[param1]["max"])
+
     return var
 
 
@@ -210,15 +186,6 @@ def stDistribution(idx=0,
                    n_simulations: bool = False,
                    seed: Union[int, None] = None
                    ) -> Tuple[Dict[str, Union[str, int, None, Dict[str, int]]], Dict[str, Union[int, float]]]:
-    if seed is None:
-        seed: Union[int, None] = st.sidebar.number_input(
-            "Enter Seed (-1 mean seed is disabled)",
-            min_value=-1,
-            max_value=10000,
-            value=0,
-            step=1
-        )
-        if seed == -1: seed = None
 
     if dist is None:
         dist_repr = st.sidebar.selectbox(
@@ -228,49 +195,35 @@ def stDistribution(idx=0,
         )
         dist: str = repr2dist(dist_repr)
 
-    st_population, st_samples = st.sidebar.columns([1, 1])
+    st_seed, st_population, st_samples = st.sidebar.columns([0.8, 1, 1])
+
+    if seed is None:
+        seed: Union[int, None] = int(st_seed.text_input("Enter Seed (-1: disable)", "0"))
+        if seed == -1: seed = None
+
     _n: Dict[str, int] = {
-        "population": st_population.number_input(
-            "Enter Population size",
-            min_value=100,
-            max_value=400,
-            value=200,
-            step=10
-        ),
-        "samples": st_samples.slider(
-            "Sample Size",
-            min_value=10 if default_values is None else default_values["sample"]["min_value"],
-            max_value=100 if default_values is None else default_values["sample"]["max_value"],
-            value=50 if default_values is None else default_values["sample"]["value"],
-            step=5 if default_values is None else default_values["sample"]["step"]
-        )
+        "population": int(st_population.text_input("Enter Population size", "200")),
+        "samples": int(st_samples.text_input("Sample Size", "50"))
     }
     if n_simulations:
-        _n["simulations"] = st.sidebar.slider("Number of simulations(k)", 10, 100, 50, 10)
+        _n["simulations"] = int(st.sidebar.text_input("Number of simulations(k)", "50"))
     st.sidebar.markdown("## Parameters")
     return {"dist": dist, "seed": seed, "n": _n}, stGetParameters(dist)
 
 
-def get_distribution(
-        dist: str,
-        var: List[Union[int, float]]
-) -> Union[scipy.stats.rv_continuous, scipy.stats.rv_discrete]:
-    if dist == "norm":
-        return norm(*var)
-    elif dist == "uniform":
-        return uniform(*var)
-    elif dist == "bernoulli":
-        return bernoulli(*var)
-    elif dist == "geom":
-        return geom(*var)
-    elif dist == "binom":
-        return binom(*var)
-    elif dist == "poisson":
-        return poisson(*var)
-    elif dist == "beta":
-        return beta(*var)
-    elif dist == "expon":
-        return expon(1 / var[0])
+def show_parameters(dist: str, _vars: Dict[str, Union[int, float]]) -> str:
+    """
+
+    :param dist: distribution
+    :param _vars: distribution's parameter's values
+    :return: markdown formatted string to display parameters
+    """
+    parameters: str = ""
+    i = 0
+    for parameter in distributions_properties[dist]["stSlider"]:
+        parameters += f"""- {distributions_properties[dist]["parameters"][i]} : ${_vars[parameter]}$\n"""
+        i += 1
+    return parameters
 
 
 def graph_label(dist: str, var: List[Union[int, float]]) -> str:

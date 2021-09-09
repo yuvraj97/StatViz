@@ -1,5 +1,5 @@
 import os
-from typing import Union
+from typing import Union, Dict
 
 import numpy as np
 import pandas as pd
@@ -7,14 +7,21 @@ import streamlit as st
 from PIL import Image
 from plotly.graph_objs import Figure
 
-from Chapters.utils.plots import plot_binary_data
+from Chapters.utilities.plots import plot_binary_data
 from Chapters.Introduction.utils import run
-from utils.ui import intialize, footer
-from utils.utils import set_get_URL
-from Chapters.utils.utils import stPandas
+from utilities.ui import intialize, footer
+from utilities.utils import set_get_URL, check_input_limits
+from Chapters.utilities.lite_utils import stPandas
 
 
-def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: int, seed: Union[int, None]):
+def stDisplay(inputs: Dict[str, Union[int, None, float]]):
+
+    n_population: int = inputs["n_population"]
+    n_samples: int = inputs["n_samples"]
+    true_p: float = inputs["p"]
+    n_simulations: int = inputs["n_simulations"]
+    seed: Union[int, None] = inputs["seed"]
+
     with st.expander("Scenario", expanded=True):
         st.markdown("""
         Say we have a <b>room</b> full of <span class="l1">Red balls</span> and <span class="l2">Blue balls</span>. <br>
@@ -72,7 +79,7 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
         estimate: float
         estimators: np.ndarray
         population_sample, samples, fig, estimate, estimators = run(n_population,
-                                                                    n_sample,
+                                                                    n_samples,
                                                                     true_p,
                                                                     n_simulations,
                                                                     "Simulated Distribution",
@@ -103,7 +110,7 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
         st.markdown(f"""
         As we can see the room is full of ${n_population}$ balls, and we can't count all of them 
         to find out the proportion of <span class="l1">Red balls</span> and <span class="l2">Blue balls</span>. <br>
-        So we took a sample of ${n_sample}$ balls out of those ${n_population}$ balls to find the proportion of
+        So we took a sample of ${n_samples}$ balls out of those ${n_population}$ balls to find the proportion of
         <span class="l1">Red balls</span> and <span class="l2">Blue balls</span> in that room. <br>
         """, unsafe_allow_html=True)
 
@@ -114,30 +121,30 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
 
     with st.expander("Statistics", expanded=True):
         st.markdown(f"""
-        So now we have our sample of ${n_sample}$ balls, let's start finding an estimate for
+        So now we have our sample of ${n_samples}$ balls, let's start finding an estimate for
         <span class="l1">Red balls</span> proportion and
         <span class="l2">Blue balls</span> proportion. <br>
         To find the proportion of <span class="l1">Red balls</span>,
         we count number of <span class="l1">Red balls</span>
-        then we divide it by total number of balls (i.e. ${n_sample}$). <br>
+        then we divide it by total number of balls (i.e. ${n_samples}$). <br>
         <span class="l1">$\\hat{{p}}$</span>:
         our estimate for proportion of <span class="l1">Red balls</span> denoted by $1$. <br>
         <span class="l2">$\\hat{{q}}$</span>:
         our estimate for proportion of <span class="l2">Blue balls</span> denoted by $0$. <br>
         """, unsafe_allow_html=True)
 
-        st.latex(f"\\hat{{p}} = \\frac{1}{{{n_sample}}}\\sum_{{i=0}}^{{{n_sample}}}X_i ")
+        st.latex(f"\\hat{{p}} = \\frac{1}{{{n_samples}}}\\sum_{{i=0}}^{{{n_samples}}}X_i ")
         st.latex(" \\hat{q} = 1-\\hat{p} ")
 
         st.markdown(f"""In our sample we have ${redBalls[0]}$ <span class="l1">red balls</span> and 
-        ${n_sample - redBalls[0]}$ <span class="l2">blue balls</span>, so for this sample
+        ${n_samples - redBalls[0]}$ <span class="l2">blue balls</span>, so for this sample
         our estimate for the proportion of <span class="l1">red balls</span> is
-        $\\hat{{p}} = {redBalls[0]}/{n_sample}={redBalls[0] / n_sample}$
+        $\\hat{{p}} = {redBalls[0]}/{n_samples}={redBalls[0] / n_samples}$
         """, unsafe_allow_html=True)
 
     tex: list = []
     for i in range(5):
-        t = f"$\\widehat{{p}} = {int(estimators[i] * n_sample)}/{n_sample} = {'{:.4f}'.format(estimators[i])}$"
+        t = f"$\\widehat{{p}} = {int(estimators[i] * n_samples)}/{n_samples} = {'{:.4f}'.format(estimators[i])}$"
         tex.append(t)
 
     st.markdown(f"""
@@ -147,15 +154,15 @@ def stDisplay(n_population: int, n_sample: int, true_p: float, n_simulations: in
     Let's collect samples, <br>
     We have {n_simulations} samples, let's see first $3$ samples, <br>
     #### Experiment 1: 
-    *   In first experiment out of ${n_sample}$,  ${int(estimators[0] * n_sample)}$ balls are 
+    *   In first experiment out of ${n_samples}$,  ${int(estimators[0] * n_samples)}$ balls are 
         <span class="l1">red balls</span>.    
         So estimate for first experiment is {tex[0]}    
     #### Experiment 2: 
-    *   In second experiment out of ${n_sample}$,  ${int(estimators[1] * n_sample)}$ balls are
+    *   In second experiment out of ${n_samples}$,  ${int(estimators[1] * n_samples)}$ balls are
         <span class="l1">red balls</span>.    
         So estimate for first experiment is {tex[1]}    
     #### Experiment 3: 
-    *   In third experiment out of ${n_sample}$,  ${int(estimators[2] * n_sample)}$ balls are
+    *   In third experiment out of ${n_samples}$,  ${int(estimators[2] * n_samples)}$ balls are
         <span class="l1">red balls</span>.        
         So estimate for first experiment is {tex[2]}
         
@@ -180,34 +187,26 @@ def main():
         "topic": "remove"
     })
 
-    seed: Union[int, None] = st.sidebar.number_input(
-        "Enter Seed (-1 mean seed is disabled)",
-        min_value=-1,
-        max_value=10000,
-        value=0,
-        step=1
-    )
+    st_seed, st_n_population = st.sidebar.columns([1, 1])
+    seed: Union[int, None] = int(st_seed.text_input("Enter Seed (-1 mean seed is disabled)", "0"))
+    n_population: int = int(st_n_population.text_input("Enter population size", "200"))
 
-    if seed == -1: seed = None
+    st_n_sample, st_n_simulation = st.sidebar.columns([1, 1])
+    n_samples: int = int(st_n_sample.text_input("Enter sample size", "30"))
+    n_simulations: int = int(st_n_simulation.text_input("Enter number of simulation", "50"))
+    true_p: float = float(st.sidebar.text_input("Proportion of Red balls (p)", "0.5"))
 
-    n_population: int = st.sidebar.number_input("Enter population size",
-                                                min_value=100,
-                                                max_value=400,
-                                                value=200)
-    n_sample: int = st.sidebar.number_input("Enter sample size",
-                                            min_value=10,
-                                            max_value=50,
-                                            value=30)
-    true_p: float = st.sidebar.slider("Proportion of Red balls (p)",
-                                      min_value=0.0,
-                                      max_value=1.0,
-                                      value=0.5,
-                                      step=0.05)
-    n_simulations: int = st.sidebar.number_input("Enter number of simulation",
-                                                 min_value=10,
-                                                 max_value=50,
-                                                 value=50)
+    inputs: Dict[str, Union[int, None, float]] = {
+        "seed": seed,
+        "n_population": n_population,
+        "n_samples": n_samples,
+        "n_simulations": n_simulations,
+        "p": true_p
+    }
 
-    stDisplay(n_population, n_sample, true_p, n_simulations, seed)
+    if not check_input_limits(inputs):
+        return
+
+    stDisplay(inputs)
 
     footer()

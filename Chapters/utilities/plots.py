@@ -2,10 +2,10 @@ from typing import Dict, Union, Tuple
 import numpy as np
 import plotly.graph_objects as go
 from plotly.graph_objs import Figure
-import matplotlib.pyplot as plt
 
 
 def plot_binary_data(info: Dict[str, Union[str, int]], seed: Union[int, None]) -> Figure:
+    if seed == -1: seed = None
     if seed is not None: np.random.seed(seed)
     count_1: int
     count_2: int
@@ -298,37 +298,6 @@ def animate_dot_2D(x, y, title, button_label="Start"):
         ),
         frames=[go.Frame(data=[go.Scatter(x=[x[i]], y=[y[i]])]) for i in range(len(x))]
     )
-    return fig
-
-
-def simulation_mpl(distribution, n_samples, name=""):
-    fig = plt.figure()
-    ax = fig.gca()
-
-    mean, std = distribution.mean(), distribution.std()
-
-    ns = np.linspace(1, n_samples, n_samples, dtype=int)
-
-    # Generate n i.i.d. random variables from the distribution
-    iid_rvs = distribution.rvs(n_samples)
-
-    # sample mean for each n
-    sample_mean = []
-    for n in range(n_samples):
-        sample_mean.append(np.mean(iid_rvs[:n + 1]))
-
-    ax.plot(ns, iid_rvs, 'o', color='grey', alpha=0.5)
-    label = '$\\bar X_n$ for $X_i \\sim$' + name
-    ax.plot(ns, sample_mean, 'g-', lw=3, alpha=0.6, label=label)
-    ax.plot(ns, [mean] * n_samples, 'k--', lw=1.5, label='$\\mu$')
-    ax.vlines(ns, mean, iid_rvs, lw=0.2)
-
-    bbox = (0.0, 1.0, 1.0, 0.1)
-    legend_args = {'ncol': 2,
-                   'bbox_to_anchor': bbox,
-                   'mode': 'expand'}
-
-    ax.legend(**legend_args, fontsize=12)
     return fig
 
 

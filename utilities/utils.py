@@ -1,6 +1,6 @@
 from typing import List
 import streamlit as st
-from Chapters.utils.distribution import distributions_properties
+from utilities.distribution import distributions_properties
 
 chapters: List[str] = [
     "Introduction",
@@ -116,3 +116,50 @@ def setMetaTags(meta_data):
         {image_meta_data}
         </script>
     """, height=0, width=0)
+
+
+def rename_inputs(inputs: dict):
+    if "n" in inputs:
+        inputs = inputs.copy()
+        if "population" in inputs["n"]:
+            inputs["n_population"] = inputs["n"]["population"]
+        if "samples" in inputs["n"]:
+            inputs["n_samples"] = inputs["n"]["samples"]
+        if "simulations" in inputs["n"]:
+            inputs["n_simulations"] = inputs["n"]["simulations"]
+
+    return inputs
+
+
+def check_input_limits(inputs):
+
+    inputs = rename_inputs(inputs)
+    
+    if "seed" in inputs and (inputs["seed"] is not None and inputs["seed"] < -1):
+        st.error(f"Seed Can't be less then $-1$")
+        return
+    if "n_population" in inputs and (
+            inputs["n_population"] < 100 or
+            inputs["n_population"] > 400):
+        st.error(f"Population size should be in between $100$ and $400$")
+        return
+
+    if "n_samples" in inputs and (
+            inputs["n_samples"] < 10 or
+            inputs["n_samples"] > 50):
+        st.error(f"Sample size should be in between $10$ and $50$")
+        return
+
+    if "n_simulations" in inputs and (
+            inputs["n_simulations"] < 10 or
+            inputs["n_simulations"] > 50):
+        st.error(f"Simulation size should be in between $10$ and $50$")
+        return
+
+    if "p" in inputs and (
+            inputs["p"] <= 0.0 or
+            inputs["p"] >= 1.0):
+        st.error(f"Probability should be in between $0.0$ and $1.0$")
+        return
+
+    return True
