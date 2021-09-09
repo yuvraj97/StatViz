@@ -15,18 +15,18 @@ def main():
     -----
     """)
 
-    st.markdown("""
-    ## Table of Content
-    [$1.$ **Introduction:**](https://app.quantml.org/statistics/introduction/)  
-    
-    [$2.$ **Law of Large Number:**](https://app.quantml.org/statistics/law-of-large-number/)  
-    
-    [$3.$ **Central Limit Theorem**](https://app.quantml.org/statistics/central-limit-theorem/)  
-    
-    [$4.$ **Gaussian Distribution**](https://app.quantml.org/statistics/gaussian-distribution/)  
-      - [**Random Walk 2D**](https://app.quantml.org/statistics/gaussian-distribution/?topic=Random+Walk+1D)  
-      - [**Random Walk 3D**](https://app.quantml.org/statistics/gaussian-distribution/?topic=Random+Walk+2D)  
-    """)
+    # st.markdown("""
+    # ## Table of Content
+    # [$1.$ **Introduction:**](https://app.quantml.org/statistics/introduction/)
+    #
+    # [$2.$ **Law of Large Number:**](https://app.quantml.org/statistics/law-of-large-number/)
+    #
+    # [$3.$ **Central Limit Theorem**](https://app.quantml.org/statistics/central-limit-theorem/)
+    #
+    # [$4.$ **Gaussian Distribution**](https://app.quantml.org/statistics/gaussian-distribution/)
+    #   - [**Random Walk 2D**](https://app.quantml.org/statistics/gaussian-distribution/?topic=Random+Walk+1D)
+    #   - [**Random Walk 3D**](https://app.quantml.org/statistics/gaussian-distribution/?topic=Random+Walk+2D)
+    # """)
 
     st.write("")
     st.write("")
