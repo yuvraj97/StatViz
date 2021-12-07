@@ -1,12 +1,6 @@
 import traceback
-
 import streamlit as st
-
-# NEED TO BE CHANGE
-# NEED TO BE CHANGE
-# NEED TO BE CHANGE
-# NEED TO BE CHANGE
-# NEED TO BE CHANGE
+from utilities.ui import intialize, reset_session, footer
 
 
 def main():
@@ -14,6 +8,8 @@ def main():
     We will never use it in production it will came handy in development
     :return: None
     """
+
+    intialize("Statistics Visualization")
 
     chapters = [
         "Table of Content",
@@ -29,7 +25,12 @@ def main():
         params = st.experimental_get_query_params()
         prev_idx = chapters.index(params["chapter"][0]) if "chapter" in params else 0
 
-    chapter: str = st.selectbox("Choose Chapter", chapters, index=prev_idx)
+    st_chapter, st_reset = st.columns([9, 1])
+
+    if st_reset.button("🔄", help="Reset Variables (Necessary to reset Manually Increment Steps)"):
+        reset_session()
+
+    chapter: str = st_chapter.selectbox("Choose Chapter", chapters, index=prev_idx)
     chosen_idx = chapters.index(chapter)
     if prev_idx != chosen_idx:
         st.session_state["chapter"] = chosen_idx
@@ -38,6 +39,7 @@ def main():
 
     chapter = chapters[prev_idx]
     exec(f"from Chapters.{chapter.replace(' ', '_')}.run import main;main()")
+    footer()
 
 
 if __name__ == '__main__':
