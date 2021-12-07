@@ -1,10 +1,9 @@
 import streamlit as st
 
-from utilities.ui import intialize, footer
+from utilities.ui import footer
 
 
 def main():
-    intialize(None)
 
     st.markdown("""
     # Statistics Concepts Visualization
@@ -69,4 +68,3 @@ def main():
     - [etc.]
        """)
 
-    footer()

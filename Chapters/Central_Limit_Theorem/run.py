@@ -7,7 +7,7 @@ from PIL import Image
 from typing import Union, List, Dict
 from scipy.stats import norm
 from utilities.distribution import show_parameters
-from utilities.ui import intialize, footer
+from utilities.ui import footer
 from utilities.utils import set_get_URL, urlIndex
 from Chapters.utilities.utils import get_distribution
 from Chapters.utilities.plots import plot_histogram, line_plot
@@ -272,8 +272,6 @@ def stDisplay(
 
 def main():
 
-    intialize("Central Limit Theorem")
-
     dist_vars: Dict[str, Union[str, int, None, Dict[str, int]]]
     dist_params: Dict[str, Union[int, float]]
     dist_vars, dist_params = stDistribution(urlIndex(st.experimental_get_query_params()), n_simulations=True)
@@ -285,4 +283,3 @@ def main():
 
     stDisplay(dist_vars, dist_params)
 
-    footer()

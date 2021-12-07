@@ -9,7 +9,7 @@ from plotly.graph_objs import Figure
 
 from Chapters.utilities.plots import plot_binary_data
 from Chapters.Introduction.utils import run
-from utilities.ui import intialize, footer
+from utilities.ui import footer
 from utilities.utils import set_get_URL, check_input_limits
 from Chapters.utilities.lite_utils import stPandas
 
@@ -180,8 +180,6 @@ def stDisplay(inputs: Dict[str, Union[int, None, float]]):
 
 def main():
 
-    intialize("Introduction")
-
     set_get_URL(parameters={
         "dist": "remove",
         "topic": "remove"
@@ -209,4 +207,3 @@ def main():
 
     stDisplay(inputs)
 
-    footer()
